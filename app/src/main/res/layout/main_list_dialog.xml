@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="330dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
+<LinearLayout
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textColor="#000"
+        android:paddingTop="12dp"
+        android:paddingBottom="9dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/dialog_title"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textSize="22dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    </LinearLayout>
+<View
+    android:layout_width="match_parent"
+    android:layout_marginTop="4dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_height="2dp"
+    android:background="#a70500"/>
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:clickable="true"
+        android:background="@drawable/main_dialog_state"
+        android:textColor="#000"
+        android:gravity="center_vertical"
+        android:layout_height="40dp"
+        android:textSize="17dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/dialog_menu1"
+        android:text="@string/notice"
+        android:layout_width="match_parent" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_height="1dp"
+        android:background="#000"/>
+    <TextView
+        android:clickable="true"
+        android:background="@drawable/main_dialog_state"
+        android:textColor="#000"
+        android:gravity="center_vertical"
+        android:layout_height="40dp"
+        android:textSize="17dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/dialog_menu2"
+        android:text="@string/lecture_refer_room"
+        android:layout_width="match_parent" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_height="1dp"
+        android:background="#000"/>
+    <TextView
+        android:clickable="true"
+        android:background="@drawable/main_dialog_state"
+        android:textColor="#000"
+        android:gravity="center_vertical"
+        android:layout_height="40dp"
+        android:textSize="17dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/dialog_menu3"
+        android:text="@string/plan_check"
+        android:layout_width="match_parent"/>
+    </LinearLayout>
+
+</LinearLayout>
