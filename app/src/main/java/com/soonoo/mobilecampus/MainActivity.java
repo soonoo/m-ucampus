@@ -5,8 +5,10 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -19,7 +21,6 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,25 +92,25 @@ public class MainActivity extends ActionBarActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0,1,0,"로그아웃"); //int groupId, int itemId, int order, CharSequence title
+        menu.add(0, 1, 0, "로그아웃"); //int groupId, int itemId, int order, CharSequence title
+        menu.add(0,2,0,"종료"); //int groupId, int itemId, int order, CharSequence title
+        menu.add(0,3,0,"정보"); //int groupId, int itemId, int order, CharSequence title
         return true;
     }
 
 
     public boolean onOptionsItemSelected(MenuItem item){
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_layout);
-        mainLayout.setAlpha(.3f);
         switch(item.getItemId()){
             case 1:
-                LogoutDialog dialog = new LogoutDialog(this);
-                dialog.show();
-//                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                View view = getLayoutInflater().inflate(R.layout.activity_login, null, false);
-//                CheckBox autoLogin = (CheckBox) view.findViewById(R.id.auto_login);
-//                autoLogin.setChecked(false);
-//
-                //Intent intent = new Intent(this, LoginActivity.class);
-                //startActivity(intent);
+                LogoutDialog dialog_logout = new LogoutDialog(this);
+                dialog_logout.show();
+                return true;
+            case 2:
+                finish();
+                return true;
+            case 3:
+                NoticeDialog dialog_notice = new NoticeDialog(this);
+                dialog_notice.show();
                 return true;
         }
         return false;

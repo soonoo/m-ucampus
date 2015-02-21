@@ -33,9 +33,7 @@ public class LogoutDialog extends Dialog implements View.OnClickListener{
                 SharedPreferences prefs = PreferenceManager
                         .getDefaultSharedPreferences(context);
                 prefs.edit().putBoolean("auto_login", false).apply();
-//
-//                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                View loginView = inflater.inflate(R.layout.activity_login, null, false);
+
                 this.dismiss();
                 Intent intent = new Intent(context, LoginActivity.class);
                 ((Activity)context).finish();

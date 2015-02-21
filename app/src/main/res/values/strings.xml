@@ -21,5 +21,24 @@
     <string name="logout_dialog_title">로그아웃</string>
     <string name="logout_dialog_contents">지금 로그아웃할까요?</string>
     <string name="message_cancel">취소</string>
+    <string name="message_confirm">확인</string>
+    <string name="message_info">정보</string>
     <string name="message_logout">로그아웃</string>
+    <string name="notice_content">
+        [광운대 유캠퍼스 beta]는 광운대학교 재학생에 의해 개발된 비공식 애플리케이션으로,
+        모바일 환경에서 보다 편하게 유캠퍼스를 사용하고자 제작되었습니다.\n\n
+        입력하신 학번과 비밀번호는 로그인 용도로만 사용되며, 개발자에게 일절 전송되지 않습니다.\n
+        (최초 로그인시에는 과목별 정보 수집으로 인해 다소 시간이 소요됩니다.)\n\n
+
+        특징\n
+        - 과목별 공지사항/강의자료실/강의계획서 조회\n
+        - 학기별 성적/장학 조회\n\n
+
+        각종 버그 및 건의사항을 qpseh2m7@gmail.com 또는
+        https://play.google.com/store/apps/details?id=com.soonoo.mobilecampus 를 통해 남겨주시면
+        적극적으로 검토하여 개선해 나가겠습니다.\n\n
+        (추가 기능 요청, 디자인 건의, 기능 문의 등 어떠한 의견도 대환영입니다!)
+
+
+    </string>
 </resources>
