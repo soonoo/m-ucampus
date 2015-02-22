@@ -111,7 +111,11 @@ public class MainListAdapter extends BaseAdapter{
                                     context.startActivity(intent);
                                     break;
                                 case 3:
-                                    intent = new Intent(v.getContext(), ScholarshipActivity.class);
+                                    intent = new Intent(context, ScholarshipActivity.class);
+                                    v.getContext().startActivity(intent);
+                                    break;
+                                case 5:
+                                    intent = new Intent(context, LibrarySeatInfoActivity.class);
                                     v.getContext().startActivity(intent);
                                     break;
                             }
@@ -130,7 +134,7 @@ public class MainListAdapter extends BaseAdapter{
     }
 
     public int getItemViewType(int position){
-        if(position == 0 || position == separatorIndex) return TYPE_SEPARATOR;
+        if(position == 0 || position == separatorIndex || position == separatorIndex + 3) return TYPE_SEPARATOR;
         else return TYPE_ITEM;
     }
 

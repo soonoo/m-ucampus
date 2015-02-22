@@ -41,4 +41,5 @@
 
 
     </string>
+    <string name="title_activity_library_seat_info">LibrarySeatInfoActivity</string>
 </resources>
