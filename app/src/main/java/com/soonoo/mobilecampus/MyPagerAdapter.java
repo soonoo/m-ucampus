@@ -13,7 +13,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     }
     @Override
     public CharSequence getPageTitle(int position) {
-        return (position == 0) ? "유캠퍼스 기능" : "시간표";
+        return (position == 0) ? "유캠퍼스" : "시간표";
     }
     @Override
     public int getCount() {

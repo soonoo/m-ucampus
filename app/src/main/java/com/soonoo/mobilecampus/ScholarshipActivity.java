@@ -22,6 +22,8 @@ public class ScholarshipActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scholarship);
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         try {
             Document doc = new GetScholarshipHtml().execute().get();
@@ -48,5 +50,23 @@ public class ScholarshipActivity extends ActionBarActivity {
             String scholarHtml = User.getHtml("GET", Sites.SCHOLARSHIP_URL, "euc-kr");
             return Jsoup.parse(scholarHtml);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
 }

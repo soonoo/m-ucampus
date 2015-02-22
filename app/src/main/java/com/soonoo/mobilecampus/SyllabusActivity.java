@@ -27,7 +27,8 @@ public class SyllabusActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_syllabus);
-
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         try{
             Intent intent = getIntent();
             int position = intent.getIntExtra("subIndex", 1);
@@ -64,5 +65,23 @@ public class SyllabusActivity extends ActionBarActivity {
             Document doc = Jsoup.parse(sylHtml);
             return doc;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
 }

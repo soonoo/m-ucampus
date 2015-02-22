@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.webkit.WebView;
 
 import org.jsoup.Jsoup;
@@ -20,6 +21,8 @@ public class GradeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grade);
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         try{
             Document doc_grade = new GetGradeHtml().execute().get();
@@ -65,6 +68,24 @@ public class GradeActivity extends ActionBarActivity {
 
             return Jsoup.parse(gradeHtml);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
 }
 

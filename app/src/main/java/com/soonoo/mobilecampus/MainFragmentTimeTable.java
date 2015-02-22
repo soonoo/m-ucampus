@@ -32,14 +32,23 @@ public class MainFragmentTimeTable extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_timetable, container, false);
 
-        bgList.add("#d9896c;");
+        bgList.add("#f9f99f;");
+        bgList.add("#c9f2ea;");
+        bgList.add("#f8e6d5;");
+        bgList.add("#def9ba;");
+        bgList.add("#fcdceb;");
+        bgList.add("#dce7ff;");
+        bgList.add("#edead1;");
+        bgList.add("#dbe1eb;");
+        bgList.add("#ecdcff;");
+
+        /*bgList.add("#d9896c;");
         bgList.add("#ffd9bf;");
         bgList.add("#72e5be;");
         bgList.add("#9cb866;");
         bgList.add("#40d9ff;");
         bgList.add("#fab11c;");
-        bgList.add("#ea8f9b;");
-
+        bgList.add("#ea8f9b;");*/
         try {
             Document doc = new GetTimeTable().execute().get();
             Elements elements = doc.select("table:has(colgroup)");

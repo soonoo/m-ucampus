@@ -117,6 +117,7 @@ public class MainListAdapter extends BaseAdapter{
                                 case 5:
                                     intent = new Intent(context, LibrarySeatInfoActivity.class);
                                     v.getContext().startActivity(intent);
+
                                     break;
                             }
                         }
