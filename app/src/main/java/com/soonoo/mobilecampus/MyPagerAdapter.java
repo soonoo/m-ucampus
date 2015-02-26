@@ -15,10 +15,12 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return (position == 0) ? "유캠퍼스" : "시간표";
     }
+
     @Override
     public int getCount() {
         return 2;
     }
+
     @Override
     public Fragment getItem(int position) {
         return (position == 0)? new MainFragmentSubList() : new MainFragmentTimeTable() ;

@@ -5,7 +5,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,7 +20,7 @@ import java.io.StringWriter;
 
 
 public class GradeActivity extends ActionBarActivity {
-
+    Document doc_grade;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,24 +29,18 @@ public class GradeActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         try{
-            Document doc_grade = new GetGradeHtml().execute().get();
+            new GetGradeHtml(new OnRequestCompleted() {
+                @Override
+                public void onRequestCompleted(Document doc) {
+                    doc_grade = doc;
+                }
+            }).execute();
 
-            doc_grade.select("table:contains(지도교수), table:contains(학위과정)").remove();
-            doc_grade.select("th:contains(학정번호), td:eq(0), td:has(img)").remove();
+            //Document doc_rank = new GetRankHtml().execute().get();
 
-            doc_grade.select("table").attr("width", "100%").attr("style", "font-size:77%;");;
-            doc_grade.select("th:contains(학년도)").attr("bgcolor", "#a70500").attr("style", "color:#ffffff;");
-            doc_grade.select("th:contains(과목명), th:contains(개설학과)," +
-                    " th:contains(이수구분), th:contains(학점)," +
-                    " th:contains(성적), th:contains(인증구분)").attr("bgcolor", "#bfbfbf");
+            //doc_rank.select("table").attr("bgcolor", "#bfbfbf").attr("width", "100%").attr("style", "font-size:80%;");
+            //Elements elements = doc_rank.select("p table");
 
-
-            Document doc_rank = new GetRankHtml().execute().get();
-
-            doc_rank.select("table").attr("bgcolor", "#bfbfbf").attr("width", "100%").attr("style", "font-size:80%;");
-            Elements elements = doc_rank.select("p table");
-            WebView webView = (WebView) findViewById(R.id.webview_grade);
-            webView.loadDataWithBaseURL("", elements.toString() + doc_grade.select("table").toString(), "text/html", "euc-kr", "");
         } catch(Exception e){
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
@@ -52,12 +50,41 @@ public class GradeActivity extends ActionBarActivity {
         }
     }
 
+
     public class GetGradeHtml extends AsyncTask<Void, Void, Document>{
+        public OnRequestCompleted delegate;
+        ProgressBar pb = (ProgressBar)findViewById(R.id.progressbar_downloading);
+
+        public GetGradeHtml(OnRequestCompleted caller){
+            delegate = caller;
+        }
+
+        @Override
+        public void onPreExecute(){
+            pb.setVisibility(View.VISIBLE);
+        }
+
         @Override
         public Document doInBackground(Void... p){
             String gradeHtml = User.getHtml("GET", Sites.GRADE_URL, "euc-kr");
 
             return Jsoup.parse(gradeHtml);
+        }
+
+        @Override
+        public void onPostExecute(Document doc){
+            delegate.onRequestCompleted(doc);
+            doc_grade.select("table:contains(지도교수), table:contains(학위과정)").remove();
+            doc_grade.select("th:contains(학정번호), td:eq(0), td:has(img)").remove();
+            doc_grade.select("table").attr("width", "100%").attr("style", "font-size:77%;");;
+            doc_grade.select("th:contains(학년도)").attr("bgcolor", "#a70500").attr("style", "color:#ffffff;");
+            doc_grade.select("th:contains(과목명), th:contains(개설학과)," +
+                    " th:contains(이수구분), th:contains(학점)," +
+                    " th:contains(성적), th:contains(인증구분)").attr("bgcolor", "#bfbfbf");
+
+            WebView webView = (WebView) findViewById(R.id.webview_grade);
+            webView.loadDataWithBaseURL("", /*elements.toString() +*/ doc_grade.select("table").toString(), "text/html", "utf-8", "");
+            pb.setVisibility(View.GONE);
         }
     }
 

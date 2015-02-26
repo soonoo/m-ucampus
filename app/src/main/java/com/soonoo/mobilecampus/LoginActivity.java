@@ -28,13 +28,15 @@ public class LoginActivity extends Activity {
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if(prefs.getBoolean("auto_login", false)){
+        if(prefs.getBoolean("auto_login", false) && isConnected()){
             try {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 if (new Login().execute(prefs.getString("user_id", null), prefs.getString("user_pw", null)).get());
                 finish();
                 startActivity(intent);
             }catch (Exception e){}
+        } else if(!isConnected()){
+            Toast.makeText(LoginActivity.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
         }
 
         final Button login_button = (Button) findViewById(R.id.login_button);

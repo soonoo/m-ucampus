@@ -27,81 +27,69 @@ import java.util.ArrayList;
 public class MainFragmentTimeTable extends Fragment {
     ArrayList<String> subList = new ArrayList<String>();
     ArrayList<String> bgList = new ArrayList<String>();
+    Document document;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_timetable, container, false);
+        final View view = inflater.inflate(R.layout.fragment_main_timetable, container, false);
+        String[] colorList = {"#f9f99f;", "#c9f2ea;", "#f8e6d5;", "#def9ba;", "#fcdceb;", "#dce7ff;", "#edead1;", "#dbe1eb;",
+                "#ecdcff;"};
 
-        bgList.add("#f9f99f;");
-        bgList.add("#c9f2ea;");
-        bgList.add("#f8e6d5;");
-        bgList.add("#def9ba;");
-        bgList.add("#fcdceb;");
-        bgList.add("#dce7ff;");
-        bgList.add("#edead1;");
-        bgList.add("#dbe1eb;");
-        bgList.add("#ecdcff;");
+        for(String str:colorList) bgList.add(str);
 
-        /*bgList.add("#d9896c;");
-        bgList.add("#ffd9bf;");
-        bgList.add("#72e5be;");
-        bgList.add("#9cb866;");
-        bgList.add("#40d9ff;");
-        bgList.add("#fab11c;");
-        bgList.add("#ea8f9b;");*/
-        try {
-            Document doc = new GetTimeTable().execute().get();
-            Elements elements = doc.select("table:has(colgroup)");
-            elements.select("table").attr("width", "100%").attr("style", "font-size:75%;");
-            elements.select("tr:eq(0)").remove();
+        new GetTimeTable(new OnRequestCompleted() {
+            @Override
+            public void onRequestCompleted(Document doc) {
+                document = doc;
+                Elements elements = doc.select("table:has(colgroup)");
+                elements.select("table").attr("width", "100%").attr("style", "font-size:75%;");
+                elements.select("tr:eq(0)").remove();
+                elements.select("col").first().attr("width", "5%");
+                elements.select("col:gt(0)").attr("width", "15.8%");
 
-            elements.select("col").first().attr("width", "5%");
-            elements.select("col:gt(0)").attr("width", "15.8%");
-
-            for(Element element: elements.select("tr:gt(1) > td:gt(0)")){
-                String sub = element.text();
-                if(sub != ""){
-                    if(!subList.contains(sub)) {
-                        subList.add(sub);
-                        element.attr("style", "background-color: " + bgList.get(subList.indexOf(sub)));
-                    }else{
-                        element.attr("style", "background-color: " + bgList.get(subList.indexOf(sub)));
+                for (Element element : elements.select("tr:gt(1) > td:gt(0)")) {
+                    String sub = element.text();
+                    if (sub != "") {
+                        if (!subList.contains(sub)) {
+                            subList.add(sub);
+                            element.attr("style", "background-color: " + bgList.get(subList.indexOf(sub)));
+                        } else {
+                            element.attr("style", "background-color: " + bgList.get(subList.indexOf(sub)));
+                        }
                     }
                 }
-            }
 
-            for(Element element: elements.select("table")){
-                element.attr("border", "1");
-                element.attr("bordercolor", "gray");
-                //element.attr("style", "border-right:1px solid; border-bottom:1px solid;");
+                for (Element element : elements.select("table")) {
+                    element.attr("border", "1");
+                    element.attr("bordercolor", "gray");
+                    //element.attr("style", "border-right:1px solid; border-bottom:1px solid;");
+                }
+                WebView myWebView = (WebView) view.findViewById(R.id.webview_timetable);
+                myWebView.loadDataWithBaseURL("", elements.toString(), "text/html", "utf-8", "");
             }
+        }).execute();
 
-            WebView myWebView = (WebView) view.findViewById(R.id.webview_timetable);
-            myWebView.loadDataWithBaseURL("", elements.toString(), "text/html", "euc-kr", "");
-        }catch (Exception e){
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            String exceptionAsStrting = sw.toString();
-            Log.e("INFO", exceptionAsStrting);
-            e.printStackTrace();
-        }
         return view;
     }
 
     public class GetTimeTable extends AsyncTask<Void, Void, Document> {
+        OnRequestCompleted delegate;
+
+        GetTimeTable(OnRequestCompleted caller){
+            delegate = caller;
+        }
+
         @Override
         public  Document doInBackground(Void... p){
             String query = "this_year=" + User.subCode.get(0).substring(0, 4) + "&hakgi=" + User.subCode.get(0).substring(4, 5);
             String timeTableHtml = User.getHtml("POST", Sites.TIMETABLE_URL, query, "euc-kr");
             return Jsoup.parse(timeTableHtml);
         }
-    }
 
-    public boolean isPeriodEmpty(Elements elements){
-        for(Element element: elements.select("td:gt(0)")){
-            if(element.text().equals("")) return false;
+        @Override
+        public void onPostExecute(Document doc){
+            delegate.onRequestCompleted(doc);
         }
-        return true;
     }
 
 }

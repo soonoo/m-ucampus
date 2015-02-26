@@ -46,4 +46,10 @@ public class Sites {
 
     //중도 좌석
     static final String LIBRARY_SEAT_URL = "http://223.194.18.3/domian/domian5.asp";
+
+    //강의 자료실
+    static final String LEC_REFER_URL = "http://info2.kw.ac.kr/servlet/controller.learn.AssPdsStuServlet";
+    static final String LEC_REFER_QUERY = "p_process=listPage&p_grcode=N000003";
+            //"&p_subj=U2014129577220011&p_year=2014&p_subjseq=1&p_class=01&p_pageno=1";
+
 }
