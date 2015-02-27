@@ -48,7 +48,7 @@ public class MainFragmentSubList extends Fragment {
                     titleList.add("성적/석차 조회");
                     titleList.add("장학 조회");
                     titleList.add("시설 이용");
-                    titleList.add("중앙도서관 좌석 정보");
+                    titleList.add("중앙도서관");
 
                     infoList.add(0, "");
                     infoList.add("");

@@ -48,7 +48,6 @@ public class MainActivity extends ActionBarActivity {
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setShouldExpand(true);
         tabs.setViewPager(pager);
-
         //tabs.setTextSize(Math.round((float)14 * density));
     }
 

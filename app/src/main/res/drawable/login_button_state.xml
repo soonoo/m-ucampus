@@ -5,5 +5,8 @@
         android:drawable="@drawable/login_button_focused"
         /> <!-- focused -->
     <item
+        android:state_enabled="false"
+        android:drawable="@drawable/login_button_enabled"/>
+    <item
         android:drawable="@drawable/login_button_default"/>
 </selector>
