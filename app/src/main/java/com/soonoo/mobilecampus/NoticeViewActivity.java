@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.net.URLEncoder;
 
@@ -73,7 +75,8 @@ public class NoticeViewActivity extends ActionBarActivity {
             contents.setText(Html.fromHtml(document.select("td.tl_l2").toString()));
             LinearLayout ll = (LinearLayout) findViewById(R.id.attatch_ll);
 
-            for (final Element element : document.select(".link_b2 a")) {
+            Elements elements = document.select(".link_b2 a");
+            for (final Element element : elements) {
                 TextView attatch = new TextView(NoticeViewActivity.this);
                 attatch.setText(element.text());
                 attatch.setTextSize(20);
@@ -116,6 +119,16 @@ public class NoticeViewActivity extends ActionBarActivity {
                     }
                 });
 
+                ll.addView(attatch);
+            }
+
+            if(elements.size() == 0) {
+                TextView attatch = new TextView(NoticeViewActivity.this);
+                attatch.setText("첨부파일이 없습니다.");
+                attatch.setTextSize(20);
+                attatch.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                attatch.setPadding(0, dpT, 0, dpB);
                 ll.addView(attatch);
             }
         }

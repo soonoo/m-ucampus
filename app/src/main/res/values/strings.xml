@@ -46,6 +46,6 @@
     <string name="title_activity_library_book_search">자료 검색</string>
     <string name="title_activity_lec_refer_room">강의 자료실</string>
     <string name="title_activity_lec_refer_disp">강의 자료실</string>
-    <string name="title_activity_notice">NoticeActivity</string>
-    <string name="title_activity_notice_view">NoticeViewActivity</string>
+    <string name="title_activity_notice">공지사항</string>
+    <string name="title_activity_notice_view">공지사항</string>
 </resources>
