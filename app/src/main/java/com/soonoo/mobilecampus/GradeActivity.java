@@ -10,6 +10,7 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,39 +26,22 @@ public class GradeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grade);
-        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        try{
-            new GetGradeHtml(new OnRequestCompleted() {
-                @Override
-                public void onRequestCompleted(Document doc) {
-                    doc_grade = doc;
-                }
-            }).execute();
 
-            //Document doc_rank = new GetRankHtml().execute().get();
+        if (User.isConnected(GradeActivity.this)) new GetGradeHtml().execute();
+        else Toast.makeText(getApplicationContext(), "nono", Toast.LENGTH_SHORT).show();
+        //Document doc_rank = new GetRankHtml().execute().get();
 
-            //doc_rank.select("table").attr("bgcolor", "#bfbfbf").attr("width", "100%").attr("style", "font-size:80%;");
-            //Elements elements = doc_rank.select("p table");
+        //doc_rank.select("table").attr("bgcolor", "#bfbfbf").attr("width", "100%").attr("style", "font-size:80%;");
+        //Elements elements = doc_rank.select("p table");
 
-        } catch(Exception e){
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            String exceptionAsStrting = sw.toString();
-            Log.e("INFO", exceptionAsStrting);
-            e.printStackTrace();
-        }
     }
 
 
     public class GetGradeHtml extends AsyncTask<Void, Void, Document>{
-        public OnRequestCompleted delegate;
         ProgressBar pb = (ProgressBar)findViewById(R.id.progressbar_downloading);
-
-        public GetGradeHtml(OnRequestCompleted caller){
-            delegate = caller;
-        }
 
         @Override
         public void onPreExecute(){
@@ -73,17 +57,23 @@ public class GradeActivity extends ActionBarActivity {
 
         @Override
         public void onPostExecute(Document doc){
-            delegate.onRequestCompleted(doc);
-            doc_grade.select("table:contains(지도교수), table:contains(학위과정)").remove();
-            doc_grade.select("th:contains(학정번호), td:eq(0), td:has(img)").remove();
-            doc_grade.select("table").attr("width", "100%").attr("style", "font-size:77%;");;
-            doc_grade.select("th:contains(학년도)").attr("bgcolor", "#a70500").attr("style", "color:#ffffff;");
-            doc_grade.select("th:contains(과목명), th:contains(개설학과)," +
-                    " th:contains(이수구분), th:contains(학점)," +
-                    " th:contains(성적), th:contains(인증구분)").attr("bgcolor", "#bfbfbf");
+            doc_grade = doc;
 
-            WebView webView = (WebView) findViewById(R.id.webview_grade);
-            webView.loadDataWithBaseURL("", /*elements.toString() +*/ doc_grade.select("table").toString(), "text/html", "utf-8", "");
+            try {
+                doc_grade.select("table:contains(지도교수), table:contains(학위과정)").remove();
+                doc_grade.select("th:contains(학정번호), td:eq(0), td:has(img)").remove();
+                doc_grade.select("table").attr("width", "100%").attr("style", "font-size:77%;");
+                doc_grade.select("th:contains(학년도)").attr("bgcolor", "#a70500").attr("style", "color:#ffffff;");
+                doc_grade.select("th:contains(과목명), th:contains(개설학과)," +
+                        " th:contains(이수구분), th:contains(학점)," +
+                        " th:contains(성적), th:contains(인증구분)").attr("bgcolor", "#bfbfbf");
+
+                WebView webView = (WebView) findViewById(R.id.webview_grade);
+                webView.loadDataWithBaseURL("", /*elements.toString() +*/ doc_grade.select("table").toString(), "text/html", "utf-8", "");
+            }catch (Exception e){
+                WebView webView = (WebView) findViewById(R.id.webview_grade);
+                webView.loadDataWithBaseURL("", /*elements.toString() +*/ getString(R.string.message_grade_missing), "text/html", "utf-8", "");
+            }
             pb.setVisibility(View.GONE);
         }
     }
@@ -112,7 +102,7 @@ public class GradeActivity extends ActionBarActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
 }
 

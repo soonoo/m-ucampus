@@ -100,8 +100,7 @@ public class MainListAdapter extends BaseAdapter{
                     @Override
                     public void onClick(View v){
                         if(pos < User.subName.size() + 1) {
-                            MainListDialog dialog = new MainListDialog(context, pos);
-                            dialog.show();
+                            new MainListDialog(context, pos).show();
                         } else{
                             int index = pos - User.subCode.size();
                             Intent intent;
@@ -115,9 +114,9 @@ public class MainListAdapter extends BaseAdapter{
                                     v.getContext().startActivity(intent);
                                     break;
                                 case 5:
-                                    intent = new Intent(context, LibrarySeatInfoActivity.class);
-                                    v.getContext().startActivity(intent);
-
+                                    new LibraryMenuDialog(context).show();
+                                    //intent = new Intent(context, LibrarySeatInfoActivity.class);
+                                    //v.getContext().startActivity(intent);
                                     break;
                             }
                         }
@@ -130,6 +129,7 @@ public class MainListAdapter extends BaseAdapter{
         }
 
     }
+
     public int getViewTypeCount(){
         return 2;
     }

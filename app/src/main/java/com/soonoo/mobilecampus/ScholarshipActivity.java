@@ -26,34 +26,15 @@ public class ScholarshipActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scholarship);
-        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        try {
-            new GetScholarshipHtml(new OnRequestCompleted() {
-                @Override
-                public void onRequestCompleted(Document doc) {
-                    document = doc;
-                }
-            }).execute();
-
-        } catch(Exception e){
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            String exceptionAsStrting = sw.toString();
-            Log.e("INFO", exceptionAsStrting);
-            e.printStackTrace();
-        }
+        new GetScholarshipHtml().execute();
     }
 
 
     public class GetScholarshipHtml extends AsyncTask<Void, Void, Document>{
-        public OnRequestCompleted delegate = null;
         ProgressBar pb = (ProgressBar)findViewById(R.id.progressbar_downloading);
-
-        GetScholarshipHtml(OnRequestCompleted caller){
-            delegate = caller;
-        }
 
         @Override
         public void onPreExecute(){
@@ -68,14 +49,19 @@ public class ScholarshipActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(Document result) {
-            delegate.onRequestCompleted(result);
-            document.select("table").attr("width", "100%").attr("style", "margin-bottom:15px;");
-            document.select("table:has(img)").remove();
-            document.select("td").attr("style", "font-size:85%;");
-            document.select("th").attr("style", "font-size:80%; background-color:#bfbfbf;");
+            document = result;
+            try {
+                document.select("table").attr("width", "100%").attr("style", "margin-bottom:15px;");
+                document.select("table:has(img)").remove();
+                document.select("td").attr("style", "font-size:85%;");
+                document.select("th").attr("style", "font-size:80%; background-color:#bfbfbf;");
 
-            WebView myWebView = (WebView)findViewById(R.id.webview_scholar);
-            myWebView.loadDataWithBaseURL("", document.select("table").toString(), "text/html", "utf-8", "");
+                WebView myWebView = (WebView)findViewById(R.id.webview_scholar);
+                myWebView.loadDataWithBaseURL("", document.select("table").toString(), "text/html", "utf-8", "");
+            }catch (Exception e){
+                WebView myWebView = (WebView)findViewById(R.id.webview_scholar);
+                myWebView.loadDataWithBaseURL("", getString(R.string.message_scholar_missing), "text/html", "utf-8", "");
+            }
             pb.setVisibility(View.GONE);
         }
     }
@@ -95,6 +81,6 @@ public class ScholarshipActivity extends ActionBarActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
 }

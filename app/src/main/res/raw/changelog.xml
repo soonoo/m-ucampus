@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="1.0.4" changeDate="2015 02월74일">
-        <changelogtext>매끄럽고 부드러운 화면 변경 적용ㅎㅎ</changelogtext>
-        <changelogtext>매끄럽고 부드러운 화면 변경 적용ㅎㅎ</changelogtext>
+    <changelogversion versionName="1.0.5" changeDate="2015 03월1일">
+        <changelogtext>강의계획서에 교수/강의실 정보가 없을 때 강제 종료되던 현상 해결</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="1.0.4" changeDate="2015 02월27일">
+        <changelogtext>화면 변경시 버벅거림 개선 - 매끌매끌 부들부들</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0.3" changeDate="2015 02월24일">
@@ -21,6 +24,6 @@
     </changelogversion>
 
     <changelogversion versionName="1.0.0" changeDate="2015  02월18일">
-        <changelogtext>최초 출시</changelogtext>
+        <changelogtext>최초 릴리즈</changelogtext>
     </changelogversion>
 </changelog>

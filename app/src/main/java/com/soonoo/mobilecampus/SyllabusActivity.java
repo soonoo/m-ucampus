@@ -33,26 +33,17 @@ public class SyllabusActivity extends ActionBarActivity{
         setContentView(R.layout.activity_syllabus);
         //pd.setVisibility(View.VISIBLE);
 
-        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         int position = intent.getIntExtra("subIndex", 1);
 
-        new GetSyllabus(new OnRequestCompleted() {
-            @Override
-            public void onRequestCompleted(Document doc) {
-                document = doc;
-            }
-        }).execute(User.subCode.get(position - 1));
+        new GetSyllabus().execute(User.subCode.get(position - 1));
     }
 
     public class GetSyllabus extends AsyncTask<String, Void, Document>{
-        public OnRequestCompleted delegate = null;
         ProgressBar pb = (ProgressBar)findViewById(R.id.progressbar_downloading);
-        GetSyllabus(OnRequestCompleted caller){
-            delegate = caller;
-        }
 
         @Override
         public void onPreExecute(){
@@ -66,19 +57,24 @@ public class SyllabusActivity extends ActionBarActivity{
         }
         @Override
         protected void onPostExecute(Document result) {
-            delegate.onRequestCompleted(result);
-            document.select("td").attr("style", "font-size:80%;");
-            document.select("td.bgtable1").attr("style", "background-color:#edf1f3; font-size:80%;");
-            document.select("table:contains(출력)").remove();
-            document.select("colspan").remove();
-            document.select("table").select("table").attr("width", "100%");
+            document = result;
+            try{
+                document.select("td").attr("style", "font-size:80%;");
+                document.select("td.bgtable1").attr("style", "background-color:#edf1f3; font-size:80%;");
+                document.select("table:contains(출력)").remove();
+                document.select("colspan").remove();
+                document.select("table").select("table").attr("width", "100%");
 
-            for(Element element: document.select("td:contains(연락처), td:contains(이동전화), td:contains(이메일)")){
-                element.nextElementSibling().attr("style", "color:#a70500; text-decoration:underline; font-size:80%;");
+                for (Element element : document.select("td:contains(연락처), td:contains(이동전화), td:contains(이메일)")) {
+                    element.nextElementSibling().attr("style", "color:#a70500; text-decoration:underline; font-size:80%;");
+                }
+                WebView myWebView = (WebView)findViewById(R.id.wv);
+                myWebView.loadDataWithBaseURL("", document.toString(), "text/html", "UTF-8", "");
+            } catch(Exception e){
+                WebView myWebView = (WebView)findViewById(R.id.wv);
+                myWebView.loadDataWithBaseURL("", getString(R.string.message_syllabus_missing), "text/html", "UTF-8", "");
             }
 
-            WebView myWebView = (WebView)findViewById(R.id.wv);
-            myWebView.loadDataWithBaseURL("", document.toString(), "text/html", "UTF-8", "");
             pb.setVisibility(View.GONE);
         }
     }
@@ -98,6 +94,6 @@ public class SyllabusActivity extends ActionBarActivity{
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
 }

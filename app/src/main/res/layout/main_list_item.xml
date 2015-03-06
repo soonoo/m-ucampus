@@ -3,22 +3,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/main_list_state"
-   >
+    android:paddingLeft="7dp"
+    >
     <TextView
         android:singleLine="true"
         android:id="@+id/main_title"
         android:paddingTop="7dp"
-        android:paddingLeft="7dp"
         android:paddingRight="7dp"
-        android:paddingBottom="4dp"
+        android:paddingBottom="5dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="22dp"
+        android:textSize="19dp"
         android:textColor="#000"/>
     <TextView
         android:id="@+id/main_info"
-        android:paddingLeft="7dp"
-        android:paddingBottom="5dp"
+        android:paddingBottom="6dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 </LinearLayout>

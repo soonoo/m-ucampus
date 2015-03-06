@@ -1,5 +1,9 @@
 package com.soonoo.mobilecampus;
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -178,5 +182,22 @@ public class User {
             e.printStackTrace();
         }
         return result.toString();
+    }
+
+    public static boolean isConnected(Activity activity){
+        ConnectivityManager cManager;
+        NetworkInfo mobile;
+        NetworkInfo wifi;
+
+        cManager=(ConnectivityManager)activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        mobile = cManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        wifi = cManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(mobile.isConnected() || wifi.isConnected()) {
+            return true;
+        } else{
+            return false;
+        }
+
     }
 }

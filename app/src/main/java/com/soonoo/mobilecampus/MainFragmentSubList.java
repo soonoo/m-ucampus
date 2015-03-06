@@ -37,61 +37,54 @@ public class MainFragmentSubList extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_list, container, false);
         final ListView mainList = (ListView) view.findViewById(R.id.fragment_list);
 
-            new InitMainList(new OnRequestCompletedArray() {
-                @Override
-                public void onRequestArray(ArrayList<String> list) {
-                    infoList = list;
-                    int size = infoList.size();
+        new InitMainList(new OnRequestCompletedArray() {
+            @Override
+            public void onRequestArray(ArrayList<String> list) {
+                infoList = list;
+                int size = titleList.size();
 
-                    titleList.add(0, "과목별 조회");
-                    titleList.add("성적/장학 조회");
-                    titleList.add("성적/석차 조회");
-                    titleList.add("장학 조회");
-                    titleList.add("시설 이용");
-                    titleList.add("중앙도서관");
+                titleList.add(0, "과목별 조회");
+                titleList.add("성적/장학 조회");
+                titleList.add("성적/석차 조회");
+                titleList.add("장학 조회");
+                titleList.add("시설 이용");
+                titleList.add("중앙도서관");
 
-                    infoList.add(0, "");
-                    infoList.add("");
-                    infoList.add("학기별 성적/석차를 확인합니다.");
-                    infoList.add("장학금 수혜 현황을 확인합니다.");
-                    infoList.add("");
-                    infoList.add("열람실별 좌석 현황을 확인합니다.");
+                infoList.add(0, "");
+                infoList.add("");
+                infoList.add("학기별 성적/석차를 확인합니다.");
+                infoList.add("장학금 수혜 현황을 확인합니다.");
+                infoList.add("");
+                infoList.add("열람실 좌석 현황/도서 검색");
 
-
-                    LayoutInflater inflater2 = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE);
-                    View view2 = inflater2 .inflate(R.layout.fragment_main_list, null);
-                    ProgressBar pb = (ProgressBar) view2.findViewById(R.id.progressbar_downloading);
-                    pb.setVisibility(View.GONE);
-
-                    adapter = new MainListAdapter(titleList, infoList, size + 1);
-                    mainList.setAdapter(adapter);
-                }
-            }).execute();
+                adapter = new MainListAdapter(titleList, infoList, size + 1);
+                mainList.setAdapter(adapter);
+            }
+        }).execute();
 
         return view;
     }
 
-    public class InitMainList extends AsyncTask<Void, Void, ArrayList<String>>{
+    public class InitMainList extends AsyncTask<Void, Void, ArrayList<String>> {
         OnRequestCompletedArray delegate;
 
         private ProgressDialog nDialog;
 
-        InitMainList(OnRequestCompletedArray caller){
+        InitMainList(OnRequestCompletedArray caller) {
             delegate = caller;
         }
 
         @Override
-        public void onPreExecute(){
+        public void onPreExecute() {
             nDialog = new ProgressDialog(getActivity()); //Here I get an error: The constructor ProgressDialog(PFragment) is undefined
-            nDialog.setMessage("최초 로그인시에는 시간이 다소 소요됩니다.");
-            nDialog.setTitle("로그인중...");
+            nDialog.setMessage("로그인중입니다...");
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(false);
             nDialog.show();
         }
 
         @Override
-        public ArrayList<String> doInBackground(Void... p){
+        public ArrayList<String> doInBackground(Void... p) {
             ArrayList<String> infoList = new ArrayList<String>();
 
             SharedPreferences prefs = PreferenceManager
@@ -103,13 +96,13 @@ public class MainFragmentSubList extends Fragment {
             User.subCode = Parser.getSubCode(mainDoc);
             User.subName = Parser.getSubName(mainDoc);
 
-            for(String sub: User.subCode){
+            for (String sub : User.subCode) {
                 String info;
-                if((info = prefs.getString(sub, null)) != null) {
+                if ((info = prefs.getString(sub, null)) != null) {
                     infoList.add(info);
                     continue;
-                }else {
-                    String sylHtml = User.getHtml("GET", Sites.SYLLABUS_URL + Parser.getSubQuery(sub), "euc-kr");
+                } else {
+                    String sylHtml = User.getHtml("POST", Sites.SYLLABUS_URL + Parser.getSubQuery(sub), "euc-kr");
                     Document sylDoc = Jsoup.parse(sylHtml);
 
                     String prof = Parser.getProf(sylDoc);
@@ -123,9 +116,10 @@ public class MainFragmentSubList extends Fragment {
             }
             return infoList;
         }
+
         @Override
-        public void onPostExecute(ArrayList<String> list){
-            titleList = (ArrayList<String>)User.subName.clone();
+        public void onPostExecute (ArrayList < String > list) {
+            titleList = (ArrayList<String>) User.subName.clone();
             delegate.onRequestArray(list);
             nDialog.dismiss();
         }

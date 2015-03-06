@@ -12,8 +12,8 @@
 </WebView>
 
         <ProgressBar
-
-            style="?android:attr/progressBarStyleLarge"
+            android:visibility="gone"
+            style="?android:attr/progressBarStyle"
             android:id="@+id/progressbar_downloading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -6,6 +6,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,10 +15,10 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:icon="@mipmap/ic_launcher"
-            android:logo="@mipmap/ic_launcher"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/app_name" >
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:logo="@mipmap/ic_launcher" >
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -53,6 +54,27 @@
             android:name=".LibrarySeatInfoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_library_seat_info" >
+        </activity>
+        <activity
+            android:name=".LibraryBookSearch"
+            android:label="@string/title_activity_library_book_search" >
+        </activity>
+        <activity
+            android:name=".LecReferRoomActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_lec_refer_room" >
+        </activity>
+        <activity
+            android:name=".LecReferDispActivity"
+            android:label="@string/title_activity_lec_refer_disp" >
+        </activity>
+        <activity
+            android:name=".NoticeActivity"
+            android:label="@string/title_activity_notice" >
+        </activity>
+        <activity
+            android:name=".NoticeViewActivity"
+            android:label="@string/title_activity_notice_view" >
         </activity>
     </application>
 

@@ -116,12 +116,11 @@ public class LoginActivity extends Activity {
                  }
                 // 로그인, 메인 액티비티 리스트 초기화 진행
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                findViewById(R.id.progress_login).setVisibility(View.INVISIBLE);
                 finish();
                 startActivity(intent);
             }
-            findViewById(R.id.progress_login).setVisibility(View.INVISIBLE);
             findViewById(R.id.login_button).setEnabled(true);
+            findViewById(R.id.progress_login).setVisibility(View.GONE);
         }
     }
 

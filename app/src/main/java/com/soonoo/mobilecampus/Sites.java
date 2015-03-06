@@ -50,6 +50,16 @@ public class Sites {
     //강의 자료실
     static final String LEC_REFER_URL = "http://info2.kw.ac.kr/servlet/controller.learn.AssPdsStuServlet";
     static final String LEC_REFER_QUERY = "p_process=listPage&p_grcode=N000003";
+    static final String LEC_REFER_VIEW_QUERY = "p_process=view&p_grcode=N000003";
             //"&p_subj=U2014129577220011&p_year=2014&p_subjseq=1&p_class=01&p_pageno=1";
+            // &p_subj=U2015119947220012 &p_year=2015 &p_subjseq=1 &p_class=01  &p_pageno=1
+    static final String LIBRRY_MAIN_PAGE = "http://mkupis.kw.ac.kr/";
 
+    static final String LEC_DOWNLOAD_URL = "http://info2.kw.ac.kr/servlet/controller.library.DownloadServlet";
+
+    static final String NOTICE_URL = "http://info2.kw.ac.kr/servlet/controller.learn.NoticeStuServlet";
+    static final String NOTICE_QUERY = "p_process=listPage&p_process=&p_grcode=N000003";
+    static final String NOTICE_VIEW_QUERY = "p_process=view";
+    //&p_subj=U2015104537220022&p_year=2015&p_subjseq=1&p_class=02&p_pageno=1
+            //"p_subj=U2015104537220022&p_year=2015&p_subjseq=1&p_class=02&p_userid=2014722023UA&p_page=;
 }

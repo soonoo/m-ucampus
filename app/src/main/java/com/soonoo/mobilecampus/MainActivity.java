@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
-
     private Context context;
     //float density = getApplicationContext().getResources().getDisplayMetrics().density;
 

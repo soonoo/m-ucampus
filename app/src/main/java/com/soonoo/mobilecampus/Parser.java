@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Parser {
 
     static ArrayList<String> getSubCode(Document doc){
-        Elements elements = doc.select("table.main_box ~ table.main_box").select("a[href]");
+        Elements elements = doc.select("table.main_box ~ table.main_box").select("a[href]:eq(0)");
         ArrayList<String> list = new ArrayList<String>();
 
         for(Element element: elements){
@@ -25,7 +25,9 @@ public class Parser {
     }
 
     static ArrayList<String> getSubName(Document doc){
-        Elements elements = doc.select("table.main_box ~ table.main_box").select(".list_txt:contains( )");
+        Elements elements = doc.select("table.main_box ~ table.main_box").select(".list_txt:contains( ):eq(1)");
+        //Elements elements = doc.select("td:contains([학부])");
+
         ArrayList<String> list = new ArrayList<String>();
 
         for(Element element: elements){
@@ -37,13 +39,15 @@ public class Parser {
     static String getProf(Document doc){
         Element element = doc.select("td:contains(담당교수) ~ td").first();
 
-        return element.text();
+        if(element != null) return element.text();
+        else return "교수 정보 없음";
     }
 
     static String getTime(Document doc){
         Element element = doc.select("td:contains(강의실) ~ td").first();
 
-        return element.text();
+        if(element != null) return element.text();
+        else return "강의실 정보 없음";
     }
 
     static String getSubQuery(String code){
@@ -54,5 +58,42 @@ public class Parser {
                 "&open_major_code=" + code.substring(9, 13) +
                 "&this_year=" + code.substring(0, 4);
         return query;
+    }
+
+    static String getReferQuery(String code, int page){
+        String query = Sites.LEC_REFER_QUERY +
+                "&p_subj=U" + code +
+                "&p_year=" + code.substring(0, 4) +
+                "&p_subjseq=" + code.substring(4, 5) +
+                "&p_class=" + code.substring(13, 15) +
+                "&p_pageno=" + page;
+        // 2015 1 1994 7220 01 2
+        return query;
+    }
+
+    static String getReferViewQuery(String code, String p_dbseq){
+        String query = Sites.LEC_REFER_VIEW_QUERY +
+                "&p_subj=U" + code +
+                "&p_year=" + code.substring(0, 4) +
+                "&p_subjseq=" + code.substring(4, 5) +
+                "&p_class=" + code.substring(13, 15) +
+                "&p_bdseq=" + p_dbseq;
+        // 2015 1 1994 7220 01 2
+        return query;
+    }
+
+    static String getNoticeQuery(String code, int page){
+        String query = Sites.NOTICE_QUERY +
+                "&p_subj=U" + code +
+                "&p_year=" + code.substring(0, 4) +
+                "&p_subjseq=" + code.substring(4, 5) +
+                "&p_class=" + code.substring(13, 15) +
+                "&p_pageno=" + page;
+        return query;
+    }
+
+    static String getNoticeViewQuery(String seq){
+        return Sites.NOTICE_VIEW_QUERY +
+                "&p_bdseq=" + seq;
     }
 }

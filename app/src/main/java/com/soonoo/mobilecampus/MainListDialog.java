@@ -35,13 +35,20 @@ public class MainListDialog extends Dialog implements View.OnClickListener {
     //TODO:
     @Override
     public void onClick(View view){
+        Intent intent;
         switch(view.getId()) {
             case R.id.dialog_menu1:
+                intent = new Intent(getContext(), NoticeActivity.class);
+                intent.putExtra("subIndex", position);
+                getContext().startActivity(intent);
                 return;
             case R.id.dialog_menu2:
+                intent = new Intent(getContext(), LecReferRoomActivity.class);
+                intent.putExtra("subIndex", position);
+                getContext().startActivity(intent);
                 return;
             case R.id.dialog_menu3:
-                Intent intent = new Intent(getContext(), SyllabusActivity.class);
+                intent = new Intent(getContext(), SyllabusActivity.class);
                 intent.putExtra("subIndex", position);
                 getContext().startActivity(intent);
                 return;
