@@ -94,8 +94,10 @@ public class LoginActivity extends Activity {
 
         @Override
         public Boolean doInBackground(Void... p){
+            long ddd = System.currentTimeMillis();
             if(User.login(id, pw)) {
                 User.getSession();
+                Log.d("time:  ", Long.toString(System.currentTimeMillis()-ddd));
                 return true;
             }
             return false;

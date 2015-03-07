@@ -31,7 +31,12 @@
     <string name="message_grade_missing">등록된 성적이 없거나 정보를 가져올 수 없습니다. <![CDATA["<br>"]]>(<![CDATA["<a href="http:info.kw.ac.kr>"]]>http://info.kw.ac.kr<![CDATA["</a>"]]> 에서 확인해 주세요.) </string>
     <string name="message_scholar_missing">등록된 장학 수혜 현황이 없거나 정보를 가져올 수 없습니다. <![CDATA["<br>"]]>(<![CDATA["<a href="http:info.kw.ac.kr>"]]>http://info.kw.ac.kr<![CDATA["</a>"]]> 에서 확인해 주세요.) </string>
     <string name="notice_content">
-        학번과 비밀번호는 로그인 용도로만 사용되며 외부로 전송되지 않습니다.\n\n
+        학교에서 제작한 공식 어플리케이션이 아닙니다. 어플 사용으로 생기는 불이익에 대해 책임지지 않습니다.\n
+        유캠퍼스의 레이아웃이 변경되면 작동하지 않을 수도 있습니다.\n\n
+
+
+        유캠퍼스의 일부 기능을 스마트폰에서 사용할 수 있는 어플입니다.\n
+        학번과 비밀번호는 로그인 용도로만 사용되며, 외부로 전송되지 않습니다.\n\n
 
         특징\n
         - 과목별 공지사항/강의자료실/강의계획서 조회\n
