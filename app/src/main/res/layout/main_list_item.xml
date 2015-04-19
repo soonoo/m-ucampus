@@ -3,8 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/main_list_state"
-    android:paddingLeft="7dp"
-    >
+    android:paddingLeft="7dp" >
     <TextView
         android:singleLine="true"
         android:id="@+id/main_title"
@@ -15,9 +14,24 @@
         android:layout_height="match_parent"
         android:textSize="19dp"
         android:textColor="#000"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="6dp"
+    android:orientation="horizontal"
+    >
+    <TextView
+        android:background="@drawable/main_list_notice"
+        android:visibility="gone"
+        android:id="@+id/new_notice"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text= " 공지NEW "
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginRight="4dp"/>
     <TextView
         android:id="@+id/main_info"
-        android:paddingBottom="6dp"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" /></LinearLayout>
 </LinearLayout>

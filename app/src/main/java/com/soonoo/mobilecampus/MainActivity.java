@@ -19,6 +19,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,6 +40,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.context = getApplicationContext();
+
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("MainActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         this.overridePendingTransition(0, 0);
 
@@ -91,5 +98,23 @@ public class MainActivity extends ActionBarActivity {
     public void finish(){
         super.finish();
         this.overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        new LoginActivity.OnBack().execute();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

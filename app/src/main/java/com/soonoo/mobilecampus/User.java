@@ -25,7 +25,7 @@ public class User {
     static String cookie = "";
     static ArrayList<String> subCode;
     static ArrayList<String> subName;
-
+    static ArrayList<Boolean> isNew = new ArrayList<>();
     public static String setCookie(HttpURLConnection con){
         String headerName;
         String cookie;

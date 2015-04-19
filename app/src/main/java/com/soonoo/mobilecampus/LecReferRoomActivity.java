@@ -15,6 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -40,6 +44,11 @@ public class LecReferRoomActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lec_refer_room);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("LecReferRoomActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
+
         subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
         new GetRefer(subCode, page).execute();
 
@@ -203,5 +212,22 @@ public class LecReferRoomActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        new LoginActivity.OnBack().execute();
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

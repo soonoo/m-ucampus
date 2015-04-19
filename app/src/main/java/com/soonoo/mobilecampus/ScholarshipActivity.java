@@ -11,6 +11,10 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,6 +32,10 @@ public class ScholarshipActivity extends ActionBarActivity {
         setContentView(R.layout.activity_scholarship);
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("ScholarshipActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         new GetScholarshipHtml().execute();
     }
@@ -82,5 +90,22 @@ public class ScholarshipActivity extends ActionBarActivity {
     public void finish() {
         super.finish();
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        new LoginActivity.OnBack().execute();
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

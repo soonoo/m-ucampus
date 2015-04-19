@@ -9,6 +9,10 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,6 +28,10 @@ public class SyllabusActivity extends ActionBarActivity{
 
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("SyllabusActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         Intent intent = getIntent();
         int position = intent.getIntExtra("subIndex", 1);
@@ -84,5 +92,16 @@ public class SyllabusActivity extends ActionBarActivity{
     public void finish() {
         super.finish();
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

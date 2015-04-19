@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name_kr">광운대학교 유캠퍼스</string>
     <string name="app_name">u-Campus</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -53,4 +54,5 @@
     <string name="title_activity_lec_refer_disp">강의 자료실</string>
     <string name="title_activity_notice">공지사항</string>
     <string name="title_activity_notice_view">공지사항</string>
+    <string name="title_activity_dining">DiningActivity</string>
 </resources>

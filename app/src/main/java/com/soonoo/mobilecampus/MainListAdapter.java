@@ -24,15 +24,17 @@ import java.util.ArrayList;
 public class MainListAdapter extends BaseAdapter{
     private ArrayList<String> titleList;
     private ArrayList<String> infoList;
+    private ArrayList<Boolean> isNew;
 
     private final int TYPE_SEPARATOR = 0;
     private final int TYPE_ITEM = 1;
 
     private int separatorIndex;
 
-    MainListAdapter(ArrayList<String> titleList, ArrayList<String> infoList, int index){
+    MainListAdapter(ArrayList<String> titleList, ArrayList<String> infoList, ArrayList<Boolean> isNew,  int index){
         this.titleList = titleList;
         this.infoList = infoList;
+        this.isNew = isNew;
         this.separatorIndex = index;
     }
 
@@ -87,10 +89,14 @@ public class MainListAdapter extends BaseAdapter{
                     holder_item = new HolderItem();
                     holder_item.title = (TextView) view.findViewById(R.id.main_title);
                     holder_item.subTitle = (TextView) view.findViewById(R.id.main_info);
+                    holder_item.newNotice = (TextView) view.findViewById(R.id.new_notice);
                     view.setTag(holder_item);
                 }else{
                     holder_item = (HolderItem) view.getTag();
                 }
+
+                if(0 < pos && pos <= User.subName.size() && isNew.get(pos-1)) holder_item.newNotice.setVisibility(View.VISIBLE);
+                else holder_item.newNotice.setVisibility(View.GONE);
 
                 holder_item.title.setText(titleList.get(pos));
                 holder_item.subTitle.setText(infoList.get(pos));
@@ -118,6 +124,9 @@ public class MainListAdapter extends BaseAdapter{
                                     //intent = new Intent(context, LibrarySeatInfoActivity.class);
                                     //v.getContext().startActivity(intent);
                                     break;
+                                case 6:
+                                    context.startActivity(new Intent(context, DiningActivity.class));
+                                    break;
                             }
                         }
                     }
@@ -142,6 +151,7 @@ public class MainListAdapter extends BaseAdapter{
     class HolderItem{
         TextView title;
         TextView subTitle;
+        TextView newNotice;
     }
     class HolderSeparator{
         TextView separator;

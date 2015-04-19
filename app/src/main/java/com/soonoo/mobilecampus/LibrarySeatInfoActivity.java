@@ -13,6 +13,10 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,6 +31,10 @@ public class LibrarySeatInfoActivity extends ActionBarActivity {
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         setContentView(R.layout.activity_library_seat_info);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("LibrarySeatInfoActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         new GetSeatHtml().execute();
     }
@@ -120,4 +128,17 @@ public class LibrarySeatInfoActivity extends ActionBarActivity {
         wv.clearCache(true);
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
+
 }

@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -49,15 +52,17 @@ public class MainFragmentSubList extends Fragment {
                 titleList.add("장학 조회");
                 titleList.add("시설 이용");
                 titleList.add("중앙도서관");
+                //titleList.add("복지관 학생식당");
 
                 infoList.add(0, "");
                 infoList.add("");
                 infoList.add("학기별 성적/석차를 확인합니다.");
                 infoList.add("장학금 수혜 현황을 확인합니다.");
-                infoList.add("");
+                infoList.add(""); User.isNew.add(false);
                 infoList.add("열람실 좌석 현황/도서 검색");
+                //infoList.add("학생 식당 식단을 확인합니다.");
 
-                adapter = new MainListAdapter(titleList, infoList, size + 1);
+                adapter = new MainListAdapter(titleList, infoList, User.isNew, size + 1);
                 mainList.setAdapter(adapter);
             }
         }).execute();
@@ -93,9 +98,12 @@ public class MainFragmentSubList extends Fragment {
 
             String mainHtml = User.getHtml("POST", Sites.MAIN_URL, Sites.MAIN_QUERY, "utf-8");
             Document mainDoc = Jsoup.parse(mainHtml);
+
             User.subCode = Parser.getSubCode(mainDoc);
             User.subName = Parser.getSubName(mainDoc);
+            Parser.getNewNotice(mainDoc);
 
+            if(User.subCode == null || User.subCode.size() ==0) Parser.setSubCode();
             for (String sub : User.subCode) {
                 String info;
                 if ((info = prefs.getString(sub, null)) != null) {

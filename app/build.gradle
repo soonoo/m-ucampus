@@ -8,8 +8,8 @@ android {
         applicationId "com.soonoo.mobilecampus"
         minSdkVersion 9
         targetSdkVersion 21
-        versionCode 8
-        versionName "1.0.5"
+        versionCode 10
+        versionName "1.0.6"
     }
     buildTypes {
         release {
@@ -25,4 +25,5 @@ dependencies {
     compile files('libs/jsoup-1.8.1.jar')
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.github.gabrielemariotti.changeloglib:library:1.5.2'
+    compile 'com.google.android.gms:play-services:6.5.87'
 }

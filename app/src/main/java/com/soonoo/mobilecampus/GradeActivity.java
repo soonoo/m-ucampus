@@ -12,6 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -29,6 +33,9 @@ public class GradeActivity extends ActionBarActivity {
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("GradeActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         if (User.isConnected(GradeActivity.this)) new GetGradeHtml().execute();
         else Toast.makeText(getApplicationContext(), "nono", Toast.LENGTH_SHORT).show();
@@ -103,6 +110,24 @@ public class GradeActivity extends ActionBarActivity {
     public void finish() {
         super.finish();
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        new LoginActivity.OnBack().execute();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }
 

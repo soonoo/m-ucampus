@@ -62,4 +62,6 @@ public class Sites {
     static final String NOTICE_VIEW_QUERY = "p_process=view";
     //&p_subj=U2015104537220022&p_year=2015&p_subjseq=1&p_class=02&p_pageno=1
             //"p_subj=U2015104537220022&p_year=2015&p_subjseq=1&p_class=02&p_userid=2014722023UA&p_page=;
+
+    static final String DINING_URL = "http://www.kw.ac.kr/sub/life/uniguide18_1CP.do";
 }

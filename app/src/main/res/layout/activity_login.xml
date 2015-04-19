@@ -1,86 +1,91 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
-<LinearLayout
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:weightSum="1">
-    <LinearLayout
-        android:layout_marginBottom="40dp"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <ImageView
-        android:src="@mipmap/ic_login_title"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="광운대학교 유캠퍼스"
-    android:textSize="18dp"
-    android:typeface="serif"
-    android:layout_gravity="center_vertical" />
-    </LinearLayout>
-    <EditText
-        android:id="@+id/text_id"
-        android:textColorHint="#cccccc"
-        android:background="@drawable/login_text_state"
-        android:hint="@string/id_hint"
-        android:textSize="20dp"
-        android:singleLine="true"
-        android:inputType="number"
-        android:paddingBottom="5dp"
-        android:layout_width="280dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="10dp"/>
-    <EditText
-        android:id="@+id/text_pw"
-        android:textColorHint="#cccccc"
-        android:background="@drawable/login_text_state"
-        android:hint="@string/pw_hint"
-        android:inputType="textPassword"
-        android:textSize="20dp"
-        android:paddingBottom="5dp"
-        android:singleLine="true"
-        android:layout_width="280dp"
-        android:layout_height="30dp"/>
+    android:orientation="vertical">
 
-    <Button
-        android:layout_marginTop="20dp"
-        android:layout_width="280dp"
-        android:text="@string/login_button"
-        android:textSize="18dp"
-        android:layout_height="40dp"
-        android:textColor="#fff"
-        android:background="@drawable/login_button_state"
-        android:id="@+id/login_button"/>
-
-    <CheckBox
-        android:layout_marginTop="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/auto_login"
-        android:id="@+id/auto_login" />
-
-</LinearLayout>
-    <LinearLayout
-        android:background="#fff"
-        android:id="@+id/progress_login"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone">
-    <ProgressBar
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            />
-</LinearLayout>
-    </RelativeLayout>
+            android:layout_marginBottom="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_marginLeft="9dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/app_name_kr"
+                android:textSize="18dp"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/text_id"
+            android:layout_width="280dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/login_text_state"
+            android:hint="@string/id_hint"
+            android:inputType="number"
+            android:paddingBottom="5dp"
+            android:singleLine="true"
+            android:textColorHint="#cccccc"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/text_pw"
+            android:layout_width="280dp"
+            android:layout_height="30dp"
+            android:background="@drawable/login_text_state"
+            android:hint="@string/pw_hint"
+            android:inputType="textPassword"
+            android:paddingBottom="5dp"
+            android:singleLine="true"
+            android:textColorHint="#cccccc"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login_button_state"
+            android:text="@string/login_button"
+            android:textColor="#fff"
+            android:textSize="18dp" />
+
+        <CheckBox
+            android:id="@+id/auto_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/auto_login" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/progress_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
+</RelativeLayout>

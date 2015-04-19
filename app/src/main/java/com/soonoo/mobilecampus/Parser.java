@@ -1,5 +1,10 @@
 package com.soonoo.mobilecampus;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,6 +17,18 @@ import java.util.ArrayList;
  */
 public class Parser {
 
+    static void getNewNotice(Document doc){
+        Elements elements = doc.select("table.main_box ~ table.main_box table tr");
+
+        for(Element element: elements){
+            if(!element.select("a[href*=Notice]").isEmpty()) {
+                Log.d("ddddddd", "true");
+                User.isNew.add(true);
+            }
+            else User.isNew.add(false);
+        }
+    }
+
     static ArrayList<String> getSubCode(Document doc){
         Elements elements = doc.select("table.main_box ~ table.main_box").select("a[href]:eq(0)");
         ArrayList<String> list = new ArrayList<String>();
@@ -22,6 +39,16 @@ public class Parser {
             list.add(temp);
         }
         return list;
+    }
+
+    static void setSubCode(){
+        Context context = LoginActivity.getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String code;
+        User.subCode = new ArrayList<>();
+        for(int i = 0; (code = prefs.getString("code"+ i, null)) != null; i++){
+            User.subCode.add(code);
+        }
     }
 
     static ArrayList<String> getSubName(Document doc){

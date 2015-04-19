@@ -16,15 +16,30 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 
 public class LoginActivity extends Activity {
+    private static Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("LoginActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
+
+        ctx = getApplicationContext();
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         final Button login_button = (Button) findViewById(R.id.login_button);
@@ -97,7 +112,7 @@ public class LoginActivity extends Activity {
             long ddd = System.currentTimeMillis();
             if(User.login(id, pw)) {
                 User.getSession();
-                Log.d("time:  ", Long.toString(System.currentTimeMillis()-ddd));
+                //Log.d("time:  ", Long.toString(System.currentTimeMillis()-ddd));
                 return true;
             }
             return false;
@@ -141,5 +156,46 @@ public class LoginActivity extends Activity {
             return false;
         }
 
+    }
+
+    static Context getContext(){
+        return ctx;
+    }
+
+    public static class OnBack extends AsyncTask<Void, Void, Void>{
+        @Override
+        public Void doInBackground(Void... p){
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            long ddd = System.currentTimeMillis();
+            if(User.login(prefs.getString("user_id", null), prefs.getString("user_pw", null))) {
+                User.getSession();
+
+                String mainHtml = User.getHtml("POST", Sites.MAIN_URL, Sites.MAIN_QUERY, "utf-8");
+                Document mainDoc = Jsoup.parse(mainHtml);
+                User.subCode = Parser.getSubCode(mainDoc);
+                User.subName = Parser.getSubName(mainDoc);
+                //Toast.makeText(getContext(), "timeeee:  "+Long.toString(System.currentTimeMillis() - ddd), Toast.LENGTH_SHORT).show();
+                Log.d("timeeee:  ", Long.toString(System.currentTimeMillis()-ddd));
+            }
+            return null;
+        }
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        new OnBack().execute();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

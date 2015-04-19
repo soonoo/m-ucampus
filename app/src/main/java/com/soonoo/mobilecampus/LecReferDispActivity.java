@@ -19,6 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,6 +39,10 @@ public class LecReferDispActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lec_refer_disp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("LecReferDispActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         Intent intent = getIntent();
         TextView title = (TextView) findViewById(R.id.content_title);
@@ -89,6 +97,8 @@ public class LecReferDispActivity extends ActionBarActivity {
                 attatch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+                        t.send(new HitBuilders.EventBuilder().setCategory("LecReferDispActiviy").setAction("Download Button").setLabel("refer").build());
                         String link = element.attr("href");
                         String title = link.substring(link.indexOf("(") + 2, link.indexOf(",") - 1);
                         String desc = link.substring(link.indexOf(",") + 2, link.indexOf(")") - 1);
@@ -124,5 +134,21 @@ public class LecReferDispActivity extends ActionBarActivity {
                 ll.addView(attatch);
             }
         }
+    }
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        new LoginActivity.OnBack().execute();
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }
