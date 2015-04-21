@@ -56,11 +56,12 @@ public class SyllabusActivity extends ActionBarActivity{
         protected void onPostExecute(Document result) {
             document = result;
             try{
-                document.select("td").attr("style", "font-size:80%;");
+                document.select("td").attr("style", "font-size:75%;");
                 document.select("td.bgtable1").attr("style", "background-color:#edf1f3; font-size:80%;");
                 document.select("table:contains(출력)").remove();
-                document.select("colspan").remove();
-                document.select("table").select("table").attr("width", "100%");
+              //  document.select("colspan").remove();
+                document.select("table").attr("width", "100%");
+               // document.select("td").attr("width", "1");
 
                 for (Element element : document.select("td:contains(연락처), td:contains(이동전화), td:contains(이메일)")) {
                     element.nextElementSibling().attr("style", "color:#a70500; text-decoration:underline; font-size:80%;");

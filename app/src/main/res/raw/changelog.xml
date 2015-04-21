@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
-    <changelogversion versionName="1.0.6" changeDate="2015 04월15일">
-        <changelogtext>PC 유캠퍼스의 공지사항 업데이트 표시 추가</changelogtext>
+    <changelogversion versionName="1.0.7" changeDate="2015 04월21일">
+        <changelogtext>성적 조회 레이아웃 변경</changelogtext>
     </changelogversion>
+    <changelogversion versionName="1.0.6" changeDate="2015 04월15일">
+    <changelogtext>PC 유캠퍼스의 공지사항 업데이트 표시 추가</changelogtext>
+</changelogversion>
     <changelogversion versionName="1.0.5" changeDate="2015 03월6일">
         <changelogtext>강의계획서에 교수/강의실 정보가 없을 때 강제 종료되던 현상 해결</changelogtext>
         <changelogtext>기타 잡다한 기능 추가</changelogtext>

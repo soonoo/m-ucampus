@@ -59,6 +59,8 @@ public class LibrarySeatInfoActivity extends ActionBarActivity {
                 document.select("tr:eq(1) > td:eq(1)").attr("width", "23%");
                 document.select("br + font").first().text("정보 갱신 간격은 1분입니다.");
                 //document.select("a").unwrap();
+
+
                 for(Element element: document.select("a:not(img)")){
                     element.attr("href", "http://223.194.18.3/domian/" + element.attr("href"));
                 }
