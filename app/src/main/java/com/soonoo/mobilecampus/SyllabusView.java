@@ -17,7 +17,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class SyllabusActivity extends ActionBarActivity{
+public class SyllabusView extends ActionBarActivity{
     Document document;
 
     @Override
@@ -35,8 +35,9 @@ public class SyllabusActivity extends ActionBarActivity{
 
         Intent intent = getIntent();
         int position = intent.getIntExtra("subIndex", 1);
+        String url = intent.getStringExtra("url");
 
-        new GetSyllabus().execute(User.subCode.get(position - 1));
+        new GetSyllabus().execute(User.subCode.get(position - 1), url);
     }
 
     public class GetSyllabus extends AsyncTask<String, Void, Document>{
@@ -49,19 +50,28 @@ public class SyllabusActivity extends ActionBarActivity{
 
         @Override
         public Document doInBackground(String...str){
-            String sylHtml = User.getHtml("GET", Sites.SYLLABUS_URL + Parser.getSubQuery(str[0]), "euc-kr");
+            String url;
+            if(str[1] == null) url = Sites.SYLLABUS_URL + Parser.getSubQuery(str[0]);
+            else url = "http://info.kw.ac.kr/webnote/lecture/" + str[1];
+
+            String sylHtml = User.getHtml("GET", url, "euc-kr");
             return Jsoup.parse(sylHtml);
         }
         @Override
         protected void onPostExecute(Document result) {
             document = result;
             try{
-                document.select("td").attr("style", "font-size:75%;");
-                document.select("td.bgtable1").attr("style", "background-color:#edf1f3; font-size:80%;");
+                document.select("td").attr("style", "font-size:75%; ");
+                document.select("td.bgtable1").attr("style", "background-color:#edf1f3; font-size:60%; white-space:nowrap;");
+                //document.select("td").attr("style", "white-space:nowrap;");
                 document.select("table:contains(출력)").remove();
-              //  document.select("colspan").remove();
+                 //  document.select("colspan").remove();
                 document.select("table").attr("width", "100%");
-               // document.select("td").attr("width", "1");
+                // document.select("td").attr("width", "1");
+
+                for(Element element: document.select("input[type^=text]")){
+                    element.remove();
+                }
 
                 for (Element element : document.select("td:contains(연락처), td:contains(이동전화), td:contains(이메일)")) {
                     element.nextElementSibling().attr("style", "color:#a70500; text-decoration:underline; font-size:80%;");

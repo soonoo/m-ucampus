@@ -1,27 +1,19 @@
 package com.soonoo.mobilecampus;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 /**
  * Created by soonoo on 2015-02-15.
  */
-public class MainListAdapter extends BaseAdapter{
+public class HomeViewAdapter extends BaseAdapter{
     private ArrayList<String> titleList;
     private ArrayList<String> infoList;
     private ArrayList<Boolean> isNew;
@@ -31,7 +23,7 @@ public class MainListAdapter extends BaseAdapter{
 
     private int separatorIndex;
 
-    MainListAdapter(ArrayList<String> titleList, ArrayList<String> infoList, ArrayList<Boolean> isNew,  int index){
+    HomeViewAdapter(ArrayList<String> titleList, ArrayList<String> infoList, ArrayList<Boolean> isNew, int index){
         this.titleList = titleList;
         this.infoList = infoList;
         this.isNew = isNew;
@@ -106,13 +98,13 @@ public class MainListAdapter extends BaseAdapter{
                     @Override
                     public void onClick(View v){
                         if(pos < User.subName.size() + 1) {
-                            new MainListDialog(context, pos).show();
+                            new HomeViewDialog(context, pos).show();
                         } else{
                             int index = pos - User.subCode.size();
                             Intent intent;
                             switch(index){
                                 case 2:
-                                    intent = new Intent(context, GradeActivity.class);
+                                    intent = new Intent(context, GradeView.class);
                                     context.startActivity(intent);
                                     break;
                                 case 3:
@@ -125,7 +117,9 @@ public class MainListAdapter extends BaseAdapter{
                                     //v.getContext().startActivity(intent);
                                     break;
                                 case 6:
-                                    context.startActivity(new Intent(context, DiningActivity.class));
+                                    //context.startActivity(new Intent(context, DiningActivity.class));
+                                    intent = new Intent(context, LectureSearchView.class);
+                                    context.startActivity(intent);
                                     break;
                             }
                         }

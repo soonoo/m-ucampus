@@ -17,6 +17,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Created by soonoo on 2015-02-15.
@@ -26,16 +28,17 @@ public class User {
     static ArrayList<String> subCode;
     static ArrayList<String> subName;
     static ArrayList<Boolean> isNew = new ArrayList<>();
-    public static String setCookie(HttpURLConnection con){
+
+    public static String setCookie(HttpURLConnection con) {
         String headerName;
         String cookie;
         StringBuilder cookies = new StringBuilder();
 
-        for (int i=1; (headerName = con.getHeaderFieldKey(i))!=null; i++) {
+        for (int i = 1; (headerName = con.getHeaderFieldKey(i)) != null; i++) {
             if (headerName.equals("Set-Cookie")) {
                 cookie = con.getHeaderField(i);
 
-                if(cookie.contains("ccmedia")) continue;
+                if (cookie.contains("ccmedia")) continue;
 
                 cookie = cookie.substring(0, cookie.indexOf(";") + 1);
                 cookies.append(cookie);
@@ -45,17 +48,24 @@ public class User {
         return cookies.toString();
     }
 
-    public static boolean login(String id, String pw){
+
+    public static boolean login(String id, String pw) {
         String loginQuery = Sites.LOGIN_QUERY + "&member_no=" + id + "&password=" + pw;
         HttpsURLConnection con;
 
-        try{
+        try {
             con = (HttpsURLConnection) new URL(Sites.LOGIN_URL).openConnection();
+
+            //https://evilzone.org/java/(java)-how-can-i-add-a-ciphersuite/
+            // IMPORTANT
+            SSLSocketFactoryEx factory = new SSLSocketFactoryEx();
+            con.setSSLSocketFactory(factory);
+            con.setRequestProperty("charset", "UTF-8");
 
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-length", String.valueOf(loginQuery.length()));
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            con.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0;Windows98;DigExt)");
+            con.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)");
             con.setDoOutput(true);
             con.setDoInput(true);
 
@@ -63,11 +73,11 @@ public class User {
             output.writeBytes(loginQuery);
             output.close();
 
-            if(isValid(con)) {
+            if (isValid(con)) {
                 cookie = setCookie(con);
                 return true;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             String exceptionAsStrting = sw.toString();
@@ -77,8 +87,8 @@ public class User {
         return false;
     }
 
-    static void getSession(){
-        try{
+    static void getSession() {
+        try {
             //URL url = new URL(MyUrl.SESSION_URL);
             HttpURLConnection con = (HttpURLConnection) new URL(Sites.SESSION_URL).openConnection();
 
@@ -89,7 +99,7 @@ public class User {
             con.setRequestProperty("Cookie", User.cookie);
 
             User.cookie += setCookie(con);
-        }catch(Exception e){
+        } catch (Exception e) {
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             String exceptionAsStrting = sw.toString();
@@ -98,15 +108,15 @@ public class User {
         }
     }
 
-    static boolean isValid(HttpURLConnection con){
+    static boolean isValid(HttpURLConnection con) {
         String headerName;
         String cookie;
         StringBuilder cookies = new StringBuilder();
 
-        for (int i=1; (headerName = con.getHeaderFieldKey(i))!=null; i++) {
+        for (int i = 1; (headerName = con.getHeaderFieldKey(i)) != null; i++) {
             if (headerName.equals("Set-Cookie")) {
                 cookie = con.getHeaderField(i);
-                if(cookie.contains("deleted")) return false;
+                if (cookie.contains("deleted")) return false;
                 else return true;
             }
         }
@@ -114,7 +124,7 @@ public class User {
     }
 
     // POST
-    static String getHtml(String method, String url, String query, String encoding){
+    static String getHtml(String method, String url, String query, String encoding) {
         HttpURLConnection con;
         DataOutputStream output;
         String line = null;
@@ -138,10 +148,10 @@ public class User {
             InputStream is = con.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, encoding));
 
-            while((line = rd.readLine()) != null) {
+            while ((line = rd.readLine()) != null) {
                 result.append(line);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             String exceptionAsStrting = sw.toString();
@@ -152,12 +162,12 @@ public class User {
     }
 
     // GET
-    static String getHtml(String method, String url, String encoding){
+    static String getHtml(String method, String url, String encoding) {
         HttpURLConnection con;
         String line = null;
         StringBuilder result = new StringBuilder();
 
-        try{
+        try {
             con = (HttpURLConnection) new URL(url).openConnection();
 
             con.setRequestMethod(method);
@@ -169,10 +179,10 @@ public class User {
             InputStream is = con.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, encoding));
 
-            while((line = rd.readLine()) != null) {
+            while ((line = rd.readLine()) != null) {
                 result.append(line);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             String exceptionAsStrting = sw.toString();
@@ -182,18 +192,18 @@ public class User {
         return result.toString();
     }
 
-    public static boolean isConnected(Activity activity){
+    public static boolean isConnected(Activity activity) {
         ConnectivityManager cManager;
         NetworkInfo mobile;
         NetworkInfo wifi;
 
-        cManager=(ConnectivityManager)activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        cManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         mobile = cManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         wifi = cManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        if(mobile.isConnected() || wifi.isConnected()) {
+        if (mobile.isConnected() || wifi.isConnected()) {
             return true;
-        } else{
+        } else {
             return false;
         }
 

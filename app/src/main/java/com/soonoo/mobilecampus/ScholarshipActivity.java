@@ -3,12 +3,9 @@ package com.soonoo.mobilecampus;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -17,10 +14,6 @@ import com.google.android.gms.analytics.Tracker;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 
 public class ScholarshipActivity extends ActionBarActivity {
@@ -95,7 +88,7 @@ public class ScholarshipActivity extends ActionBarActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginActivity.OnBack().execute();
+        new LoginView.OnBack().execute();
     }
     @Override
     protected void onStart(){

@@ -16,7 +16,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 
-public class LibraryBookSearch extends ActionBarActivity {
+public class LibrarySearchView extends ActionBarActivity {
     WebView webView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

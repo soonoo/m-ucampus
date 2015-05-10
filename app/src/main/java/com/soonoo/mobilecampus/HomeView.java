@@ -1,45 +1,25 @@
 package com.soonoo.mobilecampus;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-
-
-public class MainActivity extends ActionBarActivity {
-    private Context context;
+public class HomeView extends ActionBarActivity {
     //float density = getApplicationContext().getResources().getDisplayMetrics().density;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.context = getApplicationContext();
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
         t.setScreenName("MainActivity");
@@ -103,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginActivity.OnBack().execute();
+        new LoginView.OnBack().execute();
     }
 
     @Override

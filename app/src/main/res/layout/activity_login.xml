@@ -50,9 +50,9 @@
             android:layout_height="30dp"
             android:background="@drawable/login_text_state"
             android:hint="@string/pw_hint"
-            android:inputType="textPassword"
             android:paddingBottom="5dp"
             android:singleLine="true"
+            android:password="true"
             android:textColorHint="#cccccc"
             android:textSize="20dp" />
 

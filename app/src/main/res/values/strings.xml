@@ -55,4 +55,5 @@
     <string name="title_activity_notice">공지사항</string>
     <string name="title_activity_notice_view">공지사항</string>
     <string name="title_activity_dining">DiningActivity</string>
+    <string name="title_activity_lecture_search">LectureSearchActivity</string>
 </resources>

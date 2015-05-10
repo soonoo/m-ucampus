@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -28,7 +27,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 
-public class LoginActivity extends Activity {
+public class LoginView extends Activity {
     private static Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,7 @@ public class LoginActivity extends Activity {
                 new Login(true, prefs.getString("user_id", null), prefs.getString("user_pw", null)).execute();
             }catch (Exception e){}
         } else if(!isConnected()){
-            Toast.makeText(LoginActivity.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginView.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
         }
 
         login_button.setOnClickListener(new View.OnClickListener() {
@@ -63,11 +62,11 @@ public class LoginActivity extends Activity {
 
                 try{
                     if(!isConnected()) {
-                        Toast.makeText(LoginActivity.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginView.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
                     } else if(id.equals("")){
-                        Toast.makeText(LoginActivity.this, R.string.error_id, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginView.this, R.string.error_id, Toast.LENGTH_SHORT).show();
                     } else if(pw.equals("")){
-                        Toast.makeText(LoginActivity.this, R.string.error_pw, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginView.this, R.string.error_pw, Toast.LENGTH_SHORT).show();
                     } else{
                         new Login(false, id, pw).execute();
                     }
@@ -109,10 +108,8 @@ public class LoginActivity extends Activity {
 
         @Override
         public Boolean doInBackground(Void... p){
-            long ddd = System.currentTimeMillis();
             if(User.login(id, pw)) {
                 User.getSession();
-                //Log.d("time:  ", Long.toString(System.currentTimeMillis()-ddd));
                 return true;
             }
             return false;
@@ -121,9 +118,9 @@ public class LoginActivity extends Activity {
         @Override
         public void onPostExecute(Boolean isValid){
             final CheckBox auto_login = (CheckBox) findViewById(R.id.auto_login);
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LoginView.this);
             if(!isValid){
-                Toast.makeText(LoginActivity.this, R.string.error_login_info, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginView.this, R.string.error_login_info, Toast.LENGTH_SHORT).show();
             }else{
                  prefs.edit().putBoolean("auto_login", auto_login.isChecked()).apply();
 
@@ -132,7 +129,7 @@ public class LoginActivity extends Activity {
                      prefs.edit().putString("user_pw", pw).apply();
                  }
                 // 로그인, 메인 액티비티 리스트 초기화 진행
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginView.this, HomeView.class);
                 finish();
                 startActivity(intent);
             }
@@ -174,8 +171,6 @@ public class LoginActivity extends Activity {
                 Document mainDoc = Jsoup.parse(mainHtml);
                 User.subCode = Parser.getSubCode(mainDoc);
                 User.subName = Parser.getSubName(mainDoc);
-                //Toast.makeText(getContext(), "timeeee:  "+Long.toString(System.currentTimeMillis() - ddd), Toast.LENGTH_SHORT).show();
-                Log.d("timeeee:  ", Long.toString(System.currentTimeMillis()-ddd));
             }
             return null;
         }

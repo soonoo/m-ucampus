@@ -64,4 +64,7 @@ public class Sites {
             //"p_subj=U2015104537220022&p_year=2015&p_subjseq=1&p_class=02&p_userid=2014722023UA&p_page=;
 
     static final String DINING_URL = "http://www.kw.ac.kr/sub/life/uniguide18_1CP.do";
+
+    //강의계획서 검색
+    static final String LECTURE_SEARCH = "http://info.kw.ac.kr/webnote/lecture/h_lecture.php?layout_opt=N";
 }

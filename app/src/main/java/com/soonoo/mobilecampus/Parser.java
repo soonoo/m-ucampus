@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -42,7 +41,7 @@ public class Parser {
     }
 
     static void setSubCode(){
-        Context context = LoginActivity.getContext();
+        Context context = LoginView.getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String code;
         User.subCode = new ArrayList<>();

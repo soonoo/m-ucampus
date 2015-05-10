@@ -28,7 +28,7 @@ import java.util.ArrayList;
 /**
  * Created by soonoo on 2015-02-22.
  */
-public class MainFragmentTimeTable extends Fragment {
+public class HomeViewTableFrag extends Fragment {
     ArrayList<String> subList = new ArrayList<String>();
     ArrayList<String> bgList = new ArrayList<String>();
     Document document;

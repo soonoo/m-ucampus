@@ -11,7 +11,8 @@ import java.util.HashMap;
  * Created by soonoo on 2015-03-15.
  */
 public class Controller extends Application {
-    private static final String PROPERTY_ID = "UA-60171962-2";
+    //private static final String PROPERTY_ID = "UA-60171962-2";
+    private static final String PROPERTY_ID = "UA-60171962-22";
 
     public enum TrackerName {
         APP_TRACKER,           // 앱 별로 트래킹

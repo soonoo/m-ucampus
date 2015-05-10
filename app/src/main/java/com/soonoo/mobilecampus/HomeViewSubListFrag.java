@@ -7,31 +7,24 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 
 /**
  * Created by soonoo on 2015-02-22.
  */
-public class MainFragmentSubList extends Fragment {
+public class HomeViewSubListFrag extends Fragment {
     Context context;
     ArrayList<String> infoList;
     ArrayList<String> titleList;
-    MainListAdapter adapter;
+    HomeViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +45,7 @@ public class MainFragmentSubList extends Fragment {
                 titleList.add("장학 조회");
                 titleList.add("시설 이용");
                 titleList.add("중앙도서관");
+                //titleList.add("강의계획서 검색");
                 //titleList.add("복지관 학생식당");
 
                 infoList.add(0, "");
@@ -60,9 +54,10 @@ public class MainFragmentSubList extends Fragment {
                 infoList.add("장학금 수혜 현황을 확인합니다.");
                 infoList.add(""); User.isNew.add(false);
                 infoList.add("열람실 좌석 현황/도서 검색");
+                //infoList.add("강의계획서를 검색합니다.");
                 //infoList.add("학생 식당 식단을 확인합니다.");
 
-                adapter = new MainListAdapter(titleList, infoList, User.isNew, size + 1);
+                adapter = new HomeViewAdapter(titleList, infoList, User.isNew, size + 1);
                 mainList.setAdapter(adapter);
             }
         }).execute();

@@ -23,7 +23,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return (position == 0)? new MainFragmentSubList() : new MainFragmentTimeTable() ;
+        return (position == 0)? new HomeViewSubListFrag() : new HomeViewTableFrag() ;
         //return new MainFragmentSubList();
     }
 }

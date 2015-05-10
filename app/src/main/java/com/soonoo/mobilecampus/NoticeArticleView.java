@@ -9,12 +9,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,22 +24,21 @@ import com.google.android.gms.analytics.Tracker;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.w3c.dom.Text;
+import org.jsoup.select.Elements;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 
-public class LecReferDispActivity extends ActionBarActivity {
+public class NoticeArticleView extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lec_refer_disp);
+        setContentView(R.layout.activity_notice_view);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("LecReferDispActivity");
+        t.setScreenName("NoticeViewActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
         Intent intent = getIntent();
@@ -55,7 +52,6 @@ public class LecReferDispActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
@@ -67,13 +63,12 @@ public class LecReferDispActivity extends ActionBarActivity {
 
     public class GetContents extends AsyncTask<Void, Void, Document> {
         Intent intent = getIntent();
-        String code = intent.getStringExtra("subIndex");
         String seq = intent.getStringExtra("bdseq");
 
         @Override
         public Document doInBackground(Void... p) {
-            String html = User.getHtml("POST", Sites.LEC_REFER_URL,
-                    Parser.getReferViewQuery(code, seq), "utf-8");
+            String html = User.getHtml("POST", Sites.NOTICE_URL,
+                    Parser.getNoticeViewQuery(seq), "utf-8");
             return Jsoup.parse(html);
         }
 
@@ -82,12 +77,17 @@ public class LecReferDispActivity extends ActionBarActivity {
             float scale = getResources().getDisplayMetrics().density;
             int dpT = (int) (3 * scale + 0.5f);
             int dpB = (int) (2 * scale + 0.5f);
-            TextView contents = (TextView) findViewById(R.id.content_contents);
-            contents.setText(Html.fromHtml(document.select("td.tl_l2").toString()));
+           // TextView contents = (TextView) findViewById(R.id.content_contents);
+          //  contents.setText(Html.fromHtml(document.select("td.tl_l2").toString()));
+
+            WebView wv = (WebView)findViewById(R.id.wv_notice_view);
+            wv.loadDataWithBaseURL("", document.select("td.tl_l2").toString(), "text/html", "euc-kr", "");
+
             LinearLayout ll = (LinearLayout) findViewById(R.id.attatch_ll);
 
-            for (final Element element : document.select(".link_b2 a")) {
-                TextView attatch = new TextView(LecReferDispActivity.this);
+            Elements elements = document.select(".link_b2 a");
+            for (final Element element : elements) {
+                TextView attatch = new TextView(NoticeArticleView.this);
                 attatch.setText(element.text());
                 attatch.setTextSize(20);
                 attatch.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -98,7 +98,8 @@ public class LecReferDispActivity extends ActionBarActivity {
                     @Override
                     public void onClick(View v) {
                         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-                        t.send(new HitBuilders.EventBuilder().setCategory("LecReferDispActiviy").setAction("Download Button").setLabel("refer").build());
+                        t.send(new HitBuilders.EventBuilder().setCategory("NoticeViewActivity").setAction("Download Button").setLabel("notice").build());
+
                         String link = element.attr("href");
                         String title = link.substring(link.indexOf("(") + 2, link.indexOf(",") - 1);
                         String desc = link.substring(link.indexOf(",") + 2, link.indexOf(")") - 1);
@@ -133,12 +134,23 @@ public class LecReferDispActivity extends ActionBarActivity {
 
                 ll.addView(attatch);
             }
+
+            if(elements.size() == 0) {
+                TextView attatch = new TextView(NoticeArticleView.this);
+                attatch.setText("첨부파일이 없습니다.");
+                attatch.setTextSize(20);
+                attatch.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                attatch.setPadding(0, dpT, 0, dpB);
+                ll.addView(attatch);
+            }
         }
     }
+
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginActivity.OnBack().execute();
+        new LoginView.OnBack().execute();
     }
     @Override
     protected void onStart(){

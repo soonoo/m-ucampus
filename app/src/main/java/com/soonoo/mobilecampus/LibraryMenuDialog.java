@@ -23,10 +23,10 @@ public class LibraryMenuDialog extends Dialog implements View.OnClickListener {
     public void onClick(View view){
         switch(view.getId()) {
             case R.id.dialog_menu1:
-                getContext().startActivity(new Intent(getContext(), LibrarySeatInfoActivity.class));
+                getContext().startActivity(new Intent(getContext(), LibrarySeatInfoView.class));
                 return;
             case R.id.dialog_menu2:
-                getContext().startActivity(new Intent(getContext(), LibraryBookSearch.class));
+                getContext().startActivity(new Intent(getContext(), LibrarySearchView.class));
                 return;
         }
     }

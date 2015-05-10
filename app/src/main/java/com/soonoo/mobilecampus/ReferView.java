@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
 
-public class NoticeActivity extends ActionBarActivity {
+public class ReferView extends ActionBarActivity {
     ArrayList<String> titleList;
     ArrayList<String> infoList;
     ArrayList<String> codeList;
@@ -39,34 +38,19 @@ public class NoticeActivity extends ActionBarActivity {
         int dp = (int) (px * scale + 0.5f);
         return dp;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notice);
+        setContentView(R.layout.activity_lec_refer_room);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("NoticeActivity");
+        t.setScreenName("LecReferRoomActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
         subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
         new GetRefer(subCode, page).execute();
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     public class GetRefer extends AsyncTask<Void, Void, Document> {
@@ -79,7 +63,7 @@ public class NoticeActivity extends ActionBarActivity {
         }
 
         @Override
-        public void onPreExecute() {
+        public void onPreExecute(){
             titleList = new ArrayList<>();
             infoList = new ArrayList<>();
             codeList = new ArrayList<>();
@@ -87,39 +71,38 @@ public class NoticeActivity extends ActionBarActivity {
 
         @Override
         public Document doInBackground(Void... p) {
-            String html = User.getHtml("POST", Sites.NOTICE_URL, Parser.getNoticeQuery(code, page), "UTF-8");
+            String html = User.getHtml("POST", Sites.LEC_REFER_URL, Parser.getReferQuery(code, page), "UTF-8");
             return Jsoup.parse(html);
         }
 
         @Override
         public void onPostExecute(Document document) {
+
             Elements elements = document.select("samp");
-            for (Element element : elements) {
+            for(Element element: elements){
                 Element parent = element.parent().parent();
                 titleList.add(parent.select("a").text());
 
                 String info = "no." + parent.select("td:eq(1)").text() + "  |  " +
-                         parent.select("td:eq(4)").text() + "  |  " +
-                        "작성자: " + parent.select("td:eq(5)").text() + "  |  " +
-                        "조회수: " + parent.select("td:eq(6)").text();
+                        "등록일: " + parent.select("td:eq(3)").text() + "  |  " +
+                        "조회수: " + parent.select("td:eq(5)").text();
                 infoList.add(info);
 
                 String code = element.select("a").attr("href");
-                codeList.add(code.substring(code.indexOf("(") + 2, code.indexOf(",") - 1));
+                codeList.add(code.substring( code.indexOf("(")+2, code.indexOf(",") - 1 ));
             }
 
-            if (elements.size() == 0)
-                findViewById(R.id.message_no_contents).setVisibility(View.VISIBLE);
+            if(elements.size() == 0) findViewById(R.id.message_no_contents).setVisibility(View.VISIBLE);
 
-            ListView listView = (ListView) findViewById(R.id.refer_list);
+            ListView listView = (ListView)findViewById(R.id.refer_list);
             MainListAdapter adapter = new MainListAdapter(titleList, infoList);
 
             findViewById(R.id.progressbar_downloading).setVisibility(View.GONE);
 
             View footer = getLayoutInflater().inflate(R.layout.footer, null, false);
             LinearLayout ll = (LinearLayout) footer.findViewById(R.id.footer);
-            for (final Element numbers : document.select("b:matches(\\[[1-9]\\]), a:matches(\\[[1-9]\\])")) {
-                final TextView tv = new TextView(NoticeActivity.this);
+            for(final Element numbers: document.select("b:matches(\\[[1-9]\\]), a:matches(\\[[1-9]\\])")){
+                final TextView tv = new TextView(ReferView.this);
                 tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 tv.setText(numbers.text());
@@ -129,12 +112,12 @@ public class NoticeActivity extends ActionBarActivity {
 
                 final String pageFrom = Integer.toString(page);
                 final String pageTo = tv.getText().toString().replaceAll("[^1-9]", "");
-                if (pageFrom.equals(pageTo)) tv.setEnabled(false);
+                if(pageFrom.equals(pageTo)) tv.setEnabled(false);
 
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!pageFrom.equals(pageTo)) {
+                        if(!pageFrom.equals(pageTo)) {
                             page = Integer.parseInt(pageTo);
                             new GetRefer(code, Integer.parseInt(pageTo)).execute();
                         }
@@ -148,78 +131,93 @@ public class NoticeActivity extends ActionBarActivity {
             listView.setAdapter(adapter);
         }
 
-        public class MainListAdapter extends BaseAdapter {
-            private ArrayList<String> titleList;
-            private ArrayList<String> infoList;
+
+    }
+
+    public class MainListAdapter extends BaseAdapter {
+        private ArrayList<String> titleList;
+        private ArrayList<String> infoList;
 
             MainListAdapter(ArrayList<String> titleList, ArrayList<String> infoList) {
                 this.titleList = titleList;
                 this.infoList = infoList;
+        }
+
+        @Override
+        public int getCount() {
+            return titleList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return titleList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final int pos = position;
+            final Context context = parent.getContext();
+            View view = convertView;
+
+            HolderItem holder_item;
+            if (view == null) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.main_list_item, parent, false);
+
+                holder_item = new HolderItem();
+                holder_item.title = (TextView) view.findViewById(R.id.main_title);
+                holder_item.subTitle = (TextView) view.findViewById(R.id.main_info);
+                view.setTag(holder_item);
+            } else {
+                holder_item = (HolderItem) view.getTag();
             }
 
-            @Override
-            public int getCount() {
-                return titleList.size();
-            }
+            holder_item.title.setText(titleList.get(pos));
+            holder_item.subTitle.setText(infoList.get(pos));
 
-            @Override
-            public Object getItem(int position) {
-                return titleList.get(position);
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                final int pos = position;
-                final Context context = parent.getContext();
-                View view = convertView;
-
-                HolderItem holder_item;
-                if (view == null) {
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    view = inflater.inflate(R.layout.main_list_item, parent, false);
-
-                    holder_item = new HolderItem();
-                    holder_item.title = (TextView) view.findViewById(R.id.main_title);
-                    holder_item.subTitle = (TextView) view.findViewById(R.id.main_info);
-                    view.setTag(holder_item);
-                } else {
-                    holder_item = (HolderItem) view.getTag();
+            //터치 이벤트 - 과목별
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ReferView.this, ReferArticleView.class);
+                    intent.putExtra("subIndex", subCode)
+                          .putExtra("bdseq", codeList.get(pos))
+                          .putExtra("title", titleList.get(pos))
+                          .putExtra("info", infoList.get(pos));
+                    startActivity(intent);
                 }
+            });
+            return view;
+        }
 
-                holder_item.title.setText(titleList.get(pos));
-                holder_item.subTitle.setText(infoList.get(pos));
-
-                //터치 이벤트 - 과목별
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(NoticeActivity.this, NoticeViewActivity.class);
-                        intent.putExtra("title", titleList.get(pos))
-                              .putExtra("info", infoList.get(pos))
-                              .putExtra("bdseq", codeList.get(pos));
-                        startActivity(intent);
-                    }
-                });
-                return view;
-            }
-
-            class HolderItem {
-                TextView title;
-                TextView subTitle;
-            }
+        class HolderItem {
+            TextView title;
+            TextView subTitle;
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginActivity.OnBack().execute();
+        new LoginView.OnBack().execute();
     }
-
     @Override
     protected void onStart(){
         super.onStart();

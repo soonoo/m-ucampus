@@ -1,23 +1,18 @@
 package com.soonoo.mobilecampus;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by soonoo on 2015-02-17.
  */
-public class MainListDialog extends Dialog implements View.OnClickListener {
+public class HomeViewDialog extends Dialog implements View.OnClickListener {
     int position;
-    MainListDialog(Context context, int position){
+    HomeViewDialog(Context context, int position){
         super(context);
         this.position = position;
 
@@ -27,9 +22,9 @@ public class MainListDialog extends Dialog implements View.OnClickListener {
         TextView dialogTitle = (TextView) findViewById(R.id.dialog_title);
         dialogTitle.setText(User.subName.get(position - 1));
 
-        findViewById(R.id.dialog_menu1).setOnClickListener(this);
-        findViewById(R.id.dialog_menu2).setOnClickListener(this);
-        findViewById(R.id.dialog_menu3).setOnClickListener(this);
+        findViewById(R.id.dialog_menu1_main).setOnClickListener(this);
+        findViewById(R.id.dialog_menu2)     .setOnClickListener(this);
+        findViewById(R.id.dialog_menu3)     .setOnClickListener(this);
     }
 
     //TODO:
@@ -37,18 +32,18 @@ public class MainListDialog extends Dialog implements View.OnClickListener {
     public void onClick(View view){
         Intent intent;
         switch(view.getId()) {
-            case R.id.dialog_menu1:
-                intent = new Intent(getContext(), NoticeActivity.class);
+            case R.id.dialog_menu1_main:
+                intent = new Intent(getContext(), NoticeView.class);
                 intent.putExtra("subIndex", position);
                 getContext().startActivity(intent);
                 return;
             case R.id.dialog_menu2:
-                intent = new Intent(getContext(), LecReferRoomActivity.class);
+                intent = new Intent(getContext(), ReferView.class);
                 intent.putExtra("subIndex", position);
                 getContext().startActivity(intent);
                 return;
             case R.id.dialog_menu3:
-                intent = new Intent(getContext(), SyllabusActivity.class);
+                intent = new Intent(getContext(), SyllabusView.class);
                 intent.putExtra("subIndex", position);
                 getContext().startActivity(intent);
                 return;

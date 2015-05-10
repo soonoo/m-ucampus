@@ -35,7 +35,7 @@ public class LogoutDialog extends Dialog implements View.OnClickListener{
                 prefs.edit().putBoolean("auto_login", false).apply();
 
                 this.dismiss();
-                Intent intent = new Intent(context, LoginActivity.class);
+                Intent intent = new Intent(context, LoginView.class);
                 ((Activity)context).finish();
                 context.startActivity(intent);
 

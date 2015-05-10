@@ -22,7 +22,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 
-public class LibrarySeatInfoActivity extends ActionBarActivity {
+public class LibrarySeatInfoView extends ActionBarActivity {
     WebView wv;
     Document document = null;
     @Override
