@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,8 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lecture_search);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         new GetSearchPage().execute();
 
@@ -76,58 +80,57 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
         }
     }
 
-    class GetList extends AsyncTask<String, Void, String> {
+    class GetList extends AsyncTask<String, Void, Void> {
         ProgressBar pb = (ProgressBar) findViewById(R.id.pb_search);
         Button button = (Button) findViewById(R.id.button_search);
         TextView tv = (TextView) findViewById(R.id.noData);
+        ListView list = (ListView)findViewById(R.id.search_list);
+
+        ArrayList<String> titleList = new ArrayList<>();
+        ArrayList<String> infoList = new ArrayList<>();
+        ArrayList<String> codeList = new ArrayList<>();
 
         @Override
         public void onPreExecute() {
+            list.setVisibility(View.GONE);
             tv.setVisibility(View.GONE);
             pb.setVisibility(View.VISIBLE);
             button.setClickable(false);
         }
 
         @Override
-        public String doInBackground(String... p) {
-            return User.getHtml("POST", Sites.LECTURE_SEARCH + p[0], "euc-kr");
+        public Void doInBackground(String... p) {
+            String html =  User.getHtml("POST", Sites.LECTURE_SEARCH + p[0], "euc-kr");
+            Document doc = Jsoup.parse(html);
+            for(Element element: doc.select("a[href^=h_lecture01_2]")){
+                Element parent = element.parent().parent();
+                infoList.add(parent.select("td:eq(6)").text() + " | " +
+                        parent.select("td:eq(7)").text() + "(학점/시간) | "  +
+                        parent.select("td:eq(8)").text());
+                titleList.add(parent.select("td:eq(4)").text() + " (" + parent.select("td:eq(3)").text() + ")");
+                codeList.add(parent.select("td:eq(4) a").attr("href").substring(30, 120));
+            }
+            return null;
         }
 
         @Override
-        public void onPostExecute(String html) {
-            Element table = Jsoup.parse(html).select("table:contains(과목코드)").first();
-            table.attr("width", "100%").attr("style", "font-size:70%;");
-            table.select("col:eq(5), col:eq(0), col:eq(1), col:eq(2), col:eq(9)").remove();
-            for (Element el : table.select("td:eq(5), td:eq(2), td:eq(1), td:eq(0), td:eq(9)")) {
-                el.remove();
-            }
-            for (Element el : table.select("td")) {
-                el.attr("style", "white-space:nowrap;");
+        public void onPostExecute(Void p) {
+
+            int i = 0;
+            if(titleList.isEmpty()) {
+                tv.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.GONE);
+                button.setClickable(true);
+                return;
             }
 
-            WebView wv = (WebView) findViewById(R.id.wv_search_result);
-            wv.loadDataWithBaseURL("", table.toString(), "text/html", "euc-kr", "");
-            wv.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    if (url.startsWith("h_lecture")) {
-                        System.out.println(url);
+            SearchViewAdapter adapter = new SearchViewAdapter(titleList, infoList, codeList);
 
-                        Intent intent = new Intent(LectureSearchView.this, SyllabusView.class);
-                        intent.putExtra("url", url);
-                        startActivity(intent);
-                    }
-                    return true;
-                }
-            });
+            list.setAdapter(adapter);
+            list.setVisibility(View.VISIBLE);
             pb.setVisibility(View.GONE);
             button.setClickable(true);
-
-            if (html.contains("없습니다")) tv.setVisibility(View.VISIBLE);
-            else tv.setVisibility(View.GONE);
-
         }
-
     }
 
     @Override
@@ -143,12 +146,12 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
 
                 try {
                     String query = "&mode=view&user_opt=&skin_opt=&show_hakbu=&sugang_opt=all&x=29&y=18" +
-                            "&hh=" + URLDecoder.decode(sub.getText().toString(), "EUC-KR") +
-                            "&prof_name=" + URLDecoder.decode(prof.getText().toString(), "EUC-KR") +
-                            "&fsel1=" + URLDecoder.decode(item3.value, "euc-kr") +
+                            "&hh=" + URLEncoder.encode(sub.getText().toString(), "EUC-KR") +
+                            "&prof_name=" + URLEncoder.encode(prof.getText().toString(), "EUC-KR") +
+                            "&fsel1=" + URLEncoder.encode(item3.value, "euc-kr") +
                             "&this_year=" + item1.value +
                             "&hakgi=" + item2.value +
-                            "&fsel2=" + URLDecoder.decode(item4.value, "euc-kr") +
+                            "&fsel2=" + URLEncoder.encode(item4.value, "euc-kr") +
                             "&fsel4=00_00";
 
                     new GetList().execute(query);
@@ -161,5 +164,15 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }

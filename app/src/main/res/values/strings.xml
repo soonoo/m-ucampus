@@ -13,6 +13,7 @@
     <string name="error_pw">비밀번호를 입력해 주세요</string>
     <string name="error_login_info">학번/비밀번호를 확인해 주세요</string>
     <string name="plan_check">강의계획서 조회</string>
+    <string name="plan_assign">과제 조회</string>
     <string name="lecture_refer_room">강의 자료실</string>
     <string name="notice">공지사항</string>
     <string name="title_activity_syllabus">강의계획서 조회</string>
@@ -55,5 +56,6 @@
     <string name="title_activity_notice">공지사항</string>
     <string name="title_activity_notice_view">공지사항</string>
     <string name="title_activity_dining">DiningActivity</string>
-    <string name="title_activity_lecture_search">LectureSearchActivity</string>
+    <string name="title_activity_lecture_search">강의 계획서 검색</string>
+    <string name="title_activity_assignment_view">과제 확인</string>
 </resources>

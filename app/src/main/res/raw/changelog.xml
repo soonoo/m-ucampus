@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion versionName="1.0.9" changeDate="2015 05월23일">
+        <changelogtext>과제 조회 메뉴 추가 - 제출은 PC에서...</changelogtext>
+    </changelogversion>
     <changelogversion versionName="1.0.8" changeDate="2015 05월10일">
         <changelogtext>일부 기기에서 로그인이 안되던 현상 해결</changelogtext>
     </changelogversion>

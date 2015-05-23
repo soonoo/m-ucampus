@@ -67,4 +67,9 @@ public class Sites {
 
     //강의계획서 검색
     static final String LECTURE_SEARCH = "http://info.kw.ac.kr/webnote/lecture/h_lecture.php?layout_opt=N";
+
+    //과제 조회
+    public static final String ASSIGNMENT_URL= "http://info2.kw.ac.kr/servlet/controller.learn" +
+            ".ReportStuServlet?p_process=listPage";
+
 }

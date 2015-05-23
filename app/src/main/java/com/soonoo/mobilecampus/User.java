@@ -25,8 +25,8 @@ import javax.net.ssl.SSLSocketFactory;
  */
 public class User {
     static String cookie = "";
-    static ArrayList<String> subCode;
-    static ArrayList<String> subName;
+    public static ArrayList<String> subCode;
+    public static ArrayList<String> subName;
     static ArrayList<Boolean> isNew = new ArrayList<>();
 
     public static String setCookie(HttpURLConnection con) {
@@ -124,7 +124,7 @@ public class User {
     }
 
     // POST
-    static String getHtml(String method, String url, String query, String encoding) {
+    public static String getHtml(String method, String url, String query, String encoding) {
         HttpURLConnection con;
         DataOutputStream output;
         String line = null;

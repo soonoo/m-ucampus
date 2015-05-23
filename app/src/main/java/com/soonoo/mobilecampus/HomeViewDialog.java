@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.soonoo.mobilecampus.NewPackage.AssignmentView;
+
 /**
  * Created by soonoo on 2015-02-17.
  */
@@ -25,6 +27,7 @@ public class HomeViewDialog extends Dialog implements View.OnClickListener {
         findViewById(R.id.dialog_menu1_main).setOnClickListener(this);
         findViewById(R.id.dialog_menu2)     .setOnClickListener(this);
         findViewById(R.id.dialog_menu3)     .setOnClickListener(this);
+        findViewById(R.id.dialog_menu4)     .setOnClickListener(this);
     }
 
     //TODO:
@@ -44,6 +47,11 @@ public class HomeViewDialog extends Dialog implements View.OnClickListener {
                 return;
             case R.id.dialog_menu3:
                 intent = new Intent(getContext(), SyllabusView.class);
+                intent.putExtra("subIndex", position);
+                getContext().startActivity(intent);
+                return;
+            case R.id.dialog_menu4:
+                intent = new Intent(getContext(), AssignmentView.class);
                 intent.putExtra("subIndex", position);
                 getContext().startActivity(intent);
                 return;

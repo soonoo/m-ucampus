@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.soonoo.mobilecampus"
     android:versionCode="2"
-    android:versionName="1.0.1">
+    android:versionName="1.0.1" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -23,12 +23,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:logo="@mipmap/ic_launcher"></activity>
+            android:logo="@mipmap/ic_launcher" />
         <activity
             android:name=".LoginView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,55 +37,62 @@
         </activity>
         <activity
             android:name=".LecturePlanActivity"
-            android:label="@string/title_activity_lecture_plan"></activity>
+            android:label="@string/title_activity_lecture_plan" />
         <activity
             android:name=".SyllabusView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_syllabus">
-            <!--<intent-filter>
+            android:label="@string/title_activity_syllabus" >
+
+            <!--
+            <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.VIEW" />
                 <data android:scheme="activity_syl" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".ScholarshipActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_scholarship"></activity>
+            android:label="@string/title_activity_scholarship" />
         <activity
             android:name=".GradeView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_grade"></activity>
+            android:label="@string/title_activity_grade" />
         <activity
             android:name=".LibrarySeatInfoView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_library_seat_info"></activity>
+            android:label="@string/title_activity_library_seat_info" />
         <activity
             android:name=".LibrarySearchView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_library_book_search"></activity>
+            android:label="@string/title_activity_library_book_search" />
         <activity
             android:name=".ReferView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_lec_refer_room"></activity>
+            android:label="@string/title_activity_lec_refer_room" />
         <activity
             android:name=".ReferArticleView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_lec_refer_disp"></activity>
+            android:label="@string/title_activity_lec_refer_disp" />
         <activity
             android:name=".NoticeView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_notice"></activity>
+            android:label="@string/title_activity_notice" />
         <activity
             android:name=".NoticeArticleView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_notice_view"></activity>
+            android:label="@string/title_activity_notice_view" />
         <activity
             android:name=".DiningActivity"
-            android:label="@string/title_activity_dining"></activity>
+            android:label="@string/title_activity_dining" />
         <activity
             android:name=".LectureSearchView"
-            android:label="@string/title_activity_lecture_search"></activity>
+            android:label="@string/title_activity_lecture_search" />
+        <activity
+            android:name=".NewPackage.AssignmentView"
+            android:label="@string/title_activity_assignment_view" >
+        </activity>
     </application>
 
 </manifest>

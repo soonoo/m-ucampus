@@ -1,136 +1,123 @@
-<ScrollView
-    android:background="@color/white"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
 
-    <LinearLayout
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <Spinner
-            android:background="@drawable/abc_spinner_mtrl_am_alpha"
-            android:id="@+id/spinner_year"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"></Spinner>
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-        <Spinner
-            android:id="@+id/spinner_term"
+            <Spinner
+                android:id="@+id/spinner_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></Spinner>
+
+            <Spinner
+                android:id="@+id/spinner_term"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></Spinner>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"></Spinner>
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <Spinner
+                android:id="@+id/spinner_college"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></Spinner>
+
+            <Spinner
+                android:id="@+id/spinner_major"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <com.beardedhen.androidbootstrap.BootstrapEditText xmlns:bootstrapbutton="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/text_sub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="9dp"
+                android:hint="과목명"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:singleLine="true"
+                bootstrapbutton:be_roundedCorners="true"
+                bootstrapbutton:be_state="danger" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <com.beardedhen.androidbootstrap.BootstrapEditText xmlns:bootstrapbutton="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/text_prof"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="9dp"
+                android:hint="담당 교수"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:singleLine="true"
+                bootstrapbutton:be_roundedCorners="true"
+                bootstrapbutton:be_state="danger" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/login_button_state"
+            android:text="검색"
+            android:textColor="#fff"
+            android:textSize="13dp" />
+
+
+            <ListView
+                android:id="@+id/search_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </ListView>
+
+            <ProgressBar
+                android:id="@+id/pb_search"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/search_list"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/noData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/search_list"
+                android:gravity="center_horizontal"
+                android:text="검색 결과가 없습니다."
+                android:textColor="#191919"
+                android:visibility="gone" />
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <Spinner
-            android:id="@+id/spinner_college"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></Spinner>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <Spinner
-            android:id="@+id/spinner_major"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></Spinner>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <com.beardedhen.androidbootstrap.BootstrapEditText
-            xmlns:bootstrapbutton="http://schemas.android.com/apk/res-auto"
-            android:singleLine="true"
-            android:layout_marginBottom="9dp"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_sub"
-            android:hint="과목명"
-            bootstrapbutton:be_roundedCorners="true"
-            bootstrapbutton:be_state="danger"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <com.beardedhen.androidbootstrap.BootstrapEditText
-            xmlns:bootstrapbutton="http://schemas.android.com/apk/res-auto"
-            android:singleLine="true"
-            android:layout_marginBottom="9dp"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_prof"
-            android:hint="담당 교수"
-            bootstrapbutton:be_roundedCorners="true"
-            bootstrapbutton:be_state="danger"/>
-    </LinearLayout>
-
-    <Button
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/button_search"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@drawable/login_button_state"
-        android:text="검색"
-        android:textColor="#fff"
-        android:textSize="13dp" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/wv_search_result">
-
-    </WebView>
-        <ProgressBar
-            android:visibility="gone"
-            style="?android:attr/progressBarStyle"
-            android:id="@+id/pb_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_below="@id/wv_search_result"/>
-        <TextView
-            android:gravity="center_horizontal"
-            android:layout_below="@id/wv_search_result"
-            android:visibility="gone"
-            android:id="@+id/noData"
-            android:textColor="#191919"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="검색 결과가 없습니다."/>
-    </RelativeLayout>
-</LinearLayout></ScrollView>

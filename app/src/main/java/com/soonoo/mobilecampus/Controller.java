@@ -11,8 +11,8 @@ import java.util.HashMap;
  * Created by soonoo on 2015-03-15.
  */
 public class Controller extends Application {
-    //private static final String PROPERTY_ID = "UA-60171962-2";
-    private static final String PROPERTY_ID = "UA-60171962-22";
+    private static final String PROPERTY_ID = "UA-60171962-2";
+    //x1private static final String PROPERTY_ID = "UA-60171962-22";
 
     public enum TrackerName {
         APP_TRACKER,           // 앱 별로 트래킹
@@ -22,7 +22,7 @@ public class Controller extends Application {
 
     HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
-    synchronized Tracker getTracker(TrackerName trackerId){
+    synchronized public Tracker getTracker(TrackerName trackerId){
         if (!mTrackers.containsKey(trackerId)) {
 
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
