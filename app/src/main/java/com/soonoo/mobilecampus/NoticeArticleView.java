@@ -81,7 +81,10 @@ public class NoticeArticleView extends ActionBarActivity {
           //  contents.setText(Html.fromHtml(document.select("td.tl_l2").toString()));
 
             WebView wv = (WebView)findViewById(R.id.wv_notice_view);
-            wv.loadDataWithBaseURL("", document.select("td.tl_l2").toString(), "text/html", "euc-kr", "");
+            String baseUrl = "http://info2.kw.ac.kr/servlet/controller.learn.NoticeStuServlet";
+            String baseTag = "<base href=\"" + baseUrl + "\">";
+
+            wv.loadDataWithBaseURL("", baseTag+document.select("td.tl_l2").toString(), "text/html", "euc-kr", "");
 
             LinearLayout ll = (LinearLayout) findViewById(R.id.attatch_ll);
 

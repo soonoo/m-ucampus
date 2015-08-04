@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.soonoo.mobilecampus.board.BoardHomeView;
+
 /**
  * Created by soonoo on 2015-02-22.
  */
@@ -13,17 +15,26 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     }
     @Override
     public CharSequence getPageTitle(int position) {
-        return (position == 0) ? "유캠퍼스" : "시간표";
+        switch(position){
+            case 1: return "유캠퍼스";
+            case 2: return "시간표";
+            case 0: return "게시판";
+        }
+        return null;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return (position == 0)? new HomeViewSubListFrag() : new HomeViewTableFrag() ;
-        //return new MainFragmentSubList();
+        switch(position){
+            case 1: return new HomeViewSubListFrag();
+            case 2: return new HomeViewTableFrag();
+            case 0: return new BoardHomeView();
+        }
+        return null;
     }
 }

@@ -93,6 +93,18 @@
             android:name=".NewPackage.AssignmentView"
             android:label="@string/title_activity_assignment_view" >
         </activity>
+        <activity
+            android:name=".board.BoardHomeView"
+            android:label="@string/title_activity_board_home_view" >
+        </activity>
+        <activity
+            android:name=".board.article.BoardArticleView"
+            android:label="@string/title_activity_board_article_view" >
+        </activity>
+        <activity
+            android:name=".board.create.CreateArticleView"
+            android:label="@string/title_activity_create_article_view" >
+        </activity>
     </application>
 
 </manifest>

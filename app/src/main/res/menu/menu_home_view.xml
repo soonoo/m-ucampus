@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools">
+    <item
+        android:title="글 쓰기"
+        android:id="@+id/actionbar_write"
+        android:icon="@mipmap/ic_write"
+        android:orderInCategory="100"
+        yourapp:showAsAction="always"/>
+</menu>

@@ -17,8 +17,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Created by soonoo on 2015-02-15.
@@ -56,16 +54,16 @@ public class User {
         try {
             con = (HttpsURLConnection) new URL(Sites.LOGIN_URL).openConnection();
 
-            //https://evilzone.org/java/(java)-how-can-i-add-a-ciphersuite/
+            // https://evilzone.org/java/(java)-how-can-i-add-a-ciphersuite/
             // IMPORTANT
-            SSLSocketFactoryEx factory = new SSLSocketFactoryEx();
-            con.setSSLSocketFactory(factory);
-            con.setRequestProperty("charset", "UTF-8");
+           // SSLSocketFactoryEx factory = new SSLSocketFactoryEx();
+            //con.setSSLSocketFactory(factory);
+            //con.setRequestProperty("charset", "UTF-8");
 
             con.setRequestMethod("POST");
-            con.setRequestProperty("Content-length", String.valueOf(loginQuery.length()));
+            //con.setRequestProperty("Content-length", String.valueOf(loginQuery.length()));
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            con.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)");
+           // con.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)");
             con.setDoOutput(true);
             con.setDoInput(true);
 
@@ -162,7 +160,7 @@ public class User {
     }
 
     // GET
-    static String getHtml(String method, String url, String encoding) {
+    public static String getHtml(String method, String url, String encoding) {
         HttpURLConnection con;
         String line = null;
         StringBuilder result = new StringBuilder();

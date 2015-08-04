@@ -25,59 +25,26 @@ public class HomeViewSubListFrag extends Fragment {
     ArrayList<String> infoList;
     ArrayList<String> titleList;
     HomeViewAdapter adapter;
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.context = container.getContext();
 
-        View view = inflater.inflate(R.layout.fragment_main_list, container, false);
-        final ListView mainList = (ListView) view.findViewById(R.id.fragment_list);
+        view = inflater.inflate(R.layout.fragment_main_list, container, false);
 
-        new InitMainList(new OnRequestCompletedArray() {
-            @Override
-            public void onRequestArray(ArrayList<String> list) {
-                infoList = list;
-                int size = titleList.size();
-
-                titleList.add(0, "과목별 조회");
-                titleList.add("성적/장학 조회");
-                titleList.add("성적/석차 조회");
-                titleList.add("장학 조회");
-                titleList.add("시설 이용");
-                titleList.add("중앙도서관");
-                titleList.add("강의계획서 검색");
-                //titleList.add("복지관 학생식당");
-
-                infoList.add(0, "");
-                infoList.add("");
-                infoList.add("학기별 성적/석차를 확인합니다.");
-                infoList.add("장학금 수혜 현황을 확인합니다.");
-                infoList.add(""); User.isNew.add(false);
-                infoList.add("열람실 좌석 현황/도서 검색");
-                infoList.add("강의계획서를 검색합니다.");
-                //infoList.add("학생 식당 식단을 확인합니다.");
-
-                adapter = new HomeViewAdapter(titleList, infoList, User.isNew, size + 1);
-                mainList.setAdapter(adapter);
-            }
-        }).execute();
+        new InitMainList().execute();
 
         return view;
     }
 
     public class InitMainList extends AsyncTask<Void, Void, ArrayList<String>> {
-        OnRequestCompletedArray delegate;
-
         private ProgressDialog nDialog;
-
-        InitMainList(OnRequestCompletedArray caller) {
-            delegate = caller;
-        }
 
         @Override
         public void onPreExecute() {
             nDialog = new ProgressDialog(getActivity()); //Here I get an error: The constructor ProgressDialog(PFragment) is undefined
-            nDialog.setMessage("로그인중입니다...");
+            nDialog.setMessage("로그인중...");
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(false);
             nDialog.show();
@@ -117,13 +84,41 @@ public class HomeViewSubListFrag extends Fragment {
                     editor.commit();
                 }
             }
+
+
+            //Toast.makeText(getActivity(), User.getHtml("GET", Sites.BOARD_URL+"/read/list?page=1", "UTF-8"), Toast.LENGTH_LONG);
+            //tmp = User.getHtml("GET", Sites.BOARD_URL+"/read/list?page=1", "UTF-8");
             return infoList;
         }
 
         @Override
         public void onPostExecute (ArrayList < String > list) {
             titleList = (ArrayList<String>) User.subName.clone();
-            delegate.onRequestArray(list);
+            infoList = list;
+            int size = titleList.size();
+
+            titleList.add(0, "과목별 조회");
+            titleList.add("성적/장학 조회");
+            titleList.add("성적/석차 조회");
+            titleList.add("장학 조회");
+            titleList.add("시설 이용");
+            titleList.add("중앙도서관");
+            titleList.add("강의계획서 검색");
+            //titleList.add("복지관 학생식당");
+
+            infoList.add(0, "");
+            infoList.add("");
+            infoList.add("학기별 성적/석차를 확인합니다.");
+            infoList.add("장학금 수혜 현황을 확인합니다.");
+            infoList.add(""); User.isNew.add(false);
+            infoList.add("열람실 좌석 현황/도서 검색");
+            infoList.add("강의계획서를 검색합니다.");
+            //infoList.add("학생 식당 식단을 확인합니다.");
+
+            adapter = new HomeViewAdapter(titleList, infoList, User.isNew, size + 1);
+
+            ListView mainList = (ListView) view.findViewById(R.id.fragment_list);
+            mainList.setAdapter(adapter);
             nDialog.dismiss();
         }
     }

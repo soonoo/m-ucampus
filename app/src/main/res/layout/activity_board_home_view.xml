@@ -2,19 +2,18 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/fragment_list"/>
-
+<ListView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/board_home_list" />
     <ProgressBar
 
         style="?android:attr/progressBarStyle"
-        android:id="@+id/progressbar_downloading"
+        android:id="@+id/pb_board"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 </RelativeLayout>

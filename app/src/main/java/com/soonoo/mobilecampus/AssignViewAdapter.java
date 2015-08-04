@@ -82,7 +82,6 @@ public class AssignViewAdapter extends BaseAdapter {
         holder_item.due.setText("제출기한: "+due.get(pos));
         holder_item.due2.setText("추가제출: "+due2.get(pos));
 
-
         return view;
     }
 

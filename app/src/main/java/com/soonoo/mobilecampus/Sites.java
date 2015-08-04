@@ -6,6 +6,10 @@ package com.soonoo.mobilecampus;
 
 //TODO:
 public class Sites {
+    //public static final String BOARD_URL = "http://localhost:3000";
+    public static final String BOARD_URL = "http://10.0.3.2:4000";
+    //public static final String BOARD_URL = "http://175.125.62.206:4000";
+
 
     static final String LOGIN_URL = "https://info.kw.ac.kr/webnote/login/login_proc.php";
     static final String LOGIN_QUERY = "login_type=2&redirect_url=http%3A%2F%2Finfo.kw.ac.kr%2F" +

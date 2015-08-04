@@ -58,4 +58,10 @@
     <string name="title_activity_dining">DiningActivity</string>
     <string name="title_activity_lecture_search">강의 계획서 검색</string>
     <string name="title_activity_assignment_view">과제 확인</string>
+    <string name="title_activity_board_home_view">BoardHomeView</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_board_article_view">로딩중...!</string>
+    <string name="title_activity_create_article_view">CreateArticleView</string>
 </resources>

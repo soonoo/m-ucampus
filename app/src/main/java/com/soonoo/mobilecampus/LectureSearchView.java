@@ -1,5 +1,6 @@
 package com.soonoo.mobilecampus;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -22,6 +24,8 @@ import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,6 +48,10 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        t.setScreenName("LectureSearchView");
+        t.send(new HitBuilders.AppViewBuilder().build());
+
         new GetSearchPage().execute();
 
         Button button = (Button) findViewById(R.id.button_search);
@@ -51,6 +59,14 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
     }
 
     class GetSearchPage extends AsyncTask<Void, Void, String> {
+        Button button = (Button) findViewById(R.id.button_search);
+        @Override
+
+        public void onPreExecute() {
+            button.setClickable(false);
+            button.setEnabled(false);
+        }
+
         @Override
         public String doInBackground(Void... p) {
             return User.getHtml("GET", Sites.LECTURE_SEARCH, "EUC-KR");
@@ -77,6 +93,8 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
                 spinners[i].setAdapter(adapter);
                 spinners[i].setPrompt(prompts[i]);
             }
+            button.setEnabled(true);
+            button.setClickable(true);
         }
     }
 
@@ -104,11 +122,12 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
             Document doc = Jsoup.parse(html);
             for(Element element: doc.select("a[href^=h_lecture01_2]")){
                 Element parent = element.parent().parent();
-                infoList.add(parent.select("td:eq(6)").text() + " | " +
-                        parent.select("td:eq(7)").text() + "(학점/시간) | "  +
-                        parent.select("td:eq(8)").text());
-                titleList.add(parent.select("td:eq(4)").text() + " (" + parent.select("td:eq(3)").text() + ")");
-                codeList.add(parent.select("td:eq(4) a").attr("href").substring(30, 120));
+                infoList.add(parent.select("td:eq(5)").text() + " | " +
+                        parent.select("td:eq(4)").text() + "(학점/시간) | "  +
+                        parent.select("td:eq(0)").text().charAt(5) + "(개설학년) | " +
+                        parent.select("td:eq(3)").text());
+                titleList.add(parent.select("td:eq(1)").text() + " (" + parent.select("td:eq(3)").text() + ")");
+                codeList.add(parent.select("td:eq(1) a").attr("href").substring(30, 120));
             }
             return null;
         }
@@ -116,7 +135,6 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
         @Override
         public void onPostExecute(Void p) {
 
-            int i = 0;
             if(titleList.isEmpty()) {
                 tv.setVisibility(View.VISIBLE);
                 pb.setVisibility(View.GONE);
@@ -137,6 +155,11 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_search:
+                Button button = (Button) findViewById(R.id.button_search);
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(button.getWindowToken(), 0);
+
                 EditText sub = (EditText) findViewById(R.id.text_sub); //hh
                 EditText prof = (EditText) findViewById(R.id.text_prof); //prof_name
                 LecSearchViewItem item1 = (LecSearchViewItem) spinners[0].getSelectedItem();
@@ -159,7 +182,6 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("please");
                 }
         }
     }

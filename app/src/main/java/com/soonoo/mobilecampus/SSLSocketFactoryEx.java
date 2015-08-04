@@ -29,7 +29,10 @@ class SSLSocketFactoryEx extends SSLSocketFactory {
 //            "SSL_CK_RC4_128_WITH_MD5",
 //            "SSL_CK_RC2_128_CBC_WITH_MD5",
 //            "SSL_CK_IDEA_128_CBC_WITH_MD5",
-              "SSL_RSA_WITH_RC4_128_MD5"
+
+            //1.   "SSL_RSA_WITH_RC4_128_MD5",                   // 1.
+
+             "SSL_RSA_EXPORT_WITH_RC4_40_MD5"          //, 2.
 //            "SSL_CK_DES_192_EDE3_CBC_WITH_MD5"
     };
     public SSLSocketFactoryEx() throws NoSuchAlgorithmException, KeyManagementException {

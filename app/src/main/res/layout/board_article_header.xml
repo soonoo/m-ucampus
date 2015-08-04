@@ -1,0 +1,56 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/header">
+    <LinearLayout
+        android:id="@+id/article_article"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/article_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="#000"
+            android:paddingTop="10dp"
+            android:textSize="19dp"
+            android:minHeight="80dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:id="@+id/reply_write"
+                android:maxLength="300"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="댓글작성"
+                android:id="@+id/submit_button"/>
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:gravity="center"
+            android:textColor="#000"
+            android:id="@+id/reply_title"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="#aaa"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="정보를 불러오는데 실패했습니다."
+        android:id="@+id/msg_fail"
+        android:visibility="gone"
+        android:gravity="center"/>
+</RelativeLayout>

@@ -63,7 +63,7 @@ public class SyllabusView extends ActionBarActivity {
                 document.select("td").attr("style", "font-size:75%; ");
                 document.select("td.bgtable1").attr("style", "background-color:#edf1f3; font-size:60%; white-space:nowrap;");
                 //document.select("td").attr("style", "white-space:nowrap;");
-                document.select("table:contains(출력)").remove();
+                document.select("table:contains(출력이 안될)").remove();
                 //  document.select("colspan").remove();
                 document.select("table").attr("width", "100%");
                 // document.select("td").attr("width", "1");
@@ -73,11 +73,13 @@ public class SyllabusView extends ActionBarActivity {
                 }
 
                 for (Element element : document.select("td:contains(연락처), td:contains(이동전화), td:contains(이메일)")) {
+                    if(element.nextElementSibling() != null)
                     element.nextElementSibling().attr("style", "color:#a70500; text-decoration:underline; font-size:80%;");
                 }
                 WebView myWebView = (WebView) findViewById(R.id.wv);
                 myWebView.loadDataWithBaseURL("", document.toString(), "text/html", "UTF-8", "");
             } catch (Exception e) {
+                e.printStackTrace();
                 WebView myWebView = (WebView) findViewById(R.id.wv);
                 myWebView.loadDataWithBaseURL("", getString(R.string.message_syllabus_missing), "text/html", "UTF-8", "");
             }
