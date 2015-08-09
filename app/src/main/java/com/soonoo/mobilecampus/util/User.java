@@ -1,10 +1,12 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.util;
 
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+
+import com.soonoo.mobilecampus.Sites;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -22,10 +24,10 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by soonoo on 2015-02-15.
  */
 public class User {
-    static String cookie = "";
+    public static String cookie = "";
     public static ArrayList<String> subCode;
     public static ArrayList<String> subName;
-    static ArrayList<Boolean> isNew = new ArrayList<>();
+    public static ArrayList<Boolean> isNew = new ArrayList<>();
 
     public static String setCookie(HttpURLConnection con) {
         String headerName;
@@ -85,7 +87,7 @@ public class User {
         return false;
     }
 
-    static void getSession() {
+    public static void getSession() {
         try {
             //URL url = new URL(MyUrl.SESSION_URL);
             HttpURLConnection con = (HttpURLConnection) new URL(Sites.SESSION_URL).openConnection();

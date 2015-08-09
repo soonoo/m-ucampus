@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.ciphersuites;
 
 import java.io.IOException;
 import java.net.InetAddress;

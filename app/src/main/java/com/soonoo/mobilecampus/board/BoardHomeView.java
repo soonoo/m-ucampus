@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
-import com.soonoo.mobilecampus.User;
+import com.soonoo.mobilecampus.util.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

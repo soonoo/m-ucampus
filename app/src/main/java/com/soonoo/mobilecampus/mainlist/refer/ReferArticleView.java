@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist.refer;
 
 import android.app.DownloadManager;
 import android.content.Context;
@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,25 +20,30 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.util.Parser;
+import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.net.URLEncoder;
 
 
-public class NoticeArticleView extends ActionBarActivity {
+public class ReferArticleView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notice_view);
+        setContentView(R.layout.activity_lec_refer_disp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("NoticeViewActivity");
+        t.setScreenName("LecReferDispActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
         Intent intent = getIntent();
@@ -47,11 +52,12 @@ public class NoticeArticleView extends ActionBarActivity {
         TextView info = (TextView) findViewById(R.id.content_info);
         info.setText(intent.getStringExtra("info"));
 
-        new GetContents().execute();
+        new GetContents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
@@ -63,12 +69,13 @@ public class NoticeArticleView extends ActionBarActivity {
 
     public class GetContents extends AsyncTask<Void, Void, Document> {
         Intent intent = getIntent();
+        String code = intent.getStringExtra("subIndex");
         String seq = intent.getStringExtra("bdseq");
 
         @Override
         public Document doInBackground(Void... p) {
-            String html = User.getHtml("POST", Sites.NOTICE_URL,
-                    Parser.getNoticeViewQuery(seq), "utf-8");
+            String html = User.getHtml("POST", Sites.LEC_REFER_URL,
+                    Parser.getReferViewQuery(code, seq), "utf-8");
             return Jsoup.parse(html);
         }
 
@@ -77,20 +84,13 @@ public class NoticeArticleView extends ActionBarActivity {
             float scale = getResources().getDisplayMetrics().density;
             int dpT = (int) (3 * scale + 0.5f);
             int dpB = (int) (2 * scale + 0.5f);
-           // TextView contents = (TextView) findViewById(R.id.content_contents);
-          //  contents.setText(Html.fromHtml(document.select("td.tl_l2").toString()));
-
-            WebView wv = (WebView)findViewById(R.id.wv_notice_view);
-            String baseUrl = "http://info2.kw.ac.kr/servlet/controller.learn.NoticeStuServlet";
-            String baseTag = "<base href=\"" + baseUrl + "\">";
-
-            wv.loadDataWithBaseURL("", baseTag+document.select("td.tl_l2").toString(), "text/html", "euc-kr", "");
+            TextView contents = (TextView) findViewById(R.id.content_contents);
+            contents.setText(Html.fromHtml(document.select("td.tl_l2").toString()));
 
             LinearLayout ll = (LinearLayout) findViewById(R.id.attatch_ll);
 
-            Elements elements = document.select(".link_b2 a");
-            for (final Element element : elements) {
-                TextView attatch = new TextView(NoticeArticleView.this);
+            for (final Element element : document.select(".link_b2 a")) {
+                TextView attatch = new TextView(ReferArticleView.this);
                 attatch.setText(element.text());
                 attatch.setTextSize(20);
                 attatch.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -101,8 +101,7 @@ public class NoticeArticleView extends ActionBarActivity {
                     @Override
                     public void onClick(View v) {
                         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-                        t.send(new HitBuilders.EventBuilder().setCategory("NoticeViewActivity").setAction("Download Button").setLabel("notice").build());
-
+                        t.send(new HitBuilders.EventBuilder().setCategory("LecReferDispActiviy").setAction("Download Button").setLabel("refer").build());
                         String link = element.attr("href");
                         String title = link.substring(link.indexOf("(") + 2, link.indexOf(",") - 1);
                         String desc = link.substring(link.indexOf(",") + 2, link.indexOf(")") - 1);
@@ -137,23 +136,12 @@ public class NoticeArticleView extends ActionBarActivity {
 
                 ll.addView(attatch);
             }
-
-            if(elements.size() == 0) {
-                TextView attatch = new TextView(NoticeArticleView.this);
-                attatch.setText("첨부파일이 없습니다.");
-                attatch.setTextSize(20);
-                attatch.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                attatch.setPadding(0, dpT, 0, dpB);
-                ll.addView(attatch);
-            }
         }
     }
-
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginView.OnBack().execute();
+        new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     @Override
     protected void onStart(){

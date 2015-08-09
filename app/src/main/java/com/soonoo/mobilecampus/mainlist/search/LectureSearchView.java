@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist.search;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -17,6 +17,11 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.mainlist.library.SearchViewAdapter;
+import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

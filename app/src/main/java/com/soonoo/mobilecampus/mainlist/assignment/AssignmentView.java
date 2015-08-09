@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus.NewPackage;
+package com.soonoo.mobilecampus.mainlist.assignment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,12 +11,11 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.AssignViewAdapter;
 import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.Parser;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
-import com.soonoo.mobilecampus.User;
+import com.soonoo.mobilecampus.util.Parser;
+import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist.assignment;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,6 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.util.Parser;
+import com.soonoo.mobilecampus.util.User;
 
 import java.util.ArrayList;
 
@@ -104,7 +109,7 @@ public class AssignViewAdapter extends BaseAdapter {
         public String doInBackground(Integer... p){
             //System.out.println(p[0]);
             String getQuery = Parser.getAssignDetailQuery(subCode) + queryList.get(p[0]);
-            return User.getHtml("GET", Sites.ASSIGNMENT_DETAIL_URL+ getQuery, "UTF-8");
+            return User.getHtml("GET", Sites.ASSIGNMENT_DETAIL_URL + getQuery, "UTF-8");
             //return "WhAT THE";
         }
         public void onPostExecute(String a){

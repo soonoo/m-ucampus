@@ -17,8 +17,8 @@ import android.widget.ProgressBar;
 
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
-import com.soonoo.mobilecampus.User;
 import com.soonoo.mobilecampus.board.article.BoardArticleView;
+import com.soonoo.mobilecampus.util.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -89,7 +89,7 @@ public class CreateArticleView extends AppCompatActivity {
                 postButton.setVisibility(View.GONE);
                 pb  = (ProgressBar) findViewById(R.id.pb_post);
                 pb.setVisibility(View.VISIBLE);
-                new PostArticle().execute();
+                new PostArticle().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
     }

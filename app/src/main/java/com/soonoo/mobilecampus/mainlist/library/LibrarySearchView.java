@@ -1,11 +1,10 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist.library;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -14,9 +13,12 @@ import android.widget.ProgressBar;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.Sites;
 
 
-public class LibrarySearchView extends ActionBarActivity {
+public class LibrarySearchView extends AppCompatActivity {
     WebView webView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +10,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.soonoo.mobilecampus.NewPackage.AssignmentView;
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.mainlist.assignment.AssignmentView;
+import com.soonoo.mobilecampus.mainlist.grade.GradeView;
+import com.soonoo.mobilecampus.mainlist.library.LibrarySearchView;
+import com.soonoo.mobilecampus.mainlist.library.LibrarySeatInfoView;
+import com.soonoo.mobilecampus.mainlist.notice.NoticeView;
+import com.soonoo.mobilecampus.mainlist.refer.ReferView;
+import com.soonoo.mobilecampus.mainlist.scholarship.ScholarshipActivity;
+import com.soonoo.mobilecampus.mainlist.search.LectureSearchView;
+import com.soonoo.mobilecampus.mainlist.syllabus.SyllabusView;
+import com.soonoo.mobilecampus.util.User;
 
 import java.util.ArrayList;
 
@@ -122,7 +132,7 @@ public class HomeViewAdapter extends BaseAdapter {
                                             return;
                                         case 2:
                                             intent = new Intent(context, SyllabusView.class);
-                                            intent.putExtra("s ubIndex", pos);
+                                            intent.putExtra("subIndex", pos);
                                             context.startActivity(intent);
                                             return;
                                         case 3:

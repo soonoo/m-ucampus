@@ -1,8 +1,8 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist.scholarship;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -11,12 +11,17 @@ import android.widget.ProgressBar;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 
-public class ScholarshipActivity extends ActionBarActivity {
+public class ScholarshipActivity extends AppCompatActivity {
     Document document;
 
     @Override

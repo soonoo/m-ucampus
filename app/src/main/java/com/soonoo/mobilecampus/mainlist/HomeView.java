@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.board.create.CreateArticleView;
 
 
@@ -71,9 +74,9 @@ public class HomeView extends AppCompatActivity {
 
         menu.add(0, 0, 0, "로그아웃"); //int groupId, int itemId, int order, CharSequence title
         menu.add(0, 1, 0, "종료"); //int groupId, int itemId, int order, CharSequence title
-        menu.add(0, 2, 0, "정보"); //int groupId, int itemId, int order, CharSequence title
-        menu.add(0, 3, 0, "변경사항"); //int groupId, int itemId, int order, CharSequence title
-        menu.removeItem(4);
+        //menu.add(0, 2, 0, "정보"); //int groupId, int itemId, int order, CharSequence title
+        //menu.add(0, 3, 0, "변경사항"); //int groupId, int itemId, int order, CharSequence title
+        //menu.removeItem(4);
         return true;
     }
 
@@ -108,14 +111,6 @@ public class HomeView extends AppCompatActivity {
                 return true;
             case 1:
                 finish();
-                return true;
-            case 2:
-                NoticeDialog dialog_notice = new NoticeDialog(this);
-                dialog_notice.show();
-                return true;
-            case 3:
-                ChangeLogDialog dialog_change = new ChangeLogDialog(this);
-                dialog_change.show();
                 return true;
             case R.id.actionbar_write:
                 Intent intent = new Intent(HomeView.this, CreateArticleView.class);

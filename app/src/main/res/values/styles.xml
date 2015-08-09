@@ -22,10 +22,8 @@
         <item name="android:background">@color/r3</item>
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
         <item name="titleTextStyle">@style/MyActionBarTitleText</item>
-
         <item name="android:subtitleTextStyle">@style/MyActionBarSubTitleText</item>
         <item name="subtitleTextStyle">@style/MyActionBarSubTitleText</item>
-
         <!-- Support library compatibility -->
         <item name="background">@color/r3</item>
 
@@ -34,6 +32,7 @@
 
     <style name="MyActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">17sp</item>
+        <item name="android:ellipsize">marquee</item>
         <!-- The textColor property is backward compatible with the Support Library -->
     </style>
 

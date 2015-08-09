@@ -3,7 +3,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white">
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize" >
 
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:text="This will run the marquee animation forever"
+            android:textSize="@dimen/abc_text_size_title_material_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true" />
+
+    </Toolbar>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,10 +51,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="#a70500">
-
+        android:background="#bfbfbf">
+<!--a705000-->
     </View>
 
     <ScrollView
@@ -67,9 +84,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#a70500" />
+                android:background="#bfbfbf" />
 
 
             <LinearLayout

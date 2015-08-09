@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist.library;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.mainlist.syllabus.SyllabusView;
 
 import java.util.ArrayList;
 

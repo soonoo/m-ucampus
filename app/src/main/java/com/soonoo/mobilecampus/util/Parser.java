@@ -1,9 +1,12 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.Sites;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,7 +19,7 @@ import java.util.ArrayList;
  */
 public class Parser {
 
-    static void getNewNotice(Document doc){
+    public static void getNewNotice(Document doc){
         Elements elements = doc.select("table.main_box ~ table.main_box table tr");
 
         for(Element element: elements){
@@ -28,7 +31,7 @@ public class Parser {
         }
     }
 
-    static ArrayList<String> getSubCode(Document doc){
+    public static ArrayList<String> getSubCode(Document doc){
         Elements elements = doc.select("table.main_box ~ table.main_box").select("a[href]:eq(0)");
         ArrayList<String> list = new ArrayList<String>();
 
@@ -40,7 +43,7 @@ public class Parser {
         return list;
     }
 
-    static void setSubCode(){
+    public static void setSubCode(){
         Context context = LoginView.getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String code;
@@ -50,7 +53,7 @@ public class Parser {
         }
     }
 
-    static ArrayList<String> getSubName(Document doc){
+    public static ArrayList<String> getSubName(Document doc){
         Elements elements = doc.select("table.main_box ~ table.main_box").select(".list_txt:contains( ):eq(1)");
         //Elements elements = doc.select("td:contains([학부])");
 
@@ -62,21 +65,21 @@ public class Parser {
         return list;
     }
 
-    static String getProf(Document doc){
+    public static String getProf(Document doc){
         Element element = doc.select("td:contains(담당교수) ~ td").first();
 
         if(element != null) return element.text();
         else return "교수 정보 없음";
     }
 
-    static String getTime(Document doc){
+    public static String getTime(Document doc){
         Element element = doc.select("td:contains(강의실) ~ td").first();
 
         if(element != null) return element.text();
         else return "강의실 정보 없음";
     }
 
-    static String getSubQuery(String code){
+    public static String getSubQuery(String code){
         String query = "&bunban_no=" + code.substring(13, 15) +
                 "&hakgi=" + code.substring(4, 5) +
                 "&open_grade=" + code.substring(15) +
@@ -86,7 +89,7 @@ public class Parser {
         return query;
     }
 
-    static String getReferQuery(String code, int page){
+    public static String getReferQuery(String code, int page){
         String query = Sites.LEC_REFER_QUERY +
                 "&p_subj=U" + code +
                 "&p_year=" + code.substring(0, 4) +
@@ -97,7 +100,7 @@ public class Parser {
         return query;
     }
 
-    static String getReferViewQuery(String code, String p_dbseq){
+    public static String getReferViewQuery(String code, String p_dbseq){
         String query = Sites.LEC_REFER_VIEW_QUERY +
                 "&p_subj=U" + code +
                 "&p_year=" + code.substring(0, 4) +
@@ -108,7 +111,7 @@ public class Parser {
         return query;
     }
 
-    static String getNoticeQuery(String code, int page){
+    public static String getNoticeQuery(String code, int page){
         String query = Sites.NOTICE_QUERY +
                 "&p_subj=U" + code +
                 "&p_year=" + code.substring(0, 4) +
@@ -118,7 +121,7 @@ public class Parser {
         return query;
     }
 
-    static String getNoticeViewQuery(String seq){
+    public static String getNoticeViewQuery(String seq){
         return Sites.NOTICE_VIEW_QUERY +
                 "&p_bdseq=" + seq;
     }

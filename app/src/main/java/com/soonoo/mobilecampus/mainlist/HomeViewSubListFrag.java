@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,6 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.util.Parser;
+import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

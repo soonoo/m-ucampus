@@ -1,6 +1,5 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.timetable;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +27,6 @@ public class HomeViewTableFrag extends Fragment {
     ArrayList<String> subList = new ArrayList<String>();
     ArrayList<String> bgList = new ArrayList<String>();
     Document document;
-    Context context;
     View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

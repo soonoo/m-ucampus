@@ -2,7 +2,6 @@ package com.soonoo.mobilecampus.board.article;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -19,7 +18,7 @@ import android.widget.TextView;
 
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
-import com.soonoo.mobilecampus.User;
+import com.soonoo.mobilecampus.util.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,7 +41,7 @@ public class BoardArticleView extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         id = Integer.toString(getIntent().getIntExtra("id", 0));
 
-        new GetReplys().execute();
+        new GetReplys().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     class GetArticle extends AsyncTask<Void, Void, String> {
@@ -69,9 +68,7 @@ public class BoardArticleView extends AppCompatActivity {
                 reply_count.setText("댓글 [" + contentList.size() + "]");
 
                 setTitle(article.getString("title"));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    getSupportActionBar().setSubtitle(article.getString("date") + "   |   조회:" + article.getString("view_count"));
-                }
+                getSupportActionBar().setSubtitle(article.getString("date") + "   |   조회:" + article.getString("view_count"));
 
                 replyList.removeHeaderView(replyList.findViewById(R.id.header));
                 replyList.addHeaderView(header);
@@ -113,7 +110,7 @@ public class BoardArticleView extends AppCompatActivity {
                    InputMethodManager imm = (InputMethodManager)getSystemService(
                            Context.INPUT_METHOD_SERVICE);
                    imm.hideSoftInputFromWindow(submitButton.getWindowToken(), 0);
-                   new SubmitReply().execute(text);
+                   new SubmitReply().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, text);
                }
             });
 
@@ -207,7 +204,7 @@ public class BoardArticleView extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            new GetArticle().execute();
+            new GetArticle().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 

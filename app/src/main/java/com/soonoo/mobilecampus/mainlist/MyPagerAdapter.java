@@ -1,10 +1,11 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.soonoo.mobilecampus.board.BoardHomeView;
+import com.soonoo.mobilecampus.timetable.HomeViewTableFrag;
 
 /**
  * Created by soonoo on 2015-02-22.

@@ -1,8 +1,4 @@
-package com.soonoo.mobilecampus;
-
-import android.support.v7.internal.widget.AdapterViewCompat;
-import android.view.View;
-import android.widget.AdapterView;
+package com.soonoo.mobilecampus.mainlist.search;
 
 /**
  * Created by soonoo on 2015-05-02.

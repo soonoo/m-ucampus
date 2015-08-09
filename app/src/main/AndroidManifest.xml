@@ -19,7 +19,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".HomeView"
+            android:name=".mainlist.HomeView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -35,50 +35,50 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SyllabusView"
+            android:name=".mainlist.syllabus.SyllabusView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_syllabus" >
         </activity>
         <activity
-            android:name=".ScholarshipActivity"
+            android:name=".mainlist.scholarship.ScholarshipActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_scholarship" />
         <activity
-            android:name=".GradeView"
+            android:name=".mainlist.grade.GradeView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_grade" />
         <activity
-            android:name=".LibrarySeatInfoView"
+            android:name=".mainlist.library.LibrarySeatInfoView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_library_seat_info" />
         <activity
-            android:name=".LibrarySearchView"
+            android:name=".mainlist.library.LibrarySearchView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_library_book_search" />
         <activity
-            android:name=".ReferView"
+            android:name=".mainlist.refer.ReferView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_lec_refer_room" />
         <activity
-            android:name=".ReferArticleView"
+            android:name=".mainlist.refer.ReferArticleView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_lec_refer_disp" />
         <activity
-            android:name=".NoticeView"
+            android:name=".mainlist.notice.NoticeView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_notice" />
         <activity
-            android:name=".NoticeArticleView"
+            android:name=".mainlist.notice.NoticeArticleView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_notice_view" />
         <activity
             android:name=".DiningActivity"
             android:label="@string/title_activity_dining" />
         <activity
-            android:name=".LectureSearchView"
+            android:name=".mainlist.search.LectureSearchView"
             android:label="@string/title_activity_lecture_search" />
         <activity
-            android:name=".NewPackage.AssignmentView"
+            android:name=".mainlist.assignment.AssignmentView"
             android:label="@string/title_activity_assignment_view" >
         </activity>
         <activity

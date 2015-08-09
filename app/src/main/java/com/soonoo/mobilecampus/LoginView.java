@@ -21,6 +21,9 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.soonoo.mobilecampus.mainlist.HomeView;
+import com.soonoo.mobilecampus.util.Parser;
+import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -163,7 +166,7 @@ public class LoginView extends AppCompatActivity {
 
     }
 
-    static Context getContext(){
+    public static Context getContext(){
         return ctx;
     }
 

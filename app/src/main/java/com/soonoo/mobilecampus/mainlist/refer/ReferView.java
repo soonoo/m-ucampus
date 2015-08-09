@@ -1,10 +1,10 @@
-package com.soonoo.mobilecampus;
+package com.soonoo.mobilecampus.mainlist.refer;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +17,12 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.R;
+import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.util.Parser;
+import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,7 +32,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
 
-public class ReferView extends ActionBarActivity {
+public class ReferView extends AppCompatActivity {
     ArrayList<String> titleList;
     ArrayList<String> infoList;
     ArrayList<String> codeList;
