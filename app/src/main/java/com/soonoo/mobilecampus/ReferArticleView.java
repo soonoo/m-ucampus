@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +46,7 @@ public class ReferArticleView extends ActionBarActivity {
         TextView info = (TextView) findViewById(R.id.content_info);
         info.setText(intent.getStringExtra("info"));
 
-        new GetContents().execute();
+        new GetContents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -136,7 +135,7 @@ public class ReferArticleView extends ActionBarActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginView.OnBack().execute();
+        new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     @Override
     protected void onStart(){

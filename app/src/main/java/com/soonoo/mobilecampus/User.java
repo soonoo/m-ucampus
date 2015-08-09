@@ -131,6 +131,9 @@ public class User {
         try {
             con = (HttpURLConnection) new URL(url).openConnection();
 
+            /*con.setConnectTimeout(5000);
+            con.setReadTimeout(5000);*/
+
             con.setRequestMethod(method);
             con.setRequestProperty("Content-length", String.valueOf(query.length()));
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -162,11 +165,14 @@ public class User {
     // GET
     public static String getHtml(String method, String url, String encoding) {
         HttpURLConnection con;
-        String line = null;
+        String line;
         StringBuilder result = new StringBuilder();
 
         try {
             con = (HttpURLConnection) new URL(url).openConnection();
+
+            /*con.setConnectTimeout(5000);
+            con.setReadTimeout(5000);*/
 
             con.setRequestMethod(method);
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

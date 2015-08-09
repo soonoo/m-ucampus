@@ -1,18 +1,12 @@
 package com.soonoo.mobilecampus;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,10 +14,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -31,14 +22,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.security.spec.ECField;
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class LectureSearchView extends ActionBarActivity implements View.OnClickListener {
+public class LectureSearchView extends AppCompatActivity implements View.OnClickListener {
     Spinner[] spinners = new Spinner[4];
 
     @Override
@@ -52,7 +40,7 @@ public class LectureSearchView extends ActionBarActivity implements View.OnClick
         t.setScreenName("LectureSearchView");
         t.send(new HitBuilders.AppViewBuilder().build());
 
-        new GetSearchPage().execute();
+        new GetSearchPage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         Button button = (Button) findViewById(R.id.button_search);
         button.setOnClickListener(this);

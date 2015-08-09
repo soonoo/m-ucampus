@@ -1,8 +1,8 @@
 package com.soonoo.mobilecampus;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +36,7 @@ public class LibrarySeatInfoView extends ActionBarActivity {
         t.setScreenName("LibrarySeatInfoActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
-        new GetSeatHtml().execute();
+        new GetSeatHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public class GetSeatHtml extends AsyncTask<Void, Void, Document>  {
@@ -92,7 +92,7 @@ public class LibrarySeatInfoView extends ActionBarActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Check if the key event was the Back button and if there's history
         if ((keyCode == KeyEvent.KEYCODE_BACK) && wv.getUrl().contains("room_no=")) {
-            new GetSeatHtml().execute();
+            new GetSeatHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             return true;
         }
         // If it wasn't the Back key or there's no web page history, bubble up to the default
@@ -113,7 +113,7 @@ public class LibrarySeatInfoView extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.actionbar_refresh:
                // if(wv.getUrl().contains())
-                    new GetSeatHtml().execute();
+                    new GetSeatHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 Toast.makeText(getApplicationContext(), getString(R.string.message_refreshed), Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:

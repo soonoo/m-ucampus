@@ -3,8 +3,8 @@ package com.soonoo.mobilecampus;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +49,7 @@ public class ReferView extends ActionBarActivity {
         t.send(new HitBuilders.AppViewBuilder().build());
 
         subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
-        new GetRefer(subCode, page).execute();
+        new GetRefer(subCode, page).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 
@@ -119,7 +119,7 @@ public class ReferView extends ActionBarActivity {
                     public void onClick(View v) {
                         if(!pageFrom.equals(pageTo)) {
                             page = Integer.parseInt(pageTo);
-                            new GetRefer(code, Integer.parseInt(pageTo)).execute();
+                            new GetRefer(code, Integer.parseInt(pageTo)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                     }
                 });
@@ -216,7 +216,7 @@ public class ReferView extends ActionBarActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginView.OnBack().execute();
+        new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     @Override
     protected void onStart(){

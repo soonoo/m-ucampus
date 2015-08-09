@@ -7,8 +7,8 @@ package com.soonoo.mobilecampus;
 //TODO:
 public class Sites {
     //public static final String BOARD_URL = "http://localhost:3000";
-    public static final String BOARD_URL = "http://10.0.3.2:4000";
-    //public static final String BOARD_URL = "http://175.125.62.206:4000";
+    //public static final String BOARD_URL = "http://10.0.3.2:4000";
+    public static final String BOARD_URL = "http://175.125.197.82:4000";
 
 
     static final String LOGIN_URL = "https://info.kw.ac.kr/webnote/login/login_proc.php";
@@ -73,7 +73,8 @@ public class Sites {
     static final String LECTURE_SEARCH = "http://info.kw.ac.kr/webnote/lecture/h_lecture.php?layout_opt=N";
 
     //과제 조회
-    public static final String ASSIGNMENT_URL= "http://info2.kw.ac.kr/servlet/controller.learn" +
-            ".ReportStuServlet?p_process=listPage";
+    public static final String ASSIGNMENT_URL= "http://info2.kw.ac.kr/servlet/controller.learn.ReportStuServlet?p_process=listPage";
+
+    public static final String ASSIGNMENT_DETAIL_URL = "http://info2.kw.ac.kr/servlet/controller.learn.ReportStuServlet";
 
 }

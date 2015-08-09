@@ -1,13 +1,12 @@
 package com.soonoo.mobilecampus.board.article;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.soonoo.mobilecampus.R;
@@ -31,6 +31,9 @@ public class BoardArticleView extends AppCompatActivity {
     ListView replyList;
     ArrayList<String> contentList;
     ArrayList<String> dateList;
+    Button submitButton;
+    View header;
+    BoardReplyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,11 @@ public class BoardArticleView extends AppCompatActivity {
     }
 
     class GetArticle extends AsyncTask<Void, Void, String> {
-            View header = getLayoutInflater().inflate(R.layout.board_article_header, null, false);
             TextView tv = (TextView) header.findViewById(R.id.msg_fail);
+
+        public void onPreExecute(){
+            submitButton = (Button) header.findViewById(R.id.submit_button);
+        }
 
         public String doInBackground(Void... p){
             return User.getHtml("GET", Sites.BOARD_URL + "/read/article?article_id=" + id, "UTF-8");
@@ -69,15 +75,32 @@ public class BoardArticleView extends AppCompatActivity {
 
                 replyList.removeHeaderView(replyList.findViewById(R.id.header));
                 replyList.addHeaderView(header);
+                replyList.setAdapter(adapter);
             }catch(Exception e){
                 tv.setVisibility(View.VISIBLE);
                 LinearLayout ll = (LinearLayout) header.findViewById(R.id.article_article);
                 ll.setVisibility(View.GONE);
                 e.printStackTrace();
-            }
+             }
 
-            final Button submitButton = (Button) findViewById(R.id.submit_button);
-            final EditText reply = (EditText) findViewById(R.id.reply_write);
+            final EditText reply = (EditText) header.findViewById(R.id.reply_write);
+
+            reply.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String text = charSequence.toString();
+                    if(text.equals("") || text.replaceAll("[ |\\n|\\r]", "").equals("")) submitButton.setEnabled(false);
+                    else submitButton.setEnabled(true);
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
 
             submitButton.setOnClickListener(new View.OnClickListener(){
                public void onClick(View view){
@@ -98,6 +121,13 @@ public class BoardArticleView extends AppCompatActivity {
     }
 
     class SubmitReply extends AsyncTask<String, Void, String>{
+        ProgressBar pb = (ProgressBar) header.findViewById(R.id.pb_reply);
+        @Override
+        protected void onPreExecute() {
+            submitButton.setVisibility(View.GONE);
+            pb.setVisibility(View.VISIBLE);
+        }
+
         public String doInBackground(String... p){
             String query = "id_article=" + id + "&content=" + p[0];
             String result =  User.getHtml("POST", Sites.BOARD_URL + "/write/reply?", query, "UTF-8");
@@ -138,15 +168,19 @@ public class BoardArticleView extends AppCompatActivity {
                 }catch(Exception e){
                     e.printStackTrace();
                 }
+
+                submitButton.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.GONE);
             }
         }
     }
 
 
     class GetReplys extends AsyncTask<Void, Void, String>{
-        BoardReplyAdapter adapter;
 
         public void onPreExecute(){
+            header = getLayoutInflater().inflate(R.layout.board_article_header, null, false);
+
             contentList = new ArrayList<>();
             dateList = new ArrayList<>();
         }
@@ -169,7 +203,6 @@ public class BoardArticleView extends AppCompatActivity {
 
                 replyList = (ListView) findViewById(R.id.reply_list);
                 adapter = new BoardReplyAdapter(contentList, dateList);
-                replyList.setAdapter(adapter);
             }catch(Exception e){
                 e.printStackTrace();
             }

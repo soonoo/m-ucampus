@@ -1,8 +1,8 @@
 package com.soonoo.mobilecampus;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,45 +24,39 @@ public class GradeView extends ActionBarActivity {
     Document doc_grade;
     WebView webView;
     String html = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grade);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
         t.setScreenName("GradeActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
         if (User.isConnected(GradeView.this)) {
-            new GetRankHtml().execute();
-        }
-        else Toast.makeText(getApplicationContext(), "nono", Toast.LENGTH_SHORT).show();
-        //Document doc_rank = new GetRankHtml().execute().get();
-
-        //doc_rank.select("table").attr("bgcolor", "#bfbfbf").attr("width", "100%").attr("style", "font-size:80%;");
-        //Elements elements = doc_rank.select("p table");
-
+            new GetRankHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else Toast.makeText(getApplicationContext(), "nono", Toast.LENGTH_SHORT).show();
     }
 
 
-    public class GetGradeHtml extends AsyncTask<Void, Void, String>{
-        ProgressBar pb = (ProgressBar)findViewById(R.id.progressbar_downloading);
-        @Override
-        public String doInBackground(Void... p){
-           try{
-               return User.getHtml("GET", Sites.GRADE_URL, "euc-kr");
-           }catch(Exception e){
-               return null;
-           }
+    public class GetGradeHtml extends AsyncTask<Void, Void, String> {
+        ProgressBar pb = (ProgressBar) findViewById(R.id.progressbar_downloading);
 
-           // return Jsoup.parse(gradeHtml);
+        @Override
+        public String doInBackground(Void... p) {
+            try {
+                return User.getHtml("GET", Sites.GRADE_URL, "euc-kr");
+            } catch (Exception e) {
+                return null;
+            }
         }
 
         @Override
-        public void onPostExecute(String doc){
+        public void onPostExecute(String doc) {
             html += doc;
-            if(html != null) doc_grade = Jsoup.parse(html);
+            if (html != null) doc_grade = Jsoup.parse(html);
 
             try {
                 /*Display display = getWindowManager().getDefaultDisplay();
@@ -77,10 +71,10 @@ public class GradeView extends ActionBarActivity {
                 doc_grade.select("table").attr("width", "100%").attr("style", "font-size:65%;");
                 doc_grade.select("table:has(input)").attr("width", "100%").attr("style", "font-size:57%");
 
-                doc_grade.select("th:contains(학년도)").attr("bgcolor", "#a70500").attr("style", "color:#ffffff;");
+                doc_grade.select("th:contains(학년도)").attr("bgcolor", "#cd1f1f").attr("style", "color:#ffffff;");
                 doc_grade.select("th:contains(과목명), th:contains(개설학과)," +
                         " th:contains(이수구분), th:contains(학점)," +
-                        " th:contains(성적), th:contains(인증구분)").attr("bgcolor", "#bfbfbf");
+                        " th:contains(성적), th:contains(인증구분)").attr("bgcolor", "#e5e5e5");
                 //doc_grade.select("table:contains(학과별)").select("input").attr("href", "http://info.kw.ac.kr/webnote/sungjuk/sungjuk_info.html");
 
                 Element link = doc_grade.select("table:contains(학과별)").select("input").first();
@@ -102,7 +96,7 @@ public class GradeView extends ActionBarActivity {
                     }
                 });
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 webView = (WebView) findViewById(R.id.webview_grade);
                 webView.loadDataWithBaseURL("", /*elements.toString() +*/ getString(R.string.message_grade_missing), "text/html", "utf-8", "");
             }
@@ -111,20 +105,19 @@ public class GradeView extends ActionBarActivity {
     }
 
 
-
-    public class GetRankHtml extends AsyncTask<Void, Void, String>{
-        ProgressBar pb = (ProgressBar)findViewById(R.id.progressbar_downloading);
+    public class GetRankHtml extends AsyncTask<Void, Void, String> {
+        ProgressBar pb = (ProgressBar) findViewById(R.id.progressbar_downloading);
 
         @Override
-        public void onPreExecute(){
+        public void onPreExecute() {
             pb.setVisibility(View.VISIBLE);
         }
 
         @Override
-        public String doInBackground(Void... p){
-            try{
+        public String doInBackground(Void... p) {
+            try {
                 return User.getHtml("GET", Sites.RANK_URL, "euc-kr");
-            }catch(Exception e){
+            } catch (Exception e) {
                 return null;
             }
             //table contains(년도)
@@ -132,10 +125,10 @@ public class GradeView extends ActionBarActivity {
         }
 
         @Override
-        public void onPostExecute(String document){
+        public void onPostExecute(String document) {
             html = null;
             html = document;
-            new GetGradeHtml().execute();
+            new GetGradeHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
     }
@@ -160,19 +153,19 @@ public class GradeView extends ActionBarActivity {
     }
 
     @Override
-    public void onRestart(){
+    public void onRestart() {
         super.onRestart();
         new LoginView.OnBack().execute();
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
@@ -180,10 +173,15 @@ public class GradeView extends ActionBarActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Check if the key event was the Back button and if there's history
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.getUrl().contains("info")) {
-            new GetRankHtml().execute();
-           // webView
-            return true;
+
+        try {
+            if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.getUrl().contains("info")) {
+                new GetRankHtml().execute();
+                // webView
+                return true;
+            }
+        } catch (Exception e) {
+            finish();
         }
         // If it wasn't the Back key or there's no web page history, bubble up to the default
         // system behavior (probably exit the activity)

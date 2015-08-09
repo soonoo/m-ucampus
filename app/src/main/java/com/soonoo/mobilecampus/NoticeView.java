@@ -3,8 +3,8 @@ package com.soonoo.mobilecampus;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +26,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
 
-public class NoticeView extends ActionBarActivity {
+public class NoticeView extends AppCompatActivity {
     ArrayList<String> titleList;
     ArrayList<String> infoList;
     ArrayList<String> codeList;
@@ -50,7 +50,7 @@ public class NoticeView extends ActionBarActivity {
         t.send(new HitBuilders.AppViewBuilder().build());
 
         subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
-        new GetRefer(subCode, page).execute();
+        new GetRefer(subCode, page).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 
@@ -135,7 +135,7 @@ public class NoticeView extends ActionBarActivity {
                     public void onClick(View v) {
                         if (!pageFrom.equals(pageTo)) {
                             page = Integer.parseInt(pageTo);
-                            new GetRefer(code, Integer.parseInt(pageTo)).execute();
+                            new GetRefer(code, Integer.parseInt(pageTo)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                     }
                 });
@@ -216,7 +216,7 @@ public class NoticeView extends ActionBarActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginView.OnBack().execute();
+        new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override

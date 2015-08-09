@@ -2,8 +2,8 @@ package com.soonoo.mobilecampus;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -35,10 +35,10 @@ public class SyllabusView extends ActionBarActivity {
         int position = intent.getIntExtra("subIndex", 1);
         String query = intent.getStringExtra("query");
 
-        new GetSyllabus().execute(User.subCode.get(position - 1), query);
+        new GetSyllabus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, User.subCode.get(position - 1), query);
     }
 
-    public class GetSyllabus extends AsyncTask<String, Void, Document> {
+    public class GetSyllabus extends AsyncTask<String, Void, String> {
         ProgressBar pb = (ProgressBar) findViewById(R.id.progressbar_downloading);
 
         @Override
@@ -47,26 +47,18 @@ public class SyllabusView extends ActionBarActivity {
         }
 
         @Override
-        public Document doInBackground(String... str) {
+        public String doInBackground(String... str) {
             String url;
             if(str[1] == null) url = Sites.SYLLABUS_URL + Parser.getSubQuery(str[0]);
             else url = Sites.SYLLABUS_URL + str[1];
 
             String sylHtml = User.getHtml("GET", url, "euc-kr");
-            return Jsoup.parse(sylHtml);
-        }
-
-        @Override
-        protected void onPostExecute(Document result) {
-            document = result;
+            Document document = Jsoup.parse(sylHtml);
             try {
                 document.select("td").attr("style", "font-size:75%; ");
                 document.select("td.bgtable1").attr("style", "background-color:#edf1f3; font-size:60%; white-space:nowrap;");
-                //document.select("td").attr("style", "white-space:nowrap;");
                 document.select("table:contains(출력이 안될)").remove();
-                //  document.select("colspan").remove();
                 document.select("table").attr("width", "100%");
-                // document.select("td").attr("width", "1");
 
                 for (Element element : document.select("input[type^=text]")) {
                     element.remove();
@@ -74,16 +66,24 @@ public class SyllabusView extends ActionBarActivity {
 
                 for (Element element : document.select("td:contains(연락처), td:contains(이동전화), td:contains(이메일)")) {
                     if(element.nextElementSibling() != null)
-                    element.nextElementSibling().attr("style", "color:#a70500; text-decoration:underline; font-size:80%;");
+                        element.nextElementSibling().attr("style", "color:#a70500; text-decoration:underline; font-size:80%;");
                 }
-                WebView myWebView = (WebView) findViewById(R.id.wv);
-                myWebView.loadDataWithBaseURL("", document.toString(), "text/html", "UTF-8", "");
+                return document.toString();
             } catch (Exception e) {
                 e.printStackTrace();
                 WebView myWebView = (WebView) findViewById(R.id.wv);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            WebView myWebView = (WebView) findViewById(R.id.wv);
+            if(!(result == null)){
+                myWebView.loadDataWithBaseURL("", result.toString(), "text/html", "UTF-8", "");
+            }else{
                 myWebView.loadDataWithBaseURL("", getString(R.string.message_syllabus_missing), "text/html", "UTF-8", "");
             }
-
             pb.setVisibility(View.GONE);
         }
     }

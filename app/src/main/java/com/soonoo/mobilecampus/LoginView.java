@@ -1,14 +1,16 @@
 package com.soonoo.mobilecampus;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,12 +29,13 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 
-public class LoginView extends Activity {
+public class LoginView extends AppCompatActivity {
     private static Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
         t.setScreenName("LoginActivity");
@@ -44,11 +47,10 @@ public class LoginView extends Activity {
         final Button login_button = (Button) findViewById(R.id.login_button);
         final EditText login_id = (EditText) findViewById(R.id.text_id);
         final EditText login_pw = (EditText) findViewById(R.id.text_pw);
-        final CheckBox auto_login = (CheckBox) findViewById(R.id.auto_login);
 
         if(prefs.getBoolean("auto_login", false) && isConnected()){
             try {
-                new Login(true, prefs.getString("user_id", null), prefs.getString("user_pw", null)).execute();
+                new Login(true, prefs.getString("user_id", null), prefs.getString("user_pw", null)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }catch (Exception e){}
         } else if(!isConnected()){
             Toast.makeText(LoginView.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
@@ -68,7 +70,7 @@ public class LoginView extends Activity {
                     } else if(pw.equals("")){
                         Toast.makeText(LoginView.this, R.string.error_pw, Toast.LENGTH_SHORT).show();
                     } else{
-                        new Login(false, id, pw).execute();
+                        new Login(false, id, pw).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                 }catch(Exception e){
                     StringWriter sw = new StringWriter();
@@ -109,6 +111,12 @@ public class LoginView extends Activity {
         @Override
         public Boolean doInBackground(Void... p){
             if(User.login(id, pw)) {
+                SQLiteDatabase db = openOrCreateDatabase("UserInfo.db", Context.MODE_PRIVATE, null);
+                db.execSQL("CREATE TABLE IF NOT EXISTS login_info (id VARCHAR)");
+                db.execSQL("DELETE FROM login_info");
+                db.execSQL("INSERT INTO login_info VALUES(" + id + ")");
+                Cursor cursor = db.rawQuery("SELECT * FROM login_info", null);
+
                 User.getSession();
                 return true;
             }
@@ -163,7 +171,6 @@ public class LoginView extends Activity {
         @Override
         public Void doInBackground(Void... p){
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            long ddd = System.currentTimeMillis();
             if(User.login(prefs.getString("user_id", null), prefs.getString("user_pw", null))) {
                 User.getSession();
 
@@ -179,7 +186,7 @@ public class LoginView extends Activity {
     @Override
     public void onRestart(){
         super.onRestart();
-        new OnBack().execute();
+        new OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override

@@ -3,12 +3,15 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
-        android:background="#a70500"
+        android:textColor="#212121"
         android:paddingLeft="7dp"
-        android:textColor="#fff"
+        android:background="#e5e5e5"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:id="@+id/main_separator"
         android:layout_height="match_parent"
         android:layout_width="match_parent" />
 </LinearLayout>
+
+    <!--android:background="#bc0010"-->
+    <!--android:textColor="#fff"-->

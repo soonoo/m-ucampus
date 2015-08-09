@@ -2,29 +2,21 @@ package com.soonoo.mobilecampus.board;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.soonoo.mobilecampus.HomeViewAdapter;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -42,11 +34,7 @@ public class BoardHomeView extends Fragment implements View.OnClickListener{
         this.context = container.getContext();
         view = inflater.inflate(R.layout.activity_board_home_view, container, false);
 
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
-            new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else{
-            new GetJSON().execute();
-        }
+        new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return view;
     }

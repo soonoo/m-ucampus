@@ -1,11 +1,10 @@
 package com.soonoo.mobilecampus.NewPackage;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 
 public class AssignmentView extends ActionBarActivity {
     String subCode;
+    TextView message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class AssignmentView extends ActionBarActivity {
         t.send(new HitBuilders.AppViewBuilder().build());
 
         subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
-        new GetAssignPage().execute();
+        new GetAssignPage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     class GetAssignPage extends AsyncTask<Void, Void, String> {
@@ -62,11 +62,12 @@ public class AssignmentView extends ActionBarActivity {
         public void onPostExecute(String html){
             Document doc = Jsoup.parse(html);
 
-            ArrayList<String> titleList = new ArrayList<>();
+            final ArrayList<String> titleList = new ArrayList<>();
             ArrayList<String> numList = new ArrayList<>();
             ArrayList<Boolean> isSubmit = new ArrayList<>();
             ArrayList<String> due = new ArrayList<>();
             ArrayList<String> due2 = new ArrayList<>();
+            final ArrayList<String> queryList = new ArrayList<>();
 
             for(Element element: doc.select("td.t_c:eq(0)[rowspan=2]")){
                 numList.add(element.text());
@@ -82,11 +83,20 @@ public class AssignmentView extends ActionBarActivity {
 
             for(Element element: doc.select(".t_l2")){
                 due.add(element.nextElementSibling().text());
-            }
-
-            for(Element element: doc.select(".t_l2")){
                 due2.add(element.parent().nextElementSibling().text());
             }
+
+            /*for(Element element: doc.select("td.btn_b012:contains(조회)")){
+                String query;
+                System.out.println(element);
+                ArrayList<String> jsCodeList = new ArrayList(Arrays.asList(element.attr("onclick").toString().split(",")));
+                System.out.println(jsCodeList);
+                query = "&p_ordseq=" + jsCodeList.get(0).replaceAll("^[0-9]","");
+                query = query + "&p_weeklyseq=" + jsCodeList.get(1).replaceAll("^[0-9]","");
+                query = query + "&p_weekysubseq=" + jsCodeList.get(2).replaceAll("^[0-9]","");
+
+                queryList.add(query);
+            }*/
 
             pb.setVisibility(View.GONE);
 
@@ -95,13 +105,25 @@ public class AssignmentView extends ActionBarActivity {
                 tv.setVisibility(View.VISIBLE);
             }
 
-            AssignViewAdapter adapter = new AssignViewAdapter(titleList, numList, isSubmit, due, due2);
+            AssignViewAdapter adapter = new AssignViewAdapter(titleList, numList, isSubmit, due, due2, queryList, subCode);
             ListView list = (ListView)findViewById(R.id.assign_list);
+            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> av, View view, int i, long l) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentView.this, R.style.Theme_AppCompat_Light_Dialog_Alert);
+                    AlertDialog dialog = builder.create();
+                    dialog.setTitle(titleList.get(i));
+
+                    message = (TextView) dialog.findViewById(android.R.id.message);
+                    dialog.show();
+
+                    new GetDetails().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, queryList.get(i));
+                    message.setText("PLEASE>>>>");
+
+                }
+            });*/
+
             list.setAdapter(adapter);
-
         }
-
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -115,4 +137,19 @@ public class AssignmentView extends ActionBarActivity {
         }
     }
 
+    class GetDetails extends AsyncTask<String, Void, String> {
+        public void onPreExecute(){
+            System.out.println("aaaaaaaaaaaaa");
+        }
+        public String doInBackground(String... p){
+            //System.out.println(p[0]);
+            String getQuery = Parser.getAssignDetailQuery(subCode) + p[0];
+            return User.getHtml("GET", Sites.ASSIGNMENT_DETAIL_URL+ getQuery, "UTF-8");
+            //return "WhAT THE";
+        }
+        public void onPostExecute(String a){
+            System.out.println(a);
+            message.setText(a);
+        }
+    }
 }

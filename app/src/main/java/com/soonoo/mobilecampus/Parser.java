@@ -125,15 +125,28 @@ public class Parser {
 
     public static String getAssignQuery(String code){
         return "p_process=" +
-        "&p_gate=univ" +
-        "&p_grcode=N000003" +
-        "&p_subj=U" + code +//:U2015104537220022
-        "&p_year=" + code.substring(0, 4) +//2015
-        "&p_subjseq=" + code.substring(4, 5) +//1
-        "&p_class=" + code.substring(13, 15) +//02
-        //"&p_userid=" + //:2014722023UA
-        "&p_page=" + //
-        "&gubun_code=11" + //
-        "&p_tutor_name=";
+                "&p_gate=univ" +
+                "&p_grcode=N000003" +
+                "&p_subj=U" + code +//:U2015104537220022
+                "&p_year=" + code.substring(0, 4) +//2015
+                "&p_subjseq=" + code.substring(4, 5) +//1
+                "&p_class=" + code.substring(13, 15) +//02
+                //"&p_userid=" + //:2014722023UA
+                "&p_page=" + //
+                "&gubun_code=11" + //
+                "&p_tutor_name=";
     }
+
+    public static String getAssignDetailQuery(String code){
+        // &&&&&&p_userid=2014722023UA&&p_orderseq=3&p_weeklyseq=16&p_weekysubseq=1
+        return "p_process=viewBasicScore" +
+                "p_gate=univ" +
+                "p_grcode=N000003" +
+                "gubun_code=11" +
+                "p_subj=U" + code +
+                "&p_year=" + code.substring(0, 4) +//2015
+                "&p_subjseq=" + code.substring(4, 5) +//1
+                "&p_class=" + code.substring(13, 15);//02
+    }
+
 }

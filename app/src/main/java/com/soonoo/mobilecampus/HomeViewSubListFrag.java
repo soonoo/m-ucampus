@@ -104,7 +104,6 @@ public class HomeViewSubListFrag extends Fragment {
             titleList.add("시설 이용");
             titleList.add("중앙도서관");
             titleList.add("강의계획서 검색");
-            //titleList.add("복지관 학생식당");
 
             infoList.add(0, "");
             infoList.add("");
@@ -113,7 +112,6 @@ public class HomeViewSubListFrag extends Fragment {
             infoList.add(""); User.isNew.add(false);
             infoList.add("열람실 좌석 현황/도서 검색");
             infoList.add("강의계획서를 검색합니다.");
-            //infoList.add("학생 식당 식단을 확인합니다.");
 
             adapter = new HomeViewAdapter(titleList, infoList, User.isNew, size + 1);
 

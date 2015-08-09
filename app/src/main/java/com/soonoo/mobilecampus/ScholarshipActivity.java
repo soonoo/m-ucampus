@@ -1,8 +1,8 @@
 package com.soonoo.mobilecampus;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -30,7 +30,7 @@ public class ScholarshipActivity extends ActionBarActivity {
         t.setScreenName("ScholarshipActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
-        new GetScholarshipHtml().execute();
+        new GetScholarshipHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 
@@ -55,7 +55,7 @@ public class ScholarshipActivity extends ActionBarActivity {
                 document.select("table").attr("width", "100%").attr("style", "margin-bottom:15px;");
                 document.select("table:has(img)").remove();
                 document.select("td").attr("style", "font-size:85%;");
-                document.select("th").attr("style", "font-size:80%; background-color:#bfbfbf;");
+                document.select("th").attr("style", "font-size:80%; background-color:#e5e5e5;");
 
                 WebView myWebView = (WebView)findViewById(R.id.webview_scholar);
                 myWebView.loadDataWithBaseURL("", document.select("table").toString(), "text/html", "utf-8", "");
@@ -88,7 +88,7 @@ public class ScholarshipActivity extends ActionBarActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginView.OnBack().execute();
+        new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     @Override
     protected void onStart(){

@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/main_list_state"
-    android:paddingLeft="7dp" >
-    <TextView
-        android:singleLine="true"
-        android:id="@+id/main_title"
-        android:paddingTop="5dp"
-        android:paddingRight="7dp"
-        android:paddingBottom="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:textSize="19dp"
-        android:textColor="#000"/>
-<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="6dp"
-    android:orientation="horizontal"
-    >
+    android:background="@drawable/main_list_state"
+    android:orientation="vertical"
+    android:paddingLeft="7dp">
+
     <TextView
-        android:background="@drawable/main_list_notice"
-        android:visibility="gone"
-        android:id="@+id/new_notice"
+        android:id="@+id/main_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="7dp"
+        android:paddingTop="7dp"
+        android:singleLine="true"
+        android:paddingBottom="2dp"
+        android:textColor="#212121"
+        android:textSize="19dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text= " 공지NEW "
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:layout_marginRight="4dp"/>
-    <TextView
-        android:id="@+id/main_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" /></LinearLayout>
+        android:orientation="horizontal"
+        android:paddingBottom="6dp">
+
+        <TextView
+            android:id="@+id/new_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/main_list_notice"
+            android:text=" 공지NEW "
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/main_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#767676" />
+    </LinearLayout>
 </LinearLayout>

@@ -1,56 +1,79 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/header"
     android:layout_width="match_parent"
-    android:id="@+id/header">
+    android:layout_height="match_parent">
+
     <LinearLayout
         android:id="@+id/article_article"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
             android:id="@+id/article_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:textColor="#000"
             android:paddingTop="10dp"
-            android:textSize="19dp"
-            android:minHeight="80dp"/>
+            android:textColor="#000"
+            android:textSize="19dp" />
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <EditText
+                android:id="@+id/reply_write"
+                android:inputType="textNoSuggestions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
-                android:id="@+id/reply_write"
-                android:maxLength="300"/>
-            <Button
+                android:maxLength="300"
+                android:layout_gravity="bottom"/>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="댓글작성"
-                android:id="@+id/submit_button"/>
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:id="@+id/pb_reply"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/submit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="댓글작성" />
+            </RelativeLayout>
 
         </LinearLayout>
+
         <TextView
+            android:id="@+id/reply_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="17dp"
+            android:background="#e1e1e1"
             android:gravity="center"
-            android:textColor="#000"
-            android:id="@+id/reply_title"
-            android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:background="#aaa"/>
+            android:paddingTop="5dp"
+            android:textColor="#000"
+            android:textSize="17dp" />
     </LinearLayout>
+
     <TextView
+        android:id="@+id/msg_fail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:text="정보를 불러오는데 실패했습니다."
-        android:id="@+id/msg_fail"
-        android:visibility="gone"
-        android:gravity="center"/>
+        android:visibility="gone" />
 </RelativeLayout>

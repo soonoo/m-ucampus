@@ -4,16 +4,21 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+    lintOptions{
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.soonoo.mobilecampus"
-        minSdkVersion 9
+        minSdkVersion 15
         targetSdkVersion 21
         versionCode 20
         versionName "1.1.1"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -23,9 +28,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/jsoup-1.8.1.jar')
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.github.gabrielemariotti.changeloglib:library:1.5.2'
     compile 'com.google.android.gms:play-services:7.5.0'
-    compile 'com.beardedhen:androidbootstrap:1.2.1'
     compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:design:22.2.1'
 }
