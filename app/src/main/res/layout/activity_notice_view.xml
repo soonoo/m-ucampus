@@ -1,59 +1,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
-    <Toolbar
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize" >
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:text="This will run the marquee animation forever"
-            android:textSize="@dimen/abc_text_size_title_material_toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:singleLine="true" />
-
-    </Toolbar>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/content_title"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="#000"
-            android:textSize="20dp" />
+            android:layout_height="match_parent"
+            android:gravity="center|left"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="#fff"
+                android:textSize="17sp" />
 
-        <TextView
-            android:id="@+id/content_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#bfbfbf">
-<!--a705000-->
-    </View>
+            <TextView
+                android:id="@+id/sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="#B3B3B3"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -65,18 +57,19 @@
             android:orientation="vertical">
 
             <WebView
+                android:id="@+id/wv_notice_view"
+                android:minHeight="330dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/wv_notice_view"></WebView>
+                android:layout_height="wrap_content"></WebView>
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="13dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="13dp"
                 android:text="@string/attatch"
                 android:textColor="#000"
                 android:textSize="18dp" />
@@ -85,7 +78,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="#bfbfbf" />
-
 
             <LinearLayout
                 android:id="@+id/attatch_ll"

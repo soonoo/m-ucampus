@@ -1,4 +1,26 @@
 <resources>
+    <style name="CustomMaterial" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">#9f9f9f</item>
+        <item name="colorControlActivated">@color/r3</item>
+        <item name="colorControlHighlight">@color/r3</item>
+
+        <item name="colorPrimary">@color/r3</item>
+        <item name="colorPrimaryDark">@color/r1</item>
+        <item name="android:actionBarSize">47dp</item>
+    </style>
+
+    <style name="Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="Toolbar.Subtitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#B3B3B3</item>
+    </style>
+
+
+
     <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="actionBarSize">47dp</item>

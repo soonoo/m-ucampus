@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -30,6 +31,8 @@ public class SyllabusView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_syllabus);
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);

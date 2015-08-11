@@ -1,16 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/tab_layout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
-        style="@style/MyCustomTabLayout"
-        android:layout_height="34dp"
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="uCampus"
+        android:id="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        app:titleTextAppearance="@style/Toolbar.Title"
+        app:subtitleTextAppearance="@style/Toolbar.Subtitle"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
+        style="@style/MyCustomTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
         app:tabIndicatorColor="#fff"
         app:tabIndicatorHeight="4dp" />
 

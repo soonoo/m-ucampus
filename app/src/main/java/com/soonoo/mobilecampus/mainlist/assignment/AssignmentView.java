@@ -3,6 +3,7 @@ package com.soonoo.mobilecampus.mainlist.assignment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -33,6 +34,8 @@ public class AssignmentView extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assignment_view);
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);

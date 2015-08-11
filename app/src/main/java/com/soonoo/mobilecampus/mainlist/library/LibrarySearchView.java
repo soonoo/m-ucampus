@@ -2,6 +2,7 @@ package com.soonoo.mobilecampus.mainlist.library;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,9 @@ public class LibrarySearchView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_library_book_search);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);

@@ -5,5 +5,5 @@
     <corners
         android:radius="2dp"/>
     <solid
-        android:color="@color/gray"/>
+        android:color="@color/tab_selected"/>
 </shape>

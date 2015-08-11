@@ -1,41 +1,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <TextView
-            android:id="@+id/content_title"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="#000"
-            android:textSize="20dp" />
+            android:layout_height="match_parent"
+            android:gravity="center|left"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="#fff"
+                android:textSize="17sp" />
 
-        <TextView
-            android:id="@+id/content_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            <TextView
+                android:id="@+id/sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="#B3B3B3"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="#a70500">
-
-    </View>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -48,16 +58,17 @@
 
             <TextView
                 android:id="@+id/content_contents"
-                android:minHeight="330dp"
-                android:textColor="#191919"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:minHeight="330dp"
                 android:paddingLeft="5dp"
-                android:paddingTop="5dp" />
+                android:paddingTop="5dp"
+                android:textColor="#191919" />
+
             <WebView
-                android:layout_height="wrap_content"
+                android:id="@+id/wv_refer_view"
                 android:layout_width="match_parent"
-                android:id="@+id/wv_refer_view">
+                android:layout_height="wrap_content">
 
             </WebView>
 
@@ -65,9 +76,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="13dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="13dp"
                 android:text="@string/attatch"
                 android:textColor="#000"
                 android:textSize="18dp" />
@@ -75,9 +86,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#a70500" />
+                android:background="#bfbfbf"/>
 
 
             <LinearLayout

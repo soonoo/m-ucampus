@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,23 +42,22 @@ public class NoticeArticleView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_view);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
         t.setScreenName("NoticeViewActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
-
-
         Intent intent = getIntent();
-        TextView title = (TextView) findViewById(R.id.content_title);
+        TextView sub = (TextView)findViewById(R.id.sub);
+        sub.setText(intent.getStringExtra("info"));
+        TextView title = (TextView)findViewById(R.id.title);
         title.setText(intent.getStringExtra("title"));
-        TextView info = (TextView) findViewById(R.id.content_info);
-        info.setText(intent.getStringExtra("info"));
 
-
-        setTitle("ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ하ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅎㅎㅎㅎㅎㅎㅎ");
-        //getSupportActionBar().setSubtitle(intent.getStringExtra("info"));
+        toolbar.findViewById(R.id.sub).setSelected(true);
 
         new GetContents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

@@ -3,6 +3,7 @@ package com.soonoo.mobilecampus.mainlist.library;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,9 @@ public class LibrarySeatInfoView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         setContentView(R.layout.activity_library_seat_info);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);

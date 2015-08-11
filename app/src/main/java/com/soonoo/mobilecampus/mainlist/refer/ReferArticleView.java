@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.LoginView;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.Parser;
@@ -40,6 +40,8 @@ public class ReferArticleView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lec_refer_disp);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
@@ -47,10 +49,12 @@ public class ReferArticleView extends AppCompatActivity {
         t.send(new HitBuilders.AppViewBuilder().build());
 
         Intent intent = getIntent();
-        TextView title = (TextView) findViewById(R.id.content_title);
+        TextView sub = (TextView)findViewById(R.id.sub);
+        sub.setText(intent.getStringExtra("info"));
+        TextView title = (TextView)findViewById(R.id.title);
         title.setText(intent.getStringExtra("title"));
-        TextView info = (TextView) findViewById(R.id.content_info);
-        info.setText(intent.getStringExtra("info"));
+
+        toolbar.findViewById(R.id.sub).setSelected(true);
 
         new GetContents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -141,7 +145,7 @@ public class ReferArticleView extends AppCompatActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        //new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     @Override
     protected void onStart(){
