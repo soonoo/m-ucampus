@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class BoardHomeView extends Fragment implements View.OnClickListener{
+public class  BoardHomeView extends Fragment implements View.OnClickListener{
     Context context;
     View view;
     ArrayList<String> titleList;

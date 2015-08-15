@@ -3,6 +3,7 @@ package com.soonoo.mobilecampus.mainlist;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -56,16 +57,17 @@ public class HomeView extends AppCompatActivity {
             public void onPageScrolled(int position, float arg1, int arg2) {
             }
         });
-        pager.setOffscreenPageLimit(2);
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-        pager.setCurrentItem(1);
 
-        // Bind the tabs to the ViewPager
-        //tabs.setTabTextColors(Color.parseColor("#a1a1a1"), Color.parseColor("#ffffff"));
         tabs.setBackgroundColor(getResources().getColor(R.color.r3));
         tabs.setupWithViewPager(pager);
 
-        System.out.println(tabs.getTabCount());
+        pager.setOffscreenPageLimit(2);
+        pager.setCurrentItem(1);
+
+        // Bind the tabs to the ViewPager
+        //tabs.setTabTextColors(Color.parseColor("#b3b3b3"), Color.parseColor("#ffffff"));
+
     }
 
     @Override

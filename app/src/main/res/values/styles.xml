@@ -20,53 +20,14 @@
     </style>
 
 
-
-    <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
-        <item name="actionBarSize">47dp</item>
-        <!-- Support library compatibility -->
-        <item name="actionBarStyle">@style/MyActionBar</item>
-
-        <item name="colorControlNormal">#9f9f9f</item>
-        <item name="colorControlActivated">@color/r3</item>
-        <item name="colorControlHighlight">@color/r3</item>
-
-        <item name="colorPrimary">@color/r3</item>
-        <item name="colorPrimaryDark">@color/r1</item>
-
-        <item name="alertDialogTheme">@style/MyAlertDialogStyle</item>
-
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <!-- ActionBar styles -->
-    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/r3</item>
-        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
-        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
-        <item name="android:subtitleTextStyle">@style/MyActionBarSubTitleText</item>
-        <item name="subtitleTextStyle">@style/MyActionBarSubTitleText</item>
-        <!-- Support library compatibility -->
-        <item name="background">@color/r3</item>
-
-        <item name="elevation">0dp</item>
-    </style>
-
-    <style name="MyActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">17sp</item>
-        <item name="android:ellipsize">marquee</item>
-        <!-- The textColor property is backward compatible with the Support Library -->
-    </style>
-
-    <style name="MyActionBarSubTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">#B3B3B3</item>
-        <!-- The textColor property is backward compatible with the Support Library -->
-    </style>
-
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabTextColor">#b3b3b3</item>
-        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabTextAppearance">@style/MyCustomTabText</item>
+        <item name="tabSelectedTextColor">#Fff</item>
+    </style>
+
+    <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#999999</item>
     </style>
 
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
