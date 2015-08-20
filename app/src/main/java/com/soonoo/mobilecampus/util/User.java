@@ -139,7 +139,8 @@ public class User {
             con.setRequestMethod(method);
             con.setRequestProperty("Content-length", String.valueOf(query.length()));
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0");
+//            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0");
+            con.setRequestProperty("User-Agent", "soonoo's android client");
             con.setRequestProperty("Cookie", User.cookie);
             con.setDoInput(true);
             con.setDoOutput(true);
@@ -178,7 +179,8 @@ public class User {
 
             con.setRequestMethod(method);
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0");
+//            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0");
+            con.setRequestProperty("User-Agent", "soonoo's android client");
             con.setRequestProperty("Connection", "keep-alive");
             con.setRequestProperty("Cookie", User.cookie);
 

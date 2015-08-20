@@ -8,7 +8,7 @@ package com.soonoo.mobilecampus;
 public class Sites {
     //public static final String BOARD_URL = "http://localhost:3000";
     //public static final String BOARD_URL = "http://10.0.3.2:4000";
-    public static final String BOARD_URL = "http://175.125.197.82:4000";
+    public static final String BOARD_URL = "http://soonoo.iptime.org:3000";
 
 
     public static final String LOGIN_URL = "https://info.kw.ac.kr/webnote/login/login_proc.php";
@@ -80,214 +80,168 @@ public class Sites {
 
     public static final String TIMETABLE_TEMPLATE = "<html>\n" +
             "<title></title>\n" +
-            "<body>\n" +
-            "<table width=\"100%\">\n" +
-            "\t<tbody> \n" +
-            "\t\t<td width=\"5%\">\n" +
-            "\t\t\t<div class=\"col1\">\n" +
-            "\t\t\t\t<div class=\"head\"></div>\n" +
-            "\t\t\t\t<div class=\"period\">0</div>\n" +
-            "\t\t\t\t<div class=\"period\">1</div>\n" +
-            "\t\t\t\t<div class=\"period\">2</div>\n" +
-            "\t\t\t\t<div class=\"period\">3</div>\n" +
-            "\t\t\t\t<div class=\"period\">4</div>\n" +
-            "\t\t\t\t<div class=\"period\">5</div>\n" +
-            "\t\t\t\t<div class=\"period\">6</div>\n" +
-            "\t\t\t\t<div class=\"period\">7</div>\n" +
-            "\t\t\t\t<div class=\"period\">8</div>\n" +
-            "\t\t\t\t<div class=\"period\">9</div>\n" +
-            "\t\t\t\t<div class=\"period\">10</div>\n" +
-            "\t\t\t\t<div class=\"period\">11</div>\n" +
-            "\t\t\t\t<div class=\"period\">12</div>\n" +
-            "\t\t\t\t<div class=\"period\">13</div>\n" +
-            "\t\t\t\t<div class=\"period\">14</div>\n" +
-            "\t\t\t\t<div class=\"period\">15</div>\n" +
-            "\t\t\t</div>\n" +
-            "\t\t</td>\n" +
-            "\t\t<td class=\"col2\">\n" +
-            "\t\t\t<div class=\"subject\">\n" +
-            "\t\t\t</div>\n" +
-            "\t\t\t<div>\n" +
-            "\t\t\t\t<div class=\"day\">월</div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t</div>\n" +
-            "\t\t</td>\n" +
-            "\t\t<td  class=\"col3\">\n" +
-            "\t\t\t<div class=\"subject\">\n" +
-            "\t\t\t</div>\n" +
-            "\t\t\t<div>\n" +
-            "\t\t\t\t<div class=\"day\">화</div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t</div>\n" +
-            "\t\t</td>\n" +
-            "\t\t<td  class=\"col4\">\n" +
-            "\t\t\t<div class=\"subject\">\n" +
-            "\t\t\t</div>\n" +
-            "\t\t\t<div>\n" +
-            "\t\t\t\t<div class=\"day\">수</div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t</div>\n" +
-            "\t\t</td>\n" +
-            "\t\t<td  class=\"col5\">\n" +
-            "\t\t\t<div class=\"subject\">\n" +
-            "\t\t\t</div>\n" +
-            "\t\t\t<div>\n" +
-            "\t\t\t\t<div class=\"day\">목</div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t</div>\n" +
-            "\t\t</td>\n" +
-            "\t\t<td class=\"col6\">\n" +
-            "\t\t\t<div class=\"subject\">\n" +
-            "\t\t\t\t<!--<div style=\"\">데이터구조 실습</div>-->\n" +
-            "\t\t\t</div>\n" +
-            "\t\t\t<div>\n" +
-            "\t\t\t\t<div class=\"day\">금</div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t</div>\n" +
-            "\t\t</td>\n" +
-            "\t\t<td class=\"col7\">\n" +
-            "\t\t\t<div class=\"subject\">\n" +
-            "\t\t\t</div>\n" +
-            "\t\t\t<div class=\"saturday\">\n" +
-            "\t\t\t\t<div class=\"day\">토</div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t\t<div class=\"subs\"></div>\n" +
-            "\t\t\t</div>\n" +
-            "\t\t</td>\n" +
-            "\t</tbody>\n" +
-            "</table>\n" +
-            "\n" +
-            "\n" +
+            "<body><span class=\"col\" id=\"index\">\n" +
+            "\t\t<div class=\"day\"></div>\n" +
+            "\t\t<div>0</div>\n" +
+            "\t\t<div>1</div>\n" +
+            "\t\t<div>2</div>\n" +
+            "\t\t<div>3</div>\n" +
+            "\t\t<div>4</div>\n" +
+            "\t\t<div>5</div>\n" +
+            "\t\t<div>6</div>\n" +
+            "\t\t<div>7</div>\n" +
+            "\t\t<div>8</div>\n" +
+            "\t\t<div>9</div>\n" +
+            "\t\t<div>10</div>\n" +
+            "\t\t<div>11</div>\n" +
+            "\t\t<div>12</div>\n" +
+            "\t\t<div>13</div>\n" +
+            "\t\t<div>14</div>\n" +
+            "\t\t<div>15</div>\n" +
+            "\t</span><span class=\"col\" id=\"mon\">\n" +
+            "\t\t<div class=\"day\">월</div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t</span><span class=\"col\" id=\"tue\">\n" +
+            "\t\t<div class=\"day\">화</div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t</span><span class=\"col\" id=\"wed\">\n" +
+            "\t\t<div class=\"day\">수</div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t</span><span class=\"col\" id=\"thu\">\n" +
+            "\t\t<div class=\"day\">목</div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t</span><span class=\"col\" id=\"fri\">\n" +
+            "\t\t<div class=\"day\">금</div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t</span><span class=\"col\" id=\"sat\">\n" +
+            "\t\t<div class=\"day\">토</div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t\t<div></div>\n" +
+            "\t</span>\n" +
             "<style>\n" +
-            "td{\n" +
-            "\tpadding:0px;\n" +
+            ".day{\n" +
+            "\theight:15px;\n" +
+            "\tfont-size:70%;\n" +
+            "\ttext-align:center;\n" +
             "}\n" +
-            "table{\n" +
+            ".day ~ div{\n" +
+            "\theight:70px;\t\n" +
+            "}\n" +
+            "span{\n" +
+            "\tvertical-align:top;\n" +
+            "\twidth:15.8333%;\n" +
+            "\tdisplay:inline-block;\n" +
+            "}\n" +
+            "div{\n" +
+            "\tfont-size:60%;\n" +
             "\tborder-spacing:0px;\n" +
-            "\tborder-collapse:collapse;\n" +
+            "\tborder-right:1px solid #dfdfdf;\n" +
+            "\tborder-bottom: 1px solid #dfdfdf;\n" +
+            "\tdisplay:block;\t\n" +
             "}\n" +
-            "body{\n" +
+            "body {\n" +
+            "\twidth:100%;\n" +
             "\tmargin:0px;\n" +
             "}\n" +
-            ".period{\n" +
-            "\tfont-size:70%;\t\n" +
+            "#index{\n" +
+            "\twidth:5%;\n" +
             "}\n" +
-            ".period, .subs{\n" +
-            "\tborder-right:1px solid #dfdfdf;\n" +
-            "\tborder-bottom:1px solid #dfdfdf;\n" +
-            "\theight:70px;\n" +
+            "#index div{\n" +
+            "\ttext-align:center;\n" +
             "}\n" +
             "\n" +
-            ".head, .day{\n" +
-            "\tborder-right:1px solid #dfdfdf;\n" +
-            "\tborder-bottom:1px solid #dfdfdf;\n" +
-            "\tfont-size:70%;\n" +
-            "\theight:15px;\n" +
-            "}\n" +
-            "\n" +
-            ".day{\n" +
-            "\ttext-align:center;\t\n" +
-            "}\n" +
-            "\n" +
-            ".subject div{\n" +
-            "\tposition:absolute;\n" +
-            "\theight:71px;\n" +
-            "\tfont-size:65%;\n" +
-            "\tmargin-right:1px;\n" +
+            "*{\n" +
             "\tpadding:0px;\n" +
-            "}\n" +
-            "\n" +
-            ".period{\n" +
-            "\ttext-align:center;\t\n" +
+            "\tmargin:0px;\n" +
             "}\n" +
             "</style>\n" +
             "</body>\n" +

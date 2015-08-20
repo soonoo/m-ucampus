@@ -115,10 +115,11 @@ public class LoginView extends AppCompatActivity {
         public Boolean doInBackground(Void... p){
             if(User.login(id, pw)) {
                 SQLiteDatabase db = openOrCreateDatabase("UserInfo.db", Context.MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS login_info (id VARCHAR)");
-                db.execSQL("DELETE FROM login_info");
-                db.execSQL("INSERT INTO login_info VALUES(" + id + ")");
-                Cursor cursor = db.rawQuery("SELECT * FROM login_info", null);
+                db.execSQL("CREATE TABLE IF NOT EXISTS account_info (id VARCHAR, pw VARCHAR)");
+                db.execSQL("DELETE FROM account_info");
+                db.execSQL("INSERT INTO account_info VALUES('" + id + "', '" + pw + "')");
+                Cursor cursor = db.rawQuery("SELECT * FROM account_info", null);
+
 
                 User.getSession();
                 return true;
@@ -203,4 +204,6 @@ public class LoginView extends AppCompatActivity {
         super.onStop();
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
+
+
 }

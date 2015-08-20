@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
+import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.User;
@@ -17,6 +18,7 @@ import com.soonoo.mobilecampus.util.User;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -44,6 +46,8 @@ public class HomeViewTableFrag extends Fragment {
         view = inflater.inflate(R.layout.fragment_main_timetable, container, false);
         String[] colorList = {"#f9f99f;", "#c9f2ea;", "#f8e6d5;", "#dbe1eb;", "#fcdceb;", "#dce7ff;", "#edead1;", "#def9ba;",
                 "#ecdcff;"};
+        //String[] colorList = {"#FFCDD2;", "#F8BBD0;", "#E1BEE7;", "#D1C4E9;", "#C5CAE9;", "#BBDEFB;", "#80CBC4;", "#F0F4C3;",
+            //    "#FFF59D;"};
         days.add(day1);
         days.add(day2);
         days.add(day3);
@@ -79,9 +83,11 @@ public class HomeViewTableFrag extends Fragment {
             document = doc;
             Elements elements = doc.select("table:has(colgroup)");
             Element html = Jsoup.parse(Sites.TIMETABLE_TEMPLATE);
-            String width = "calc(95%/6);";
+            String width = "15.83333%;";
             String color;
+            Element ele = Jsoup.parse(Sites.TIMETABLE_TEMPLATE, "", Parser.xmlParser());
 
+            // 요일별 과목명 가져오기
             int idx1 = 0, idx2 = 0;
             for (Element tr : elements.select("tr:gt(1)")) {
                 idx2 = 0;
@@ -97,12 +103,17 @@ public class HomeViewTableFrag extends Fragment {
                 idx1++;
             }
 
-
+            // 토요일 수업 없으면 칼럼 삭제
             if (isListEmpty(day6)) {
-                html.select(".col7").remove();
+                ele.select("#sat").remove();
                 days.remove(5);
-                width = "calc(95%/5);";
+                width = "19%;";
+                ele.select("span:gt(0)").attr("style", "width:19%;");
             }
+
+            HtmlCompressor compressor = new HtmlCompressor();
+            compressor.setPreserveLineBreaks(false);        //preserves original line breaks
+            compressor.setRemoveSurroundingSpaces("div,span,html,body,head,title,style");
 
             idx1 = 0;
             for (ArrayList<String> list : days) {
@@ -115,26 +126,28 @@ public class HomeViewTableFrag extends Fragment {
                         color = "";
                     } else {
                         color = bgList.get(subList.indexOf(subs));
-                        try{
-                            if(list.get(idx2).equals(list.get(idx2-1))) subs="";
-                        }catch(Exception e){
+                        try {
+                            if (list.get(idx2).equals(list.get(idx2 - 1))) subs = "";
+                        } catch (Exception e) {
 
                         }
                     }
 
-                    String div = "<div style=\"top:" + Integer.toString(15 + 71 * idx2) + "px; width:" + width +
-                            " background-color:" + color + ";\" >" + subs + "</div>";
-                   // System.out.println(div);
-                    html.select(".col" + Integer.toString(idx1 + 2) + " > div.subject").first().append(div);
+                    if(!subs.equals("")){
+                        subs = subs.replaceAll("\\(", "<br>\\(");
+                        subs = subs.replaceAll("\\(", "<h5 style=\"padding:3 1 0 1; color:#333333l;\">");
+                        subs = subs.replaceAll("\\)", "</h5>");
+                    }
+                    String div = "background-color:" + color ;
+                    ele.select("span:eq(" + Integer.toString(idx1 + 1) + ") div:eq(" + Integer.toString(idx2 + 1) + ")").first().append("<h4 style=\"padding:3 1 0 1; color:#212121; \">"+subs+"</h4>").
+                            attr("style", div);
                     idx2++;
                 }
                 idx1++;
             }
 
             WebView myWebView = (WebView) view.findViewById(R.id.webview_timetable);
-            myWebView.loadDataWithBaseURL("", html.toString(), "text/html", "utf-8", "");
-            //System.out.println(html);
-            //myWebView.loadDataWithBaseURL("", elements.toString(), "text/html", "utf-8", "");
+            myWebView.loadDataWithBaseURL("", compressor.compress(ele.toString()), "text/html", "utf-8", "");
             pb.setVisibility(View.GONE);
         }
     }

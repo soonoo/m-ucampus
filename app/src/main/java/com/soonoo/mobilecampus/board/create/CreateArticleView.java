@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -23,21 +24,23 @@ import com.soonoo.mobilecampus.util.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+
 public class CreateArticleView extends AppCompatActivity {
     EditText title;
     EditText content;
     ProgressBar pb;
     Button postButton;
 
-    public void doFinish(){
+    public void doFinish() {
         finish();
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         String titleText = title.getText().toString().replaceAll("[ |\\r|\\n]", "");
         String contentText = content.getText().toString().replaceAll("[ |\\r|\\n]", "");
 
-        if(!titleText.equals("") && !contentText.equals("")) return false;
+        if (!titleText.equals("") && !contentText.equals("")) return false;
         else return true;
     }
 
@@ -45,11 +48,14 @@ public class CreateArticleView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_article_view);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         title = (EditText) findViewById(R.id.post_title);
         content = (EditText) findViewById(R.id.post_content);
-        postButton = (Button)findViewById(R.id.post_submit_button);
+        postButton = (Button) findViewById(R.id.post_submit_button);
 
         title.addTextChangedListener(new TextWatcher() {
             @Override
@@ -58,7 +64,7 @@ public class CreateArticleView extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(isEmpty()) postButton.setEnabled(false);
+                if (isEmpty()) postButton.setEnabled(false);
                 else postButton.setEnabled(true);
             }
 
@@ -74,7 +80,7 @@ public class CreateArticleView extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(isEmpty()) postButton.setEnabled(false);
+                if (isEmpty()) postButton.setEnabled(false);
                 else postButton.setEnabled(true);
             }
 
@@ -87,51 +93,54 @@ public class CreateArticleView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 postButton.setVisibility(View.GONE);
-                pb  = (ProgressBar) findViewById(R.id.pb_post);
+                pb = (ProgressBar) findViewById(R.id.pb_post);
                 pb.setVisibility(View.VISIBLE);
                 new PostArticle().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
     }
 
-    public class PostArticle extends AsyncTask<Void, Void, String>{
+    public class PostArticle extends AsyncTask<Void, Void, String> {
         String query;
         String student_id;
 
         @Override
-        public void onPreExecute(){
+        public void onPreExecute() {
             SQLiteDatabase db = openOrCreateDatabase("UserInfo.db", Context.MODE_PRIVATE, null);
-            Cursor cursor = db.rawQuery("SELECT * FROM login_info", null);
-            if(cursor.moveToFirst()){
-               student_id = cursor.getString(0);
+            Cursor cursor = db.rawQuery("SELECT * FROM account_info", null);
+            if (cursor.moveToFirst()) {
+                student_id = cursor.getString(0);
             }
 
-            query = "title=" + title.getText().toString() + "&content=" + content.getText().toString()
-                            + "&student_id=" + student_id;
+            try {
+                query = "title=" + URLEncoder.encode(title.getText().toString(), "UTF-8") + "&content=" + URLEncoder.encode(content.getText().toString(), "UTF-8")
+                        + "&nickname=" + URLEncoder.encode(student_id, "UTF-8");
+            } catch (Exception e) {
+            }
         }
 
         @Override
-        public String doInBackground(Void... p){
-            return User.getHtml("POST", Sites.BOARD_URL + "/write/article", query, "UTF-8");
+        public String doInBackground(Void... p) {
+            return User.getHtml("GET", Sites.BOARD_URL + "/write/article?" + query, "UTF-8");
         }
 
         @Override
-        public void onPostExecute(String response){
+        public void onPostExecute(String response) {
             System.out.println(response);
-            if(!response.equals("Bad Request")){
+            if (!response.equals("Bad Request")) {
                 Intent intent = new Intent(getApplicationContext(), BoardArticleView.class);
-
-                try{
+                System.out.println("ㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅ");
+                try {
                     JSONArray jsonArray = new JSONArray(response);
                     JSONObject info = jsonArray.getJSONObject(0);
                     intent.putExtra("id", Integer.parseInt(info.getString("id")));
                     doFinish();
                     startActivity(intent);
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return;
-            } else{
+            } else {
                 pb.setVisibility(View.GONE);
                 postButton.setVisibility(View.VISIBLE);
                 return;

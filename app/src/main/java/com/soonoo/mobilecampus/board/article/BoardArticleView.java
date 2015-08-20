@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import com.soonoo.mobilecampus.util.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class BoardArticleView extends AppCompatActivity {
@@ -38,6 +40,9 @@ public class BoardArticleView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_article_view);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         id = Integer.toString(getIntent().getIntExtra("id", 0));
 
@@ -67,7 +72,7 @@ public class BoardArticleView extends AppCompatActivity {
                 content.setText(article.getString("content"));
                 reply_count.setText("댓글 [" + contentList.size() + "]");
 
-                setTitle(article.getString("title"));
+                getSupportActionBar().setTitle(article.getString("title"));
                 getSupportActionBar().setSubtitle(article.getString("date") + "   |   조회:" + article.getString("view_count"));
 
                 replyList.removeHeaderView(replyList.findViewById(R.id.header));
@@ -126,8 +131,12 @@ public class BoardArticleView extends AppCompatActivity {
         }
 
         public String doInBackground(String... p){
-            String query = "id_article=" + id + "&content=" + p[0];
-            String result =  User.getHtml("POST", Sites.BOARD_URL + "/write/reply?", query, "UTF-8");
+            String query = null;
+            try {
+                query = "id_article=" + id + "&content=" + URLEncoder.encode(p[0], "UTF-8");
+            }catch(Exception e){
+            }
+            String result =  User.getHtml("GET", Sites.BOARD_URL + "/write/reply?" + query, "UTF-8");
 
             if(result.equals("OK")){
                 return User.getHtml("GET", Sites.BOARD_URL + "/read/reply?id_article=" + id, "UTF-8");
@@ -190,7 +199,7 @@ public class BoardArticleView extends AppCompatActivity {
             try {
                 JSONArray jsonArray = new JSONArray(json);
 
-                for(int i = 0 ; i < jsonArray.length(); i++) {
+                for(int i = jsonArray.length()-1 ; i > -1; i--) {
                     JSONObject reply = jsonArray.getJSONObject(i);
                     if (reply == null) throw new Exception();
 

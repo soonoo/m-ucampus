@@ -34,7 +34,7 @@ public class  BoardHomeView extends Fragment implements View.OnClickListener{
         this.context = container.getContext();
         view = inflater.inflate(R.layout.activity_board_home_view, container, false);
 
-        new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+       // new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return view;
     }
@@ -88,7 +88,7 @@ public class  BoardHomeView extends Fragment implements View.OnClickListener{
 
                 TextView next = (TextView) footer.findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View view){
+                    public void onClick(View view) {
                         page++;
                         new GetJSON().execute();
                         return;
@@ -97,6 +97,7 @@ public class  BoardHomeView extends Fragment implements View.OnClickListener{
 
                 listView.removeFooterView(listView.findViewById(R.id.board_list_footer));
                 listView.addFooterView(footer);
+                //adapter.notifyDataSetChanged();
                 listView.setAdapter(adapter);
             }catch(Exception e){
                 e.printStackTrace();
@@ -119,9 +120,8 @@ public class  BoardHomeView extends Fragment implements View.OnClickListener{
         }
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        new GetJSON().execute();
+    public void onStart(){
+        super.onStart();
+        new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

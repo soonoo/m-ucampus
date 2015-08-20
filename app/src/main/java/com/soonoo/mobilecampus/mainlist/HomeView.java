@@ -3,10 +3,10 @@ package com.soonoo.mobilecampus.mainlist;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -57,8 +57,12 @@ public class HomeView extends AppCompatActivity {
             public void onPageScrolled(int position, float arg1, int arg2) {
             }
         });
-        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-
+        try {
+            pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        } catch (Exception e) {
+            ActivityCompat.finishAffinity(this);
+            startActivity(new Intent(this, LoginView.class));
+        }
         tabs.setBackgroundColor(getResources().getColor(R.color.r3));
         tabs.setupWithViewPager(pager);
 

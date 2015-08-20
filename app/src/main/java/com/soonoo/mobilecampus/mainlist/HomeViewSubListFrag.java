@@ -2,16 +2,19 @@ package com.soonoo.mobilecampus.mainlist;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.soonoo.mobilecampus.LoginView;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.Parser;
@@ -37,7 +40,6 @@ public class HomeViewSubListFrag extends Fragment {
         this.context = container.getContext();
 
         view = inflater.inflate(R.layout.fragment_main_list, container, false);
-
         new InitMainList().execute();
 
         return view;
@@ -70,7 +72,7 @@ public class HomeViewSubListFrag extends Fragment {
             User.subName = Parser.getSubName(mainDoc);
             Parser.getNewNotice(mainDoc);
 
-            if(User.subCode == null || User.subCode.size() ==0) Parser.setSubCode();
+            if (User.subCode == null || User.subCode.size() == 0) Parser.setSubCode();
             for (String sub : User.subCode) {
                 String info;
                 if ((info = prefs.getString(sub, null)) != null) {
@@ -97,7 +99,7 @@ public class HomeViewSubListFrag extends Fragment {
         }
 
         @Override
-        public void onPostExecute (ArrayList < String > list) {
+        public void onPostExecute(ArrayList<String> list) {
             titleList = (ArrayList<String>) User.subName.clone();
             infoList = list;
             int size = titleList.size();
@@ -114,7 +116,8 @@ public class HomeViewSubListFrag extends Fragment {
             infoList.add("");
             infoList.add("학기별 성적/석차를 확인합니다.");
             infoList.add("장학금 수혜 현황을 확인합니다.");
-            infoList.add(""); User.isNew.add(false);
+            infoList.add("");
+            User.isNew.add(false);
             infoList.add("열람실 좌석 현황/도서 검색");
             infoList.add("강의계획서를 검색합니다.");
 
