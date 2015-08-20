@@ -37,8 +37,8 @@ public class CreateArticleView extends AppCompatActivity {
     }
 
     public boolean isEmpty() {
-        String titleText = title.getText().toString().replaceAll("[ |\\r|\\n]", "");
-        String contentText = content.getText().toString().replaceAll("[ |\\r|\\n]", "");
+        String titleText = title.getText().toString().replaceAll("[ |\\r|\\n|\\t]", "");
+        String contentText = content.getText().toString().replaceAll("[ |\\r|\\n|\\t]", "");
 
         if (!titleText.equals("") && !contentText.equals("")) return false;
         else return true;
@@ -129,7 +129,6 @@ public class CreateArticleView extends AppCompatActivity {
             System.out.println(response);
             if (!response.equals("Bad Request")) {
                 Intent intent = new Intent(getApplicationContext(), BoardArticleView.class);
-                System.out.println("ㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅ");
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     JSONObject info = jsonArray.getJSONObject(0);

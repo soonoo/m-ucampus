@@ -22,12 +22,12 @@
 
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyCustomTabText</item>
-        <item name="tabSelectedTextColor">#Fff</item>
+        <item name="tabSelectedTextColor">@color/r3</item>
     </style>
 
     <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">#999999</item>
+        <item name="android:textColor">#666666</item>
     </style>
 
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">

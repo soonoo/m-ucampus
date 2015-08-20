@@ -40,7 +40,12 @@ public class HomeViewSubListFrag extends Fragment {
         this.context = container.getContext();
 
         view = inflater.inflate(R.layout.fragment_main_list, container, false);
-        new InitMainList().execute();
+        try {
+            new InitMainList().execute();
+        }catch (Exception e){
+            System.out.println("Error!");
+            e.printStackTrace();
+        }
 
         return view;
     }

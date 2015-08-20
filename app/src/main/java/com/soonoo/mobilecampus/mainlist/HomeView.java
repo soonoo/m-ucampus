@@ -63,7 +63,7 @@ public class HomeView extends AppCompatActivity {
             ActivityCompat.finishAffinity(this);
             startActivity(new Intent(this, LoginView.class));
         }
-        tabs.setBackgroundColor(getResources().getColor(R.color.r3));
+//        tabs.setBackgroundColor(getResources().getColor(R.color.wh));
         tabs.setupWithViewPager(pager);
 
         pager.setOffscreenPageLimit(2);

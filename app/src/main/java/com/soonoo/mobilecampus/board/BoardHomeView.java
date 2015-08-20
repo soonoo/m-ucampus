@@ -64,7 +64,7 @@ public class  BoardHomeView extends Fragment implements View.OnClickListener{
                     if(replyCount > 0 ) titleList.add(jsonObject.getString("title") + " <font color=#b30027>[" + Integer.toString(replyCount) + "]</font>");
                     else titleList.add(jsonObject.getString("title"));
 
-                    infoList.add(jsonObject.getString("date") + "  |  조회:" + jsonObject.getString("view_count"));
+                    infoList.add(jsonObject.getString("date") + "  |  조회:" + jsonObject.getString("view_count") + "  |  " + jsonObject.getString("ip") + ".*.*");
                     idList.add(jsonObject.getInt("id"));
                 }
 

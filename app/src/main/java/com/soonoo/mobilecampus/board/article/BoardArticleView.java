@@ -73,7 +73,8 @@ public class BoardArticleView extends AppCompatActivity {
                 reply_count.setText("댓글 [" + contentList.size() + "]");
 
                 getSupportActionBar().setTitle(article.getString("title"));
-                getSupportActionBar().setSubtitle(article.getString("date") + "   |   조회:" + article.getString("view_count"));
+                getSupportActionBar().setSubtitle(article.getString("date") + "   |   조회:" + article.getString("view_count")
+                        + "  |  " + article.getString("ip") + ".*.*");
 
                 replyList.removeHeaderView(replyList.findViewById(R.id.header));
                 replyList.addHeaderView(header);
@@ -107,10 +108,10 @@ public class BoardArticleView extends AppCompatActivity {
             submitButton.setOnClickListener(new View.OnClickListener(){
                public void onClick(View view){
                    String text = reply.getText().toString();
-                   text = text.replaceAll("[\\n|\\r]", " ");
 
                    if(text.equals("")) return;
-                   if(text.replaceAll("\\p{Space}", "").equals("")) return;
+                   if(text.replaceAll("[\\n|\\r|\\t| ]", "").equals("")) return;
+//                   if(text.replaceAll("\\p{Space}", "").equals("")) return;
 
                    InputMethodManager imm = (InputMethodManager)getSystemService(
                            Context.INPUT_METHOD_SERVICE);
@@ -160,7 +161,7 @@ public class BoardArticleView extends AppCompatActivity {
                         if (reply == null) throw new Exception();
 
                         contentList.add(reply.getString("content"));
-                        dateList.add(reply.getString("date"));
+                        dateList.add(reply.getString("date") + "  |  " + reply.getString("ip")  + "*.*");
                     }
                     BoardReplyAdapter adapter = new BoardReplyAdapter(contentList, dateList);
                     replyList.setAdapter(adapter);
@@ -204,7 +205,7 @@ public class BoardArticleView extends AppCompatActivity {
                     if (reply == null) throw new Exception();
 
                     contentList.add(reply.getString("content"));
-                    dateList.add(reply.getString("date"));
+                    dateList.add(reply.getString("date") + "  |  " + reply.getString("ip") + ".*.*");
                 }
 
                 replyList = (ListView) findViewById(R.id.reply_list);
