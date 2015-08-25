@@ -48,6 +48,7 @@ public class BoardHomeViewAdpater extends BaseAdapter {
         final Context context = parent.getContext();
         View view = convertView;
 
+
         HolderItem holder;
 
         if(view == null){
@@ -67,6 +68,7 @@ public class BoardHomeViewAdpater extends BaseAdapter {
             public void onClick(View view){
                 Intent intent = new Intent(context, BoardArticleView.class);
                 intent.putExtra("id", idList.get(pos));
+                intent.putExtra("pos", pos);
                 context.startActivity(intent);
                 return;
             }

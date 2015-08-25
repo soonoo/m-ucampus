@@ -1,12 +1,14 @@
-package com.soonoo.mobilecampus.mainlist.refer;
+package com.soonoo.mobilecampus.mainlist.qna;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.LoginView;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.mainlist.refer.ReferArticleView;
 import com.soonoo.mobilecampus.util.Parser;
 import com.soonoo.mobilecampus.util.User;
-import com.urqa.clientinterface.URQAController;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,8 +33,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
-
-public class ReferView extends AppCompatActivity {
+public class QnaActivity extends AppCompatActivity {
     ArrayList<String> titleList;
     ArrayList<String> infoList;
     ArrayList<String> codeList;
@@ -50,28 +49,19 @@ public class ReferView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lec_refer_room);
+        setContentView(R.layout.activity_qna);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        URQAController.InitializeAndStartSession(getApplicationContext(), "4BF35847");
 
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("LecReferRoomActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
-
-        try{
+        try {
             subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
             new GetRefer(subCode, page).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }catch(Exception e){
+        } catch (Exception e) {
             finish();
-            e.printStackTrace();
         }
-
     }
-
-
 
     public class GetRefer extends AsyncTask<Void, Void, Document> {
         String code;
@@ -92,9 +82,9 @@ public class ReferView extends AppCompatActivity {
         @Override
         public Document doInBackground(Void... p) {
             String html = null;
-            try{
-                html = User.getHtml("POST", Sites.LEC_REFER_URL, Parser.getReferQuery(code, page), "UTF-8");
-            }catch (Exception e){
+            try {
+                html = User.getHtml("POST", Sites.QNA_URL, Parser.getStuReferQuery(code, page), "UTF-8");
+            } catch (Exception e) {
                 finish();
             }
             return Jsoup.parse(html);
@@ -106,32 +96,33 @@ public class ReferView extends AppCompatActivity {
             Elements elements = document.select("samp");
             for (Element element : elements) {
                 Element parent = element.parent().parent();
-                titleList.add(parent.select("a").text());
+                titleList.add(parent.select("td:eq(3)").text());
 
-                String info = "no." + parent.select("td:eq(1)").text() + "  |  " +
-                        "등록일: " + parent.select("td:eq(3)").text() + "  |  " +
-                        "조회수: " + parent.select("td:eq(5)").text();
+                String info = /*"no." + parent.select("td:eq(1)").text() + "  |  " +*/
+                        "등록일: " + parent.select("td:eq(5)").text() + "  |  " +
+                                "조회수: " + parent.select("td:eq(7)").text() + "  |  " +
+                                "작성자: " + parent.select("td:eq(6)").text() + "  |  " +
+                                parent.select("td:eq(2)").text();
                 infoList.add(info);
 
                 String code = element.select("a").attr("href");
-                codeList.add(code.substring(code.indexOf("(") + 2, code.indexOf(",") - 1));
+                if (!code.equals("") && code != null)
+                    codeList.add(code.substring(code.indexOf("(") + 2, code.indexOf(",") - 1));
+                else codeList.add("");
             }
 
-            if (elements.size() == 0) {
+            if (elements.size() == 0)
                 findViewById(R.id.message_no_contents).setVisibility(View.VISIBLE);
-                findViewById(R.id.progressbar_downloading).setVisibility(View.GONE);
-                return;
-            }
-
 
             ListView listView = (ListView) findViewById(R.id.refer_list);
             MainListAdapter adapter = new MainListAdapter(titleList, infoList);
 
+            findViewById(R.id.progressbar_downloading).setVisibility(View.GONE);
 
             View footer = getLayoutInflater().inflate(R.layout.footer, null, false);
             LinearLayout ll = (LinearLayout) footer.findViewById(R.id.footer);
             for (final Element numbers : document.select("b:matches(\\[[1-9]\\]), a:matches(\\[[1-9]\\])")) {
-                final TextView tv = new TextView(ReferView.this);
+                final TextView tv = new TextView(QnaActivity.this);
                 tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 tv.setText(numbers.text());
@@ -213,7 +204,8 @@ public class ReferView extends AppCompatActivity {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ReferView.this, ReferArticleView.class);
+                    if (codeList.get(pos).equals("")) return;
+                    Intent intent = new Intent(QnaActivity.this, QnaArticleView.class);
                     intent.putExtra("subIndex", subCode)
                             .putExtra("bdseq", codeList.get(pos))
                             .putExtra("title", titleList.get(pos))
@@ -240,17 +232,5 @@ public class ReferView extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

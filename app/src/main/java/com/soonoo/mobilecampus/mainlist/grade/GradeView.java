@@ -160,12 +160,6 @@ public class GradeView extends AppCompatActivity {
     }
 
     @Override
-    public void onRestart() {
-        super.onRestart();
-        new LoginView.OnBack().execute();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);

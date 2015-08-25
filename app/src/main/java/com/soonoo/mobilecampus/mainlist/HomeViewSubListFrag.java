@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.Parser;
 import com.soonoo.mobilecampus.util.User;
+import com.urqa.clientinterface.URQAController;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,12 +40,7 @@ public class HomeViewSubListFrag extends Fragment {
         this.context = container.getContext();
 
         view = inflater.inflate(R.layout.fragment_main_list, container, false);
-        try {
-            new InitMainList().execute();
-        }catch (Exception e){
-            System.out.println("Error!");
-            e.printStackTrace();
-        }
+        new InitMainList().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return view;
     }
@@ -63,8 +58,8 @@ public class HomeViewSubListFrag extends Fragment {
         }
 
         @Override
-        public ArrayList<String> doInBackground(Void... p) {
-            ArrayList<String> infoList = new ArrayList<String>();
+        public ArrayList<String> doInBackground(Void... p){
+            ArrayList<String> infoList = new ArrayList<>();
 
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(context);
@@ -73,20 +68,33 @@ public class HomeViewSubListFrag extends Fragment {
             String mainHtml = User.getHtml("POST", Sites.MAIN_URL, Sites.MAIN_QUERY, "utf-8");
             Document mainDoc = Jsoup.parse(mainHtml);
 
-            User.subCode = Parser.getSubCode(mainDoc);
-            User.subName = Parser.getSubName(mainDoc);
-            Parser.getNewNotice(mainDoc);
+            Parser.setSubCode(mainDoc);
+            Parser.setSubName(mainDoc);
+            Parser.setNewNotice(mainDoc);
 
-            if (User.subCode == null || User.subCode.size() == 0) Parser.setSubCode();
+            if(User.subCode == null || User.subCode.isEmpty()){
+                getActivity().finish();
+                prefs.edit().putBoolean("get_session", true);
+                startActivity(new Intent(getActivity(), LoginView.class));
+            }
+
             for (String sub : User.subCode) {
                 String info;
                 if ((info = prefs.getString(sub, null)) != null) {
                     infoList.add(info);
                     continue;
                 } else {
-                    String sylHtml = User.getHtml("POST", Sites.SYLLABUS_URL + Parser.getSubQuery(sub), "euc-kr");
-                    Document sylDoc = Jsoup.parse(sylHtml);
+                    String sylHtml = null;
 
+                    try{
+                        sylHtml = User.getHtml("POST", Sites.SYLLABUS_URL + Parser.getSubQuery(sub), "euc-kr");
+                    }catch (Exception e){
+                        getActivity().finish();
+                        prefs.edit().putBoolean("get_session", true);
+                        startActivity(new Intent(getActivity(), LoginView.class));
+                    }
+
+                    Document sylDoc = Jsoup.parse(sylHtml);
                     String prof = Parser.getProf(sylDoc);
                     String time = Parser.getTime(sylDoc);
 
@@ -97,9 +105,6 @@ public class HomeViewSubListFrag extends Fragment {
                 }
             }
 
-
-            //Toast.makeText(getActivity(), User.getHtml("GET", Sites.BOARD_URL+"/read/list?page=1", "UTF-8"), Toast.LENGTH_LONG);
-            //tmp = User.getHtml("GET", Sites.BOARD_URL+"/read/list?page=1", "UTF-8");
             return infoList;
         }
 

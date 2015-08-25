@@ -21,9 +21,9 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.mainlist.HomeView;
 import com.soonoo.mobilecampus.util.Parser;
 import com.soonoo.mobilecampus.util.User;
+import com.urqa.clientinterface.URQAController;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,28 +34,38 @@ import java.io.StringWriter;
 
 public class LoginView extends AppCompatActivity {
     private static Context ctx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 //        getSupportActionBar().hide();
 
-        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        URQAController.InitializeAndStartSession(getApplicationContext(), "4BF35847");
+
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if(prefs.getBoolean("get_session", false)){
+            prefs.edit().putBoolean("get_session", false).apply();
+            new LoginOnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
+        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
         t.setScreenName("LoginActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
         ctx = getApplicationContext();
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         final Button login_button = (Button) findViewById(R.id.login_button);
         final EditText login_id = (EditText) findViewById(R.id.text_id);
         final EditText login_pw = (EditText) findViewById(R.id.text_pw);
 
-        if(prefs.getBoolean("auto_login", false) && isConnected()){
+        if (prefs.getBoolean("auto_login", false) && isConnected()) {
             try {
                 new Login(true, prefs.getString("user_id", null), prefs.getString("user_pw", null)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }catch (Exception e){}
-        } else if(!isConnected()){
+            } catch (Exception e) {
+            }
+        } else if (!isConnected()) {
             Toast.makeText(LoginView.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
         }
 
@@ -65,17 +75,17 @@ public class LoginView extends AppCompatActivity {
                 final String id = login_id.getText().toString();
                 final String pw = login_pw.getText().toString();
 
-                try{
-                    if(!isConnected()) {
+                try {
+                    if (!isConnected()) {
                         Toast.makeText(LoginView.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
-                    } else if(id.equals("")){
+                    } else if (id.equals("")) {
                         Toast.makeText(LoginView.this, R.string.error_id, Toast.LENGTH_SHORT).show();
-                    } else if(pw.equals("")){
+                    } else if (pw.equals("")) {
                         Toast.makeText(LoginView.this, R.string.error_pw, Toast.LENGTH_SHORT).show();
-                    } else{
+                    } else {
                         new Login(false, id, pw).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
-                }catch(Exception e){
+                } catch (Exception e) {
                     StringWriter sw = new StringWriter();
                     e.printStackTrace(new PrintWriter(sw));
                     String exceptionAsStrting = sw.toString();
@@ -91,35 +101,34 @@ public class LoginView extends AppCompatActivity {
         String id;
         String pw;
 
-        Login(boolean isAuto, String id, String pw){
+        Login(boolean isAuto, String id, String pw) {
             this.isAuto = isAuto;
             this.id = id;
             this.pw = pw;
         }
 
         @Override
-        public void onPreExecute(){
+        public void onPreExecute() {
             findViewById(R.id.progress_login).setVisibility(View.VISIBLE);
             findViewById(R.id.login_button).setEnabled(false);
-            if(isAuto){
-                CheckBox checkBox = (CheckBox)findViewById(R.id.auto_login);
+            if (isAuto) {
+                CheckBox checkBox = (CheckBox) findViewById(R.id.auto_login);
                 checkBox.setChecked(true);
-                EditText text_id = (EditText)findViewById(R.id.text_id);
+                EditText text_id = (EditText) findViewById(R.id.text_id);
                 text_id.setText(id);
-                EditText text_pw = (EditText)findViewById(R.id.text_pw);
+                EditText text_pw = (EditText) findViewById(R.id.text_pw);
                 text_pw.setText(id);
             }
         }
 
         @Override
-        public Boolean doInBackground(Void... p){
-            if(User.login(id, pw)) {
+        public Boolean doInBackground(Void... p) {
+            if (User.login(id, pw)) {
                 SQLiteDatabase db = openOrCreateDatabase("UserInfo.db", Context.MODE_PRIVATE, null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS account_info (id VARCHAR, pw VARCHAR)");
                 db.execSQL("DELETE FROM account_info");
                 db.execSQL("INSERT INTO account_info VALUES('" + id + "', '" + pw + "')");
                 Cursor cursor = db.rawQuery("SELECT * FROM account_info", null);
-
 
                 User.getSession();
                 return true;
@@ -128,18 +137,18 @@ public class LoginView extends AppCompatActivity {
         }
 
         @Override
-        public void onPostExecute(Boolean isValid){
+        public void onPostExecute(Boolean isValid) {
             final CheckBox auto_login = (CheckBox) findViewById(R.id.auto_login);
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LoginView.this);
-            if(!isValid){
+            if (!isValid) {
                 Toast.makeText(LoginView.this, R.string.error_login_info, Toast.LENGTH_SHORT).show();
-            }else{
-                 prefs.edit().putBoolean("auto_login", auto_login.isChecked()).apply();
+            } else {
+                prefs.edit().putBoolean("auto_login", auto_login.isChecked()).apply();
 
-                 if(auto_login.isChecked()) {
-                     prefs.edit().putString("user_id", id).apply();
-                     prefs.edit().putString("user_pw", pw).apply();
-                 }
+                if (auto_login.isChecked()) {
+                    prefs.edit().putString("user_id", id).apply();
+                    prefs.edit().putString("user_pw", pw).apply();
+                }
                 // 로그인, 메인 액티비티 리스트 초기화 진행
                 Intent intent = new Intent(LoginView.this, HomeView.class);
                 finish();
@@ -150,57 +159,71 @@ public class LoginView extends AppCompatActivity {
         }
     }
 
-    public boolean isConnected(){
+    public class LoginOnBack extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        public void onPreExecute() {
+            findViewById(R.id.progress_login).setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public Boolean doInBackground(Void... p) {
+            SQLiteDatabase db = openOrCreateDatabase("UserInfo.db", Context.MODE_PRIVATE, null);
+            Cursor cursor = db.rawQuery("SELECT * FROM account_info", null);
+
+            if (cursor.moveToFirst()) {
+                if (User.login(cursor.getString(0), cursor.getString(1))) {
+                    User.getSession();
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        @Override
+        public void onPostExecute(Boolean isValid) {
+            if (!isValid) {
+                Toast.makeText(LoginView.this, R.string.error_login_info, Toast.LENGTH_SHORT).show();
+            } else {
+                // 로그인, 메인 액티비티 리스트 초기화 진행
+                Intent intent = new Intent(LoginView.this, HomeView.class);
+                finish();
+                startActivity(intent);
+            }
+            findViewById(R.id.login_button).setEnabled(true);
+            findViewById(R.id.progress_login).setVisibility(View.GONE);
+        }
+    }
+
+    public boolean isConnected() {
         ConnectivityManager cManager;
         NetworkInfo mobile;
         NetworkInfo wifi;
 
-        cManager=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        cManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         mobile = cManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         wifi = cManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        if(mobile.isConnected() || wifi.isConnected()) {
+        if (mobile.isConnected() || wifi.isConnected()) {
             return true;
-        } else{
+        } else {
             return false;
         }
 
     }
 
-    public static Context getContext(){
+    public static Context getContext() {
         return ctx;
     }
 
-    public static class OnBack extends AsyncTask<Void, Void, Void>{
-        @Override
-        public Void doInBackground(Void... p){
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            if(User.login(prefs.getString("user_id", null), prefs.getString("user_pw", null))) {
-                User.getSession();
-
-                String mainHtml = User.getHtml("POST", Sites.MAIN_URL, Sites.MAIN_QUERY, "utf-8");
-                Document mainDoc = Jsoup.parse(mainHtml);
-                User.subCode = Parser.getSubCode(mainDoc);
-                User.subName = Parser.getSubName(mainDoc);
-            }
-            return null;
-        }
-    }
-
     @Override
-    public void onRestart(){
-        super.onRestart();
-        new OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }

@@ -17,9 +17,9 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch(position){
+            case 0: return "게시판";
             case 1: return "유캠퍼스";
             case 2: return "시간표";
-            case 0: return "게시판";
         }
         return null;
     }
@@ -32,9 +32,9 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch(position){
+            case 0: return new BoardHomeView();
             case 1: return new HomeViewSubListFrag();
             case 2: return new HomeViewTableFrag();
-            case 0: return new BoardHomeView();
         }
         return null;
     }

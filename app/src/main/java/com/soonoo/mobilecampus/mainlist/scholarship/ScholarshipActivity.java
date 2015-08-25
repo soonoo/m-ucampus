@@ -1,22 +1,15 @@
 package com.soonoo.mobilecampus.mainlist.scholarship;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.CheckBox;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -25,7 +18,6 @@ import com.soonoo.mobilecampus.Controller;
 import com.soonoo.mobilecampus.LoginView;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
-import com.soonoo.mobilecampus.mainlist.HomeView;
 import com.soonoo.mobilecampus.util.User;
 
 import org.jsoup.Jsoup;
@@ -75,11 +67,10 @@ public class ScholarshipActivity extends AppCompatActivity {
         protected void onPostExecute(Document result) {
             document = result;
             try {
-                document.select("table").attr("width", "100%").attr("style", "margin-bottom:15px;");
                 document.select("table:has(img)").remove();
                 document.select("td").attr("style", "font-size:85%;");
                 document.select("th").attr("style", "font-size:80%; background-color:#e5e5e5;");
-
+                document.select("table").attr("width", "100%").attr("style", "margin-bottom:15px;");
                 WebView myWebView = (WebView) findViewById(R.id.webview_scholar);
                 myWebView.loadDataWithBaseURL("", document.select("table").toString(), "text/html", "utf-8", "");
             } catch (Exception e) {
@@ -106,12 +97,6 @@ public class ScholarshipActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
-    }
-
-    @Override
-    public void onRestart() {
-        super.onRestart();
-        new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override

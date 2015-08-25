@@ -1,8 +1,10 @@
 package com.soonoo.mobilecampus.board.article;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 
 public class BoardArticleView extends AppCompatActivity {
     String id;
+    int pos;
     ListView replyList;
     ArrayList<String> contentList;
     ArrayList<String> dateList;
@@ -45,7 +48,7 @@ public class BoardArticleView extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         id = Integer.toString(getIntent().getIntExtra("id", 0));
-
+        pos = getIntent().getIntExtra("pos", 0);
         new GetReplys().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -161,7 +164,7 @@ public class BoardArticleView extends AppCompatActivity {
                         if (reply == null) throw new Exception();
 
                         contentList.add(reply.getString("content"));
-                        dateList.add(reply.getString("date") + "  |  " + reply.getString("ip")  + "*.*");
+                        dateList.add(reply.getString("date") + "  |  " + reply.getString("ip")  + ".*.*");
                     }
                     BoardReplyAdapter adapter = new BoardReplyAdapter(contentList, dateList);
                     replyList.setAdapter(adapter);
@@ -175,6 +178,11 @@ public class BoardArticleView extends AppCompatActivity {
                 }catch(Exception e){
                     e.printStackTrace();
                 }
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                prefs.edit().putBoolean("new_reply_created", true).apply();
+                prefs.edit().putInt("titlePos", pos).apply();
+                prefs.edit().putInt("replyNum", contentList.size()).apply();
 
                 submitButton.setVisibility(View.VISIBLE);
                 pb.setVisibility(View.GONE);

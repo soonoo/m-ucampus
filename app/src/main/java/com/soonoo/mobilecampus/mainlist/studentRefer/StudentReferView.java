@@ -1,8 +1,9 @@
-package com.soonoo.mobilecampus.mainlist.notice;
+package com.soonoo.mobilecampus.mainlist.studentRefer;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,13 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.LoginView;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
+import com.soonoo.mobilecampus.mainlist.notice.NoticeArticleView;
+import com.soonoo.mobilecampus.mainlist.notice.NoticeView;
 import com.soonoo.mobilecampus.util.Parser;
 import com.soonoo.mobilecampus.util.User;
 
@@ -32,13 +30,13 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
+public class StudentReferView extends AppCompatActivity {
+    String subCode;
+    int page = 1;
 
-public class NoticeView extends AppCompatActivity {
     ArrayList<String> titleList;
     ArrayList<String> infoList;
     ArrayList<String> codeList;
-    String subCode;
-    int page = 1;
 
     int getDp(int px) {
         float scale = getResources().getDisplayMetrics().density;
@@ -49,45 +47,26 @@ public class NoticeView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notice);
+        setContentView(R.layout.activity_student_refer_view);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("NoticeActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
-
         try {
             subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
-            new GetRefer(subCode, page).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new GetContents(subCode, page).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             finish();
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 
-    public class GetRefer extends AsyncTask<Void, Void, Document> {
+    public class GetContents extends AsyncTask<Void, Void, Document> {
         String code;
         int page;
 
-        GetRefer(String code, int page) {
+        GetContents(String code, int page) {
             this.code = code;
             this.page = page;
         }
@@ -102,9 +81,9 @@ public class NoticeView extends AppCompatActivity {
         @Override
         public Document doInBackground(Void... p) {
             String html = null;
-            try{
-                html = User.getHtml("POST", Sites.NOTICE_URL, Parser.getNoticeQuery(code, page), "UTF-8");
-            }catch (Exception e){
+            try {
+                html = User.getHtml("POST", Sites.STUDENT_REFER_URL, Parser.getStuReferQuery(code, page), "UTF-8");
+            } catch (Exception e) {
                 finish();
             }
             return Jsoup.parse(html);
@@ -115,7 +94,7 @@ public class NoticeView extends AppCompatActivity {
             Elements elements = document.select("samp");
             for (Element element : elements) {
                 Element parent = element.parent().parent();
-                titleList.add(parent.select("a").text());
+                titleList.add(element.text());
 
                 String info = "no." + parent.select("td:eq(1)").text() + "  |  " +
                         parent.select("td:eq(4)").text() + "  |  " +
@@ -138,7 +117,7 @@ public class NoticeView extends AppCompatActivity {
             View footer = getLayoutInflater().inflate(R.layout.footer, null, false);
             LinearLayout ll = (LinearLayout) footer.findViewById(R.id.footer);
             for (final Element numbers : document.select("b:matches(\\[[1-9]\\]), a:matches(\\[[1-9]\\])")) {
-                final TextView tv = new TextView(NoticeView.this);
+                final TextView tv = new TextView(StudentReferView.this);
                 tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 tv.setText(numbers.text());
@@ -155,7 +134,7 @@ public class NoticeView extends AppCompatActivity {
                     public void onClick(View v) {
                         if (!pageFrom.equals(pageTo)) {
                             page = Integer.parseInt(pageTo);
-                            new GetRefer(code, Integer.parseInt(pageTo)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            new GetContents(code, Integer.parseInt(pageTo)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                     }
                 });
@@ -217,10 +196,11 @@ public class NoticeView extends AppCompatActivity {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(NoticeView.this, NoticeArticleView.class);
+                        Intent intent = new Intent(StudentReferView.this, NoticeArticleView.class);
                         intent.putExtra("title", titleList.get(pos))
                                 .putExtra("info", infoList.get(pos))
-                                .putExtra("bdseq", codeList.get(pos));
+                                .putExtra("bdseq", codeList.get(pos))
+                                .putExtra("isStuReferView", true);
                         startActivity(intent);
                     }
                 });
@@ -235,14 +215,13 @@ public class NoticeView extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

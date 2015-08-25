@@ -25,9 +25,14 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class User {
     public static String cookie = "";
-    public static ArrayList<String> subCode;
-    public static ArrayList<String> subName;
+    public static ArrayList<String> subCode = new ArrayList<>();
+    public static ArrayList<String> subName = new ArrayList<>();
     public static ArrayList<Boolean> isNew = new ArrayList<>();
+    public static Context context;
+
+    User(Context context){
+        this.context = context;
+    }
 
     public static String setCookie(HttpURLConnection con) {
         String headerName;
@@ -139,7 +144,7 @@ public class User {
             con.setRequestMethod(method);
             con.setRequestProperty("Content-length", String.valueOf(query.length()));
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0");
+            //con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0");
             con.setRequestProperty("User-Agent", "soonoo's android client");
             con.setRequestProperty("Cookie", User.cookie);
             con.setDoInput(true);
@@ -179,7 +184,7 @@ public class User {
 
             con.setRequestMethod(method);
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0");
+            //con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0");
             con.setRequestProperty("User-Agent", "soonoo's android client");
             con.setRequestProperty("Connection", "keep-alive");
             con.setRequestProperty("Cookie", User.cookie);

@@ -44,19 +44,23 @@ public class ReferArticleView extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
         t.setScreenName("LecReferDispActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
-        Intent intent = getIntent();
-        TextView sub = (TextView)findViewById(R.id.sub);
-        sub.setText(intent.getStringExtra("info"));
-        TextView title = (TextView)findViewById(R.id.title);
-        title.setText(intent.getStringExtra("title"));
+        try {
+            Intent intent = getIntent();
+            TextView sub = (TextView) findViewById(R.id.sub);
+            sub.setText(intent.getStringExtra("info"));
+            TextView title = (TextView) findViewById(R.id.title);
+            title.setText(intent.getStringExtra("title"));
 
-        toolbar.findViewById(R.id.sub).setSelected(true);
+            toolbar.findViewById(R.id.sub).setSelected(true);
 
-        new GetContents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new GetContents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (Exception e) {
+            finish();
+        }
     }
 
     @Override
@@ -73,13 +77,28 @@ public class ReferArticleView extends AppCompatActivity {
 
     public class GetContents extends AsyncTask<Void, Void, Document> {
         Intent intent = getIntent();
-        String code = intent.getStringExtra("subIndex");
-        String seq = intent.getStringExtra("bdseq");
+        String code;
+        String seq;
+
+        @Override
+        public void onPreExecute() {
+            try {
+                code = intent.getStringExtra("subIndex");
+                seq = intent.getStringExtra("bdseq");
+            } catch (Exception e) {
+                finish();
+            }
+        }
 
         @Override
         public Document doInBackground(Void... p) {
-            String html = User.getHtml("POST", Sites.LEC_REFER_URL,
-                    Parser.getReferViewQuery(code, seq), "utf-8");
+            String html = null;
+            try {
+                html = User.getHtml("POST", Sites.LEC_REFER_URL,
+                        Parser.getReferViewQuery(code, seq), "utf-8");
+            } catch (Exception e) {
+                finish();
+            }
             return Jsoup.parse(html);
         }
 
@@ -104,7 +123,7 @@ public class ReferArticleView extends AppCompatActivity {
                 attatch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+                        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
                         t.send(new HitBuilders.EventBuilder().setCategory("LecReferDispActiviy").setAction("Download Button").setLabel("refer").build());
                         String link = element.attr("href");
                         String title = link.substring(link.indexOf("(") + 2, link.indexOf(",") - 1);
@@ -142,19 +161,21 @@ public class ReferArticleView extends AppCompatActivity {
             }
         }
     }
+
     @Override
-    public void onRestart(){
+    public void onRestart() {
         super.onRestart();
         //new LoginView.OnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }

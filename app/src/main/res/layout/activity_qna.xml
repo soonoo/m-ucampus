@@ -12,7 +12,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:subtitleTextAppearance="@style/Toolbar.Subtitle"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="강의 자료실"
+        app:title="강의 QnA"
         app:titleTextAppearance="@style/Toolbar.Title" />
 
     <RelativeLayout

@@ -31,7 +31,7 @@ public class SyllabusView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_syllabus);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -39,11 +39,16 @@ public class SyllabusView extends AppCompatActivity {
         t.setScreenName("SyllabusActivity");
         t.send(new HitBuilders.AppViewBuilder().build());
 
-        Intent intent = getIntent();
-        int position = intent.getIntExtra("subIndex", 1);
-        String query = intent.getStringExtra("query");
+        try {
+            Intent intent = getIntent();
+            int position = intent.getIntExtra("subIndex", 1);
+            String query = intent.getStringExtra("query");
+            String subCode = User.subCode.get(position - 1);
 
-        new GetSyllabus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, User.subCode.get(position - 1), query);
+            new GetSyllabus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, subCode, query);
+        } catch (Exception e) {
+            finish();
+        }
     }
 
     public class GetSyllabus extends AsyncTask<String, Void, String> {
@@ -56,9 +61,13 @@ public class SyllabusView extends AppCompatActivity {
 
         @Override
         public String doInBackground(String... str) {
-            String url;
-            if(str[1] == null) url = Sites.SYLLABUS_URL + Parser.getSubQuery(str[0]);
-            else url = Sites.SYLLABUS_URL + str[1];
+            String url = null;
+            try {
+                if (str[1] == null) url = Sites.SYLLABUS_URL + Parser.getSubQuery(str[0]);
+                else url = Sites.SYLLABUS_URL + str[1];
+            }catch (Exception e){
+                finish();
+            }
 
             String sylHtml = User.getHtml("GET", url, "euc-kr");
             Document document = Jsoup.parse(sylHtml);
@@ -73,7 +82,7 @@ public class SyllabusView extends AppCompatActivity {
                 }
 
                 for (Element element : document.select("td:contains(연락처), td:contains(이동전화), td:contains(이메일)")) {
-                    if(element.nextElementSibling() != null)
+                    if (element.nextElementSibling() != null)
                         element.nextElementSibling().attr("style", "color:#a70500; text-decoration:underline; font-size:80%;");
                 }
                 return document.toString();
@@ -87,9 +96,9 @@ public class SyllabusView extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             WebView myWebView = (WebView) findViewById(R.id.wv);
-            if(!(result == null)){
+            if (!(result == null)) {
                 myWebView.loadDataWithBaseURL("", result.toString(), "text/html", "UTF-8", "");
-            }else{
+            } else {
                 myWebView.loadDataWithBaseURL("", getString(R.string.message_syllabus_missing), "text/html", "UTF-8", "");
             }
             pb.setVisibility(View.GONE);

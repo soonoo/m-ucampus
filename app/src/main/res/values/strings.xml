@@ -64,4 +64,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_board_article_view">로딩중...!</string>
     <string name="title_activity_create_article_view">게시판 글쓰기</string>
+    <string name="title_activity_student_refer_view">학생 자료실</string>
+    <string name="title_activity_qna">QnaActivity</string>
+    <string name="title_activity_qna_article_view">QnaArticleView</string>
 </resources>

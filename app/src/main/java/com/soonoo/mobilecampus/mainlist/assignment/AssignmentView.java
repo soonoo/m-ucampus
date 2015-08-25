@@ -34,34 +34,44 @@ public class AssignmentView extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assignment_view);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
+        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
         t.setScreenName("AssignView");
         t.send(new HitBuilders.AppViewBuilder().build());
 
-        subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
-        new GetAssignPage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        try {
+            subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
+            new GetAssignPage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (Exception e) {
+            finish();
+        }
     }
 
     class GetAssignPage extends AsyncTask<Void, Void, String> {
-        ProgressBar pb = (ProgressBar)findViewById(R.id.progressbar_downloading);
+        ProgressBar pb = (ProgressBar) findViewById(R.id.progressbar_downloading);
+
         @Override
-        public void onPreExecute()
-        {
+        public void onPreExecute() {
             pb.setVisibility(View.VISIBLE);
         }
 
         @Override
-        public String doInBackground(Void... p){
-            String html = User.getHtml("POST", Sites.ASSIGNMENT_URL,
-                    Parser.getAssignQuery(subCode), "UTF-8");
+        public String doInBackground(Void... p) {
+            String html = null;
+            try{
+                html = User.getHtml("POST", Sites.ASSIGNMENT_URL,
+                        Parser.getAssignQuery(subCode), "UTF-8");
+            }catch (Exception e){
+                finish();
+            }
             return html;
         }
+
         @Override
-        public void onPostExecute(String html){
+        public void onPostExecute(String html) {
             Document doc = Jsoup.parse(html);
 
             final ArrayList<String> titleList = new ArrayList<>();
@@ -71,19 +81,19 @@ public class AssignmentView extends ActionBarActivity {
             ArrayList<String> due2 = new ArrayList<>();
             final ArrayList<String> queryList = new ArrayList<>();
 
-            for(Element element: doc.select("td.t_c:eq(0)[rowspan=2]")){
+            for (Element element : doc.select("td.t_c:eq(0)[rowspan=2]")) {
                 numList.add(element.text());
             }
 
-            for(Element element: doc.select(".link_b2")){
+            for (Element element : doc.select(".link_b2")) {
                 titleList.add(element.text());
             }
 
-            for(Element element: doc.select("td.t_c:eq(3)")){
+            for (Element element : doc.select("td.t_c:eq(3)")) {
                 isSubmit.add(element.text().equals("제출"));
             }
 
-            for(Element element: doc.select(".t_l2")){
+            for (Element element : doc.select(".t_l2")) {
                 due.add(element.nextElementSibling().text());
                 due2.add(element.parent().nextElementSibling().text());
             }
@@ -102,13 +112,13 @@ public class AssignmentView extends ActionBarActivity {
 
             pb.setVisibility(View.GONE);
 
-            if(titleList.isEmpty()){
-                TextView tv = (TextView)findViewById(R.id.message_no_contents);
+            if (titleList.isEmpty()) {
+                TextView tv = (TextView) findViewById(R.id.message_no_contents);
                 tv.setVisibility(View.VISIBLE);
             }
 
             AssignViewAdapter adapter = new AssignViewAdapter(titleList, numList, isSubmit, due, due2, queryList, subCode);
-            ListView list = (ListView)findViewById(R.id.assign_list);
+            ListView list = (ListView) findViewById(R.id.assign_list);
             /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> av, View view, int i, long l) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentView.this, R.style.Theme_AppCompat_Light_Dialog_Alert);
@@ -127,6 +137,7 @@ public class AssignmentView extends ActionBarActivity {
             list.setAdapter(adapter);
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
@@ -140,16 +151,18 @@ public class AssignmentView extends ActionBarActivity {
     }
 
     class GetDetails extends AsyncTask<String, Void, String> {
-        public void onPreExecute(){
+        public void onPreExecute() {
             System.out.println("aaaaaaaaaaaaa");
         }
-        public String doInBackground(String... p){
+
+        public String doInBackground(String... p) {
             //System.out.println(p[0]);
             String getQuery = Parser.getAssignDetailQuery(subCode) + p[0];
-            return User.getHtml("GET", Sites.ASSIGNMENT_DETAIL_URL+ getQuery, "UTF-8");
+            return User.getHtml("GET", Sites.ASSIGNMENT_DETAIL_URL + getQuery, "UTF-8");
             //return "WhAT THE";
         }
-        public void onPostExecute(String a){
+
+        public void onPostExecute(String a) {
             System.out.println(a);
             message.setText(a);
         }

@@ -6,11 +6,10 @@
 
         <item name="colorPrimary">@color/r3</item>
         <item name="colorPrimaryDark">@color/r1</item>
-        <item name="android:actionBarSize">47dp</item>
     </style>
 
     <style name="Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">17sp</item>
+        <!--<item name="android:textSize">17sp</item>-->
         <item name="android:textColor">#fff</item>
     </style>
 
@@ -26,8 +25,9 @@
     </style>
 
     <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">#666666</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#aaaaaa</item>
     </style>
 
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">

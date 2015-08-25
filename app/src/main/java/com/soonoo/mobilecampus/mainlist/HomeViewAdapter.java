@@ -16,9 +16,11 @@ import com.soonoo.mobilecampus.mainlist.grade.GradeView;
 import com.soonoo.mobilecampus.mainlist.library.LibrarySearchView;
 import com.soonoo.mobilecampus.mainlist.library.LibrarySeatInfoView;
 import com.soonoo.mobilecampus.mainlist.notice.NoticeView;
+import com.soonoo.mobilecampus.mainlist.qna.QnaActivity;
 import com.soonoo.mobilecampus.mainlist.refer.ReferView;
 import com.soonoo.mobilecampus.mainlist.scholarship.ScholarshipActivity;
 import com.soonoo.mobilecampus.mainlist.search.LectureSearchView;
+import com.soonoo.mobilecampus.mainlist.studentRefer.StudentReferView;
 import com.soonoo.mobilecampus.mainlist.syllabus.SyllabusView;
 import com.soonoo.mobilecampus.util.User;
 
@@ -106,7 +108,7 @@ public class HomeViewAdapter extends BaseAdapter {
 
                 holder_item.title.setText(titleList.get(pos));
                 holder_item.subTitle.setText(infoList.get(pos));
-                final CharSequence[] ss = {"공지사항", "강의 자료실", "강의계획서 조회", "과제 조회"};
+                final CharSequence[] ss = {"공지사항", "강의 자료실", "강의 계획서 조회", "과제 조회", "학생 자료실", "강의 QnA"};
 
                 //터치 이벤트 - 과목별
                 view.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +141,17 @@ public class HomeViewAdapter extends BaseAdapter {
                                             intent = new Intent(context, AssignmentView.class);
                                             intent.putExtra("subIndex", pos);
                                             context.startActivity(intent);
+                                            return;
+                                        case 4:
+                                            intent = new Intent(context, StudentReferView.class);
+                                            intent.putExtra("subIndex", pos);
+                                            context.startActivity(intent);
+                                            return;
+                                        case 5:
+                                            intent = new Intent(context, QnaActivity.class);
+                                            intent.putExtra("subIndex", pos);
+                                            context.startActivity(intent);
+                                            return;
                                     }
                                 } //#########
                             });

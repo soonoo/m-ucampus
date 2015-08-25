@@ -74,14 +74,16 @@ public class Sites {
 
     //과제 조회
     public static final String ASSIGNMENT_URL = "http://info2.kw.ac.kr/servlet/controller.learn.ReportStuServlet?p_process=listPage";
-
     public static final String ASSIGNMENT_DETAIL_URL = "http://info2.kw.ac.kr/servlet/controller.learn.ReportStuServlet";
 
+    public static final String STUDENT_REFER_URL = "http://info2.kw.ac.kr/servlet/controller.learn.PdsProfServlet";
+
+    public static final String QNA_URL = "http://info2.kw.ac.kr/servlet/controller.learn.QnAStuServlet";
 
     public static final String TIMETABLE_TEMPLATE = "<html>\n" +
             "<title></title>\n" +
             "<body><span class=\"col\" id=\"index\">\n" +
-            "\t\t<div class=\"day\"></div>\n" +
+            "\t\t<div class=\"day\"><span></span></div>\n" +
             "\t\t<div>0</div>\n" +
             "\t\t<div>1</div>\n" +
             "\t\t<div>2</div>\n" +
@@ -99,7 +101,7 @@ public class Sites {
             "\t\t<div>14</div>\n" +
             "\t\t<div>15</div>\n" +
             "\t</span><span class=\"col\" id=\"mon\">\n" +
-            "\t\t<div class=\"day\">월</div>\n" +
+            "\t\t<div class=\"day\"><span>월</span></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
@@ -117,7 +119,7 @@ public class Sites {
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t</span><span class=\"col\" id=\"tue\">\n" +
-            "\t\t<div class=\"day\">화</div>\n" +
+            "\t\t<div class=\"day\"><span>화</span></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
@@ -135,7 +137,7 @@ public class Sites {
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t</span><span class=\"col\" id=\"wed\">\n" +
-            "\t\t<div class=\"day\">수</div>\n" +
+            "\t\t<div class=\"day\"><span>수</span></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
@@ -153,7 +155,7 @@ public class Sites {
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t</span><span class=\"col\" id=\"thu\">\n" +
-            "\t\t<div class=\"day\">목</div>\n" +
+            "\t\t<div class=\"day\"><span>목</span></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
@@ -171,7 +173,7 @@ public class Sites {
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t</span><span class=\"col\" id=\"fri\">\n" +
-            "\t\t<div class=\"day\">금</div>\n" +
+            "\t\t<div class=\"day\"><span>금</span></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
@@ -189,7 +191,7 @@ public class Sites {
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t</span><span class=\"col\" id=\"sat\">\n" +
-            "\t\t<div class=\"day\">토</div>\n" +
+            "\t\t<div class=\"day\"><span>토</span></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
             "\t\t<div></div>\n" +
@@ -212,6 +214,9 @@ public class Sites {
             "\theight:15px;\n" +
             "\tfont-size:70%;\n" +
             "\ttext-align:center;\n" +
+            "}\n" +
+            ".day span{\n" +
+            "\tpadding-top:2px\n" +
             "}\n" +
             ".day ~ div{\n" +
             "\theight:70px;\t\n" +

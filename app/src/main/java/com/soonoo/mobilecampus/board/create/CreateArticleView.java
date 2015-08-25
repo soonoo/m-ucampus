@@ -2,10 +2,12 @@ package com.soonoo.mobilecampus.board.create;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -134,6 +136,9 @@ public class CreateArticleView extends AppCompatActivity {
                     JSONObject info = jsonArray.getJSONObject(0);
                     intent.putExtra("id", Integer.parseInt(info.getString("id")));
                     doFinish();
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    prefs.edit().putBoolean("new_article_created", true).apply();
+
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

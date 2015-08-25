@@ -1,7 +1,10 @@
 package com.soonoo.mobilecampus.timetable;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +14,11 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
+import com.soonoo.mobilecampus.LoginView;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.User;
+import com.urqa.clientinterface.URQAController;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,6 +49,7 @@ public class HomeViewTableFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_timetable, container, false);
+
         String[] colorList = {"#f9f99f;", "#c9f2ea;", "#f8e6d5;", "#dbe1eb;", "#fcdceb;", "#dce7ff;", "#edead1;", "#def9ba;",
                 "#ecdcff;"};
         //String[] colorList = {"#FFCDD2;", "#F8BBD0;", "#E1BEE7;", "#D1C4E9;", "#C5CAE9;", "#BBDEFB;", "#80CBC4;", "#F0F4C3;",
@@ -57,8 +63,16 @@ public class HomeViewTableFrag extends Fragment {
 
         for (String str : colorList) bgList.add(str);
 
-        new GetTimeTable().execute();
+        //try {
+            new GetTimeTable().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        //} catch (Exception e){
+            /*Intent intent = new Intent(getActivity(), LoginView.class);
 
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            pref.edit().putBoolean("get_session", true).apply();
+            getActivity().finish();
+            startActivity(intent);*/
+        //}
         return view;
     }
 
@@ -73,8 +87,8 @@ public class HomeViewTableFrag extends Fragment {
 
         @Override
         public Document doInBackground(Void... p) {
-            String query = "this_year=" + User.subCode.get(0).substring(0, 4) + "&hakgi=" + User.subCode.get(0).substring(4, 5);
-            String timeTableHtml = User.getHtml("POST", Sites.TIMETABLE_URL, query, "euc-kr");
+            //String query = "this_year=" + User.subCode.get(0).substring(0, 4) + "&hakgi=" + User.subCode.get(0).substring(4, 5);
+            String timeTableHtml = User.getHtml("GET", Sites.TIMETABLE_URL, "euc-kr");
             return Jsoup.parse(timeTableHtml);
         }
 
@@ -94,6 +108,10 @@ public class HomeViewTableFrag extends Fragment {
                 for (Element td : tr.select("td:gt(0)")) {
                     String text = td.text();
                     if (!text.equals("")) {
+                        /*if(text.contains("데이터구조실습")) {
+                            days.get(idx2).add("");
+                            continue;
+                        }*/
                         days.get(idx2).add(text);
                     } else {
                         days.get(idx2).add("");
@@ -111,6 +129,10 @@ public class HomeViewTableFrag extends Fragment {
                 ele.select("span:gt(0)").attr("style", "width:19%;");
             }
 
+            /*if(isPeriodEmpty(days)){
+                ele.select("div:eq(0)").remove();
+            }
+*/
             HtmlCompressor compressor = new HtmlCompressor();
             compressor.setPreserveLineBreaks(false);        //preserves original line breaks
             compressor.setRemoveSurroundingSpaces("div,span,html,body,head,title,style");
@@ -139,8 +161,10 @@ public class HomeViewTableFrag extends Fragment {
                         subs = subs.replaceAll("\\)", "</h5>");
                     }
                     String div = "background-color:" + color ;
+                   // if(!(isPeriodEmpty(days) && idx2==0)){
                     ele.select("span:eq(" + Integer.toString(idx1 + 1) + ") div:eq(" + Integer.toString(idx2 + 1) + ")").first().append("<h4 style=\"padding:3 1 0 1; color:#212121; \">"+subs+"</h4>").
-                            attr("style", div);
+                                attr("style", div);
+                  //  }
                     idx2++;
                 }
                 idx1++;
@@ -155,6 +179,13 @@ public class HomeViewTableFrag extends Fragment {
     private boolean isListEmpty(ArrayList<String> list) {
         for (String string : list) {
             if (!string.equals("")) return false;
+        }
+        return true;
+    }
+
+    private boolean isPeriodEmpty(ArrayList<ArrayList<String>> list){
+        for(ArrayList<String> day: list){
+            if(!day.get(0).equals("")) return false;
         }
         return true;
     }

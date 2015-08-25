@@ -33,4 +33,5 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:design:22.2.0'
     compile files('libs/htmlcompressor-1.5.3.jar')
+    compile files('libs/UrQA-Client_0.97.jar')
 }

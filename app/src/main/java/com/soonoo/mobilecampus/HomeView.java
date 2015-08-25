@@ -1,4 +1,4 @@
-package com.soonoo.mobilecampus.mainlist;
+package com.soonoo.mobilecampus;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,10 +18,9 @@ import android.view.MenuItem;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.LoginView;
-import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.board.create.CreateArticleView;
+import com.soonoo.mobilecampus.mainlist.MyPagerAdapter;
+import com.urqa.clientinterface.URQAController;
 
 
 public class HomeView extends AppCompatActivity {
@@ -41,7 +40,6 @@ public class HomeView extends AppCompatActivity {
 
         final ViewPager pager = (ViewPager) findViewById(R.id.pager);
         final TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
-
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -57,12 +55,8 @@ public class HomeView extends AppCompatActivity {
             public void onPageScrolled(int position, float arg1, int arg2) {
             }
         });
-        try {
-            pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-        } catch (Exception e) {
-            ActivityCompat.finishAffinity(this);
-            startActivity(new Intent(this, LoginView.class));
-        }
+        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+
 //        tabs.setBackgroundColor(getResources().getColor(R.color.wh));
         tabs.setupWithViewPager(pager);
 
@@ -84,6 +78,9 @@ public class HomeView extends AppCompatActivity {
 
         menu.add(0, 0, 0, "로그아웃"); //int groupId, int itemId, int order, CharSequence title
         menu.add(0, 1, 0, "종료"); //int groupId, int itemId, int order, CharSequence title
+        //menu.add(0, 2, 0, "게시판 끄기");
+        //menu.getItem(2).setCheckable(true);
+
         //menu.add(0, 2, 0, "정보"); //int groupId, int itemId, int order, CharSequence title
         //menu.add(0, 3, 0, "변경사항"); //int groupId, int itemId, int order, CharSequence title
         //menu.removeItem(4);
@@ -121,6 +118,10 @@ public class HomeView extends AppCompatActivity {
                 return true;
             case 1:
                 finish();
+                return true;
+            case 2:
+                if (item.isChecked()) item.setChecked(false);
+                else item.setChecked(true);
                 return true;
             case R.id.actionbar_write:
                 Intent intent = new Intent(HomeView.this, CreateArticleView.class);
