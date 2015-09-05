@@ -14,8 +14,7 @@ import android.widget.ProgressBar;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.User;
@@ -26,26 +25,23 @@ import org.jsoup.nodes.Document;
 
 public class ScholarshipActivity extends AppCompatActivity {
     Document document;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scholarship);
 
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("Scholar");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("ScholarshipActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
-
-        try {
-            new GetScholarshipHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } catch(Exception e){
-            ActivityCompat.finishAffinity(this);
-            startActivity(new Intent(this, LoginView.class));
-        }
+        new GetScholarshipHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 
@@ -59,7 +55,12 @@ public class ScholarshipActivity extends AppCompatActivity {
 
         @Override
         public Document doInBackground(Void... p) {
-            String scholarHtml = User.getHtml("GET", Sites.SCHOLARSHIP_URL, "euc-kr");
+            String scholarHtml = null;
+            try {
+                scholarHtml = User.getHtml("GET", Sites.SCHOLARSHIP_URL, "euc-kr");
+            } catch (Exception e) {
+                finish();
+            }
             return Jsoup.parse(scholarHtml);
         }
 
@@ -91,23 +92,5 @@ public class ScholarshipActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

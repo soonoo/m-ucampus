@@ -4,6 +4,8 @@
         <item name="colorControlActivated">@color/r3</item>
         <item name="colorControlHighlight">@color/r3</item>
 
+        <item name="android:typeface">@null</item>
+
         <item name="colorPrimary">@color/r3</item>
         <item name="colorPrimaryDark">@color/r1</item>
     </style>
@@ -18,6 +20,9 @@
         <item name="android:textColor">#B3B3B3</item>
     </style>
 
+    <style name="Font">
+        <item name="android:typeface">serif</item>
+    </style>
 
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyCustomTabText</item>

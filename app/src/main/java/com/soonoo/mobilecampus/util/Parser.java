@@ -20,17 +20,21 @@ import java.util.ArrayList;
 public class Parser {
 
     public static void setNewNotice(Document doc) {
+        User.isNew = new ArrayList<>();
         Elements elements = doc.select("table.main_box ~ table.main_box table tr");
 
         for (Element element : elements) {
             if (!element.select("a[href*=Notice]").isEmpty()) {
                 Log.d("ddddddd", "true");
                 User.isNew.add(true);
-            } else User.isNew.add(false);
+            } else {
+                User.isNew.add(false);
+            }
         }
     }
 
     public static void setSubCode(Document doc) {
+        User.subCode = new ArrayList<>();
         Elements elements = doc.select("table.main_box ~ table.main_box").select("a[href]:eq(0)");
 
         for (Element element : elements) {
@@ -51,6 +55,7 @@ public class Parser {
     }
 
     public static void setSubName(Document doc) {
+        User.subName = new ArrayList<>();
         Elements elements = doc.select("table.main_box ~ table.main_box").select(".list_txt:contains( ):eq(1)");
 
         for (Element element : elements) {

@@ -91,10 +91,6 @@ public class AssignViewAdapter extends BaseAdapter {
         return view;
     }
 
-    public void executeAsync(int param){
-        System.out.println("aaaaaaaaaaaaaaaaa");
-        new GetDetails().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, param);
-    }
 
     class Holder {
         TextView title;
@@ -105,14 +101,4 @@ public class AssignViewAdapter extends BaseAdapter {
         TextView due2;
     }
 
-    class GetDetails extends AsyncTask<Integer, Void, String> {
-        public String doInBackground(Integer... p){
-            //System.out.println(p[0]);
-            String getQuery = Parser.getAssignDetailQuery(subCode) + queryList.get(p[0]);
-            return User.getHtml("GET", Sites.ASSIGNMENT_DETAIL_URL + getQuery, "UTF-8");
-            //return "WhAT THE";
-        }
-        public void onPostExecute(String a){
-        }
-    }
 }

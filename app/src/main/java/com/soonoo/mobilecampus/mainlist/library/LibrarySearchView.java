@@ -14,26 +14,28 @@ import android.widget.ProgressBar;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 
 
 public class LibrarySearchView extends AppCompatActivity {
     WebView webView;
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_library_book_search);
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("LibrarySearch");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("LibraryBookSearchActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
 
         webView = (WebView)findViewById(R.id.webview_library_search);
         webView.loadUrl(Sites.LIBRRY_MAIN_PAGE);
@@ -93,16 +95,4 @@ public class LibrarySearchView extends AppCompatActivity {
         webView.clearCache(true);
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
-    @Override
-    protected void onStart(){
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-
 }

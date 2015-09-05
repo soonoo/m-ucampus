@@ -7,21 +7,20 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.design.widget.Snackbar;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.Parser;
@@ -33,18 +32,22 @@ import org.jsoup.nodes.Element;
 
 import java.net.URLEncoder;
 
-public class QnaArticleView extends ActionBarActivity {
+public class QnaArticleView extends AppCompatActivity {
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lec_refer_disp);
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("QnaArticle");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("LecReferDispActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
 
         try {
             Intent intent = getIntent();
@@ -111,14 +114,12 @@ public class QnaArticleView extends ActionBarActivity {
                 attatch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-                        t.send(new HitBuilders.EventBuilder().setCategory("LecReferDispActiviy").setAction("Download Button").setLabel("refer").build());
                         String link = element.attr("href");
                         String title = link.substring(link.indexOf("('") + 2, link.indexOf("','") - 1);
                         String desc = link.substring(link.indexOf("','") + 3, link.indexOf(");") - 1);
 
                         try {
-                            Toast.makeText(getApplicationContext(), "다운로드를 시작합니다.", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.refer_view), "다운로드를 시작합니다.", Snackbar.LENGTH_SHORT).show();
                             String url = Sites.LEC_DOWNLOAD_URL +
                                     "?p_savefile=" + URLEncoder.encode(title, "utf-8") +
                                     "&p_realfile=" + URLEncoder.encode(desc, "utf-8");
@@ -140,7 +141,7 @@ public class QnaArticleView extends ActionBarActivity {
                             DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
                             manager.enqueue(request);
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.refer_view), "다운로드 실패", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });

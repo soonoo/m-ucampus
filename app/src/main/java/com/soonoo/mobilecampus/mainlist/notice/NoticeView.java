@@ -18,8 +18,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.Parser;
@@ -40,6 +39,8 @@ public class NoticeView extends AppCompatActivity {
     String subCode;
     int page = 1;
 
+    private Tracker mTracker;
+
     int getDp(int px) {
         float scale = getResources().getDisplayMetrics().density;
         int dp = (int) (px * scale + 0.5f);
@@ -51,13 +52,14 @@ public class NoticeView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice);
 
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("NoticeHome");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("NoticeActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
 
         try {
             subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
@@ -232,17 +234,5 @@ public class NoticeView extends AppCompatActivity {
                 TextView subTitle;
             }
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

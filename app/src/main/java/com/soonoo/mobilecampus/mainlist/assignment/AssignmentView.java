@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.Parser;
@@ -28,19 +28,21 @@ import java.util.ArrayList;
 public class AssignmentView extends ActionBarActivity {
     String subCode;
     TextView message;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assignment_view);
 
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("Assignment");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("AssignView");
-        t.send(new HitBuilders.AppViewBuilder().build());
 
         try {
             subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
@@ -158,7 +160,11 @@ public class AssignmentView extends ActionBarActivity {
         public String doInBackground(String... p) {
             //System.out.println(p[0]);
             String getQuery = Parser.getAssignDetailQuery(subCode) + p[0];
-            return User.getHtml("GET", Sites.ASSIGNMENT_DETAIL_URL + getQuery, "UTF-8");
+            try{
+                return User.getHtml("GET", Sites.ASSIGNMENT_DETAIL_URL + getQuery, "UTF-8");
+            }catch (Exception e){
+                return "";
+            }
             //return "WhAT THE";
         }
 

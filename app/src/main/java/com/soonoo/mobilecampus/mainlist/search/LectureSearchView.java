@@ -3,6 +3,7 @@ package com.soonoo.mobilecampus.mainlist.search;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.mainlist.library.SearchViewAdapter;
@@ -34,19 +35,21 @@ import java.util.ArrayList;
 
 public class LectureSearchView extends AppCompatActivity implements View.OnClickListener {
     Spinner[] spinners = new Spinner[4];
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lecture_search);
 
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("LectureSearch");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("LectureSearchView");
-        t.send(new HitBuilders.AppViewBuilder().build());
 
         new GetSearchPage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -65,7 +68,11 @@ public class LectureSearchView extends AppCompatActivity implements View.OnClick
 
         @Override
         public String doInBackground(Void... p) {
-            return User.getHtml("GET", Sites.LECTURE_SEARCH, "EUC-KR");
+            try {
+                return User.getHtml("GET", Sites.LECTURE_SEARCH, "EUC-KR");
+            }catch (Exception e){
+                return "";
+            }
         }
 
         @Override
@@ -114,7 +121,12 @@ public class LectureSearchView extends AppCompatActivity implements View.OnClick
 
         @Override
         public Void doInBackground(String... p) {
-            String html =  User.getHtml("POST", Sites.LECTURE_SEARCH + p[0], "euc-kr");
+            String html = null;
+            try{
+                html =  User.getHtml("POST", Sites.LECTURE_SEARCH + p[0], "euc-kr");
+            }catch (Exception e){
+                html = "";
+            }
             Document doc = Jsoup.parse(html);
             for(Element element: doc.select("a[href^=h_lecture01_2]")){
                 Element parent = element.parent().parent();
@@ -162,6 +174,10 @@ public class LectureSearchView extends AppCompatActivity implements View.OnClick
                 LecSearchViewItem item2 = (LecSearchViewItem) spinners[1].getSelectedItem();
                 LecSearchViewItem item3 = (LecSearchViewItem) spinners[2].getSelectedItem();
                 LecSearchViewItem item4 = (LecSearchViewItem) spinners[3].getSelectedItem();
+
+                if(spinners[2].getSelectedItemPosition() == 0){
+                    Snackbar.make(findViewById(R.id.search_view), "전체 과목 검색시 시간이 다소 소요됩니다.", Snackbar.LENGTH_LONG).show();
+                }
 
                 try {
                     String query = "&mode=view&user_opt=&skin_opt=&show_hakbu=&sugang_opt=all&x=29&y=18" +

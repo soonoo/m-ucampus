@@ -65,7 +65,13 @@ public class HomeViewSubListFrag extends Fragment {
                     .getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = prefs.edit();
 
-            String mainHtml = User.getHtml("POST", Sites.MAIN_URL, Sites.MAIN_QUERY, "utf-8");
+            String mainHtml;
+            try{
+                mainHtml = User.getHtml("POST", Sites.MAIN_URL, Sites.MAIN_QUERY, "utf-8");
+            }catch(Exception e){
+                mainHtml = "";
+            }
+
             Document mainDoc = Jsoup.parse(mainHtml);
 
             Parser.setSubCode(mainDoc);

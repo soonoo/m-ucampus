@@ -2,6 +2,7 @@ package com.soonoo.mobilecampus.mainlist.library;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -12,12 +13,10 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.User;
@@ -30,19 +29,20 @@ import org.jsoup.nodes.Element;
 public class LibrarySeatInfoView extends AppCompatActivity {
     WebView wv;
     Document document = null;
+    private Tracker mTracker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         setContentView(R.layout.activity_library_seat_info);
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("LibrarySeat");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Tracker t = ((Controller)getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("LibrarySeatInfoActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
 
         new GetSeatHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -55,7 +55,12 @@ public class LibrarySeatInfoView extends AppCompatActivity {
         }
 
         public Document doInBackground(Void... p){
-            String seatHtml = User.getHtml("GET", Sites.LIBRARY_SEAT_URL, "euc-kr");
+            String seatHtml;
+            try{
+                seatHtml = User.getHtml("GET", Sites.LIBRARY_SEAT_URL, "euc-kr");
+            }catch (Exception e){
+                seatHtml = "";
+            }
             return Jsoup.parse(seatHtml);
         }
 
@@ -122,7 +127,7 @@ public class LibrarySeatInfoView extends AppCompatActivity {
             case R.id.actionbar_refresh:
                // if(wv.getUrl().contains())
                     new GetSeatHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                Toast.makeText(getApplicationContext(), getString(R.string.message_refreshed), Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.library_seat), getString(R.string.message_refreshed), Snackbar.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
                 this.finish();
@@ -136,19 +141,5 @@ public class LibrarySeatInfoView extends AppCompatActivity {
     public void finish() {
         super.finish();
         wv.clearCache(true);
-        //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
     }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-
 }

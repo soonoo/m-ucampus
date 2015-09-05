@@ -10,23 +10,19 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.util.Parser;
 import com.soonoo.mobilecampus.util.User;
 import com.urqa.clientinterface.URQAController;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -50,10 +46,6 @@ public class LoginView extends AppCompatActivity {
             new LoginOnBack().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("LoginActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
-
         ctx = getApplicationContext();
 
         final Button login_button = (Button) findViewById(R.id.login_button);
@@ -66,7 +58,7 @@ public class LoginView extends AppCompatActivity {
             } catch (Exception e) {
             }
         } else if (!isConnected()) {
-            Toast.makeText(LoginView.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.login_view), R.string.error_network_connection, Snackbar.LENGTH_SHORT).show();
         }
 
         login_button.setOnClickListener(new View.OnClickListener() {
@@ -77,11 +69,11 @@ public class LoginView extends AppCompatActivity {
 
                 try {
                     if (!isConnected()) {
-                        Toast.makeText(LoginView.this, R.string.error_network_connection, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.login_view), R.string.error_network_connection, Snackbar.LENGTH_SHORT).show();
                     } else if (id.equals("")) {
-                        Toast.makeText(LoginView.this, R.string.error_id, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.login_view), R.string.error_id, Snackbar.LENGTH_SHORT).show();
                     } else if (pw.equals("")) {
-                        Toast.makeText(LoginView.this, R.string.error_pw, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.login_view), R.string.error_pw, Snackbar.LENGTH_SHORT).show();
                     } else {
                         new Login(false, id, pw).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
@@ -141,7 +133,7 @@ public class LoginView extends AppCompatActivity {
             final CheckBox auto_login = (CheckBox) findViewById(R.id.auto_login);
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LoginView.this);
             if (!isValid) {
-                Toast.makeText(LoginView.this, R.string.error_login_info, Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.login_view), R.string.error_login_info, Snackbar.LENGTH_SHORT).show();
             } else {
                 prefs.edit().putBoolean("auto_login", auto_login.isChecked()).apply();
 
@@ -183,7 +175,7 @@ public class LoginView extends AppCompatActivity {
         @Override
         public void onPostExecute(Boolean isValid) {
             if (!isValid) {
-                Toast.makeText(LoginView.this, R.string.error_login_info, Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.login_view), R.string.error_login_info, Snackbar.LENGTH_SHORT).show();
             } else {
                 // 로그인, 메인 액티비티 리스트 초기화 진행
                 Intent intent = new Intent(LoginView.this, HomeView.class);
@@ -209,24 +201,9 @@ public class LoginView extends AppCompatActivity {
         } else {
             return false;
         }
-
     }
 
     public static Context getContext() {
         return ctx;
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-
-
 }

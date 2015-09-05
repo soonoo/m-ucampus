@@ -18,8 +18,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.Parser;
@@ -41,6 +40,8 @@ public class ReferView extends AppCompatActivity {
     String subCode;
     int page = 1;
 
+    private Tracker mTracker;
+
     int getDp(int px) {
         float scale = getResources().getDisplayMetrics().density;
         int dp = (int) (px * scale + 0.5f);
@@ -51,15 +52,15 @@ public class ReferView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lec_refer_room);
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("ReferHome");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        URQAController.InitializeAndStartSession(getApplicationContext(), "4BF35847");
-
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("LecReferRoomActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
 
         try{
             subCode = User.subCode.get(getIntent().getIntExtra("subIndex", 1) - 1);
@@ -119,9 +120,9 @@ public class ReferView extends AppCompatActivity {
 
             if (elements.size() == 0) {
                 findViewById(R.id.message_no_contents).setVisibility(View.VISIBLE);
-                findViewById(R.id.progressbar_downloading).setVisibility(View.GONE);
                 return;
             }
+            findViewById(R.id.progressbar_downloading).setVisibility(View.GONE);
 
 
             ListView listView = (ListView) findViewById(R.id.refer_list);
@@ -240,17 +241,5 @@ public class ReferView extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

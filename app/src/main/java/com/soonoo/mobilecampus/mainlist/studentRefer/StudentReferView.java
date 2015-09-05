@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.mainlist.notice.NoticeArticleView;
@@ -33,6 +36,7 @@ import java.util.ArrayList;
 public class StudentReferView extends AppCompatActivity {
     String subCode;
     int page = 1;
+    private Tracker mTracker;
 
     ArrayList<String> titleList;
     ArrayList<String> infoList;
@@ -49,8 +53,12 @@ public class StudentReferView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_refer_view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("StudentReferHome");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

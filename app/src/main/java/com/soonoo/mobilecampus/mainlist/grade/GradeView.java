@@ -2,6 +2,7 @@ package com.soonoo.mobilecampus.mainlist.grade;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -10,13 +11,11 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
-import com.soonoo.mobilecampus.LoginView;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.User;
@@ -30,23 +29,25 @@ public class GradeView extends AppCompatActivity {
     Document doc_grade;
     WebView webView;
     String html = null;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grade);
 
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("Grade");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("GradeActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
-
-        if (User.isConnected(GradeView.this)) {
+        //if (User.isConnected(GradeView.this)) {
             new GetRankHtml().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else Toast.makeText(getApplicationContext(), "nono", Toast.LENGTH_SHORT).show();
+      //  } else Snackbar.make(findViewById(R.id.), "nono", Snackbar.LENGTH_SHORT).show();
     }
 
 
@@ -55,11 +56,13 @@ public class GradeView extends AppCompatActivity {
 
         @Override
         public String doInBackground(Void... p) {
+            String html = null;
             try {
-                return User.getHtml("GET", Sites.GRADE_URL, "euc-kr");
+                html = User.getHtml("GET", Sites.GRADE_URL, "euc-kr");
             } catch (Exception e) {
-                return null;
+                finish();
             }
+            return html;
         }
 
         @Override
@@ -157,18 +160,6 @@ public class GradeView extends AppCompatActivity {
     public void finish() {
         super.finish();
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     @Override

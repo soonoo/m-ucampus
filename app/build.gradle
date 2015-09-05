@@ -1,37 +1,44 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'soonooapp'
+            keyPassword 'ehqps2m7'
+            storeFile file('E:/kwkeystore.jks')
+            storePassword 'ehqps2m7'
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-
-    lintOptions{
+    lintOptions {
         abortOnError false
     }
-
     defaultConfig {
         applicationId "com.soonoo.mobilecampus"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 20
-        versionName "1.1.1"
+        versionCode 23
+        versionName "1.2.1"
     }
     buildTypes {
         release {
-            shrinkResources true
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/jsoup-1.8.1.jar')
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.github.gabrielemariotti.changeloglib:library:1.5.2'
     compile 'com.google.android.gms:play-services:7.5.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile files('libs/jsoup-1.8.1.jar')
+    compile 'com.github.gabrielemariotti.changeloglib:library:1.5.2'
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:design:22.2.0'
-    compile files('libs/htmlcompressor-1.5.3.jar')
     compile files('libs/UrQA-Client_0.97.jar')
+    compile 'com.google.android.gms:play-services-analytics:7.3.0'
 }

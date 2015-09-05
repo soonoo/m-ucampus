@@ -1,24 +1,17 @@
 package com.soonoo.mobilecampus.timetable;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
-import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
-import com.soonoo.mobilecampus.LoginView;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.User;
-import com.urqa.clientinterface.URQAController;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -88,7 +81,12 @@ public class HomeViewTableFrag extends Fragment {
         @Override
         public Document doInBackground(Void... p) {
             //String query = "this_year=" + User.subCode.get(0).substring(0, 4) + "&hakgi=" + User.subCode.get(0).substring(4, 5);
-            String timeTableHtml = User.getHtml("GET", Sites.TIMETABLE_URL, "euc-kr");
+            String timeTableHtml= null;
+            try{
+                timeTableHtml = User.getHtml("GET", Sites.TIMETABLE_URL, "euc-kr");
+            }catch (Exception e){
+                timeTableHtml = "";
+            }
             return Jsoup.parse(timeTableHtml);
         }
 
@@ -133,9 +131,6 @@ public class HomeViewTableFrag extends Fragment {
                 ele.select("div:eq(0)").remove();
             }
 */
-            HtmlCompressor compressor = new HtmlCompressor();
-            compressor.setPreserveLineBreaks(false);        //preserves original line breaks
-            compressor.setRemoveSurroundingSpaces("div,span,html,body,head,title,style");
 
             idx1 = 0;
             for (ArrayList<String> list : days) {
@@ -170,8 +165,11 @@ public class HomeViewTableFrag extends Fragment {
                 idx1++;
             }
 
+            String result = ele.toString().replaceAll("[\\t|\\n|\\r]", "");
+            result = result.replaceAll("(> +<)", "><");
+//            System.out.println(result);
             WebView myWebView = (WebView) view.findViewById(R.id.webview_timetable);
-            myWebView.loadDataWithBaseURL("", compressor.compress(ele.toString()), "text/html", "utf-8", "");
+            myWebView.loadDataWithBaseURL("",/* compressor.compress(*/result/*)*/, "text/html", "utf-8", "");
             pb.setVisibility(View.GONE);
         }
     }

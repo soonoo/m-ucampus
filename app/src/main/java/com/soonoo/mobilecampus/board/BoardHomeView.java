@@ -1,25 +1,21 @@
 package com.soonoo.mobilecampus.board;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.soonoo.mobilecampus.LoginView;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.User;
-import com.urqa.clientinterface.URQAController;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,43 +25,58 @@ import java.util.ArrayList;
 public class BoardHomeView extends Fragment {
     Context context;
     View view;
-    ArrayList<String> titleList = new ArrayList<>();
-    ArrayList<String> infoList = new ArrayList<>();
-    ArrayList<Integer> idList = new ArrayList<>();
+    ArrayList<String> titleList;
+    ArrayList<String> infoList;
+    ArrayList<Integer> idList;
+    ArrayList<Integer> countList;
+    ArrayList<Integer> viewList;
     BoardHomeViewAdpater adapter;
     int page = 1;
+    boolean refreshed = false;
     boolean lock = true;
     boolean isEnd = false;
     ListView listView;
+    SwipeRefreshLayout swipe;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.context = container.getContext();
         view = inflater.inflate(R.layout.activity_board_home_view, container, false);
 
-        //try{
-            new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        /*}catch(Exception e){
-            Intent intent = new Intent(getActivity(), LoginView.class);
+        swipe = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                lock = true;
+                isEnd = false;
+                page = 1;
+                refreshed = true;
+                new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
 
-            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            pref.edit().putBoolean("get_session", true).apply();
-            getActivity().finish();
-            startActivity(intent);
-        }*/
+        new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return view;
     }
 
     public class GetJSON extends AsyncTask<Void, Void, String> {
-        View footer = getActivity().getLayoutInflater().inflate(R.layout.board_list_footer, null, false);
+        //View footer = getActivity().getLayoutInflater().inflate(R.layout.board_list_footer, null, false);
 
         public void onPreExecute() {
-
+            titleList = new ArrayList<>();
+            infoList = new ArrayList<>();
+            idList = new ArrayList<>();
+            countList = new ArrayList<>();
+            viewList = new ArrayList<>();
         }
 
         public String doInBackground(Void... p) {
-            return User.getHtml("GET", Sites.BOARD_URL + "/read/list?num=25&page=" + Integer.toString(page), "UTF-8");
+            try {
+                return User.getHtml("GET", Sites.BOARD_URL + "/read/list?num=25&page=" + Integer.toString(page), "UTF-8");
+            } catch (Exception e) {
+                return "";
+            }
         }
 
         public void onPostExecute(String json) {
@@ -76,17 +87,21 @@ public class BoardHomeView extends Fragment {
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject jsonObject = data.getJSONObject(i);
                     replyCount = jsonObject.getInt("reply_count");
+                    titleList.add(jsonObject.getString("title"));
+                    viewList.add(jsonObject.getInt("view_count"));
 
-                    if (replyCount > 0)
-                        titleList.add(jsonObject.getString("title") + " <font color=#b30027>[" + Integer.toString(replyCount) + "]</font>");
-                    else titleList.add(jsonObject.getString("title"));
+                    countList.add(replyCount);
 
-                    infoList.add(jsonObject.getString("date") + "  |  조회:" + jsonObject.getString("view_count") + "  |  " + jsonObject.getString("ip") + ".*.*");
+                    if (jsonObject.get("ip").equals("관리자") || jsonObject.get("ip").equals("admin"))
+                        infoList.add(jsonObject.getString("date") + "  |  " + jsonObject.getString("ip"));
+                    else
+                        infoList.add(jsonObject.getString("date") + "  |  " + jsonObject.getString("ip") + ".*.*");
+
                     idList.add(jsonObject.getInt("id"));
                 }
 
                 listView = (ListView) view.findViewById(R.id.board_home_list);
-                adapter = new BoardHomeViewAdpater(titleList, infoList, idList);
+                adapter = new BoardHomeViewAdpater(titleList, infoList, idList, countList, viewList);
 
                 listView.setOnScrollListener(new AbsListView.OnScrollListener() {
                     @Override
@@ -96,40 +111,36 @@ public class BoardHomeView extends Fragment {
                     @Override
                     public void onScroll(AbsListView absListView, int i, int i1, int i2) {
                         if (isEnd) {
-                            footer.findViewById(R.id.footer_pb).setVisibility(View.GONE);
                             return;
                         }
-                        if (i2 == i + i1) {
-                           // lock = !lock;
+                        if (i2 == i + i1 + 2) {
+                            // lock = !lock;
                             if (lock)
                                 new GetNextPage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                     }
                 });
-
-                listView.addFooterView(footer);
                 listView.setAdapter(adapter);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-           // view.findViewById(R.id.footer_pb).setVisibility(View.GONE);
+            swipe.setRefreshing(false);
         }
     }
 
     public class GetNextPage extends AsyncTask<Void, Void, String> {
-        View footer = getActivity().getLayoutInflater().inflate(R.layout.board_list_footer, null, false);
-        TextView pb = (TextView) footer.findViewById(R.id.footer_pb);
-
         public void onPreExecute() {
             lock = !lock;
-            pb.setVisibility(View.VISIBLE);
         }
 
 
         public String doInBackground(Void... p) {
-            return User.getHtml("GET", Sites.BOARD_URL + "/read/list?num=25&page=" + Integer.toString(++page), "UTF-8");
+            try {
+                return User.getHtml("GET", Sites.BOARD_URL + "/read/list?num=25&page=" + Integer.toString(++page), "UTF-8");
+            } catch (Exception e) {
+                return "";
+            }
         }
 
         public void onPostExecute(String json) {
@@ -137,24 +148,21 @@ public class BoardHomeView extends Fragment {
                 JSONArray data = new JSONArray(json);
                 int replyCount;
 
-                if (data.length() == 0) {
+                if (json.equals("[]")) {
                     isEnd = true;
-                    pb.setVisibility(View.GONE);
                     lock = !lock;
-                    listView.removeFooterView(footer);
-                    adapter.notifyDataSetChanged();
                     return;
                 }
 
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject jsonObject = data.getJSONObject(i);
                     replyCount = jsonObject.getInt("reply_count");
+                    titleList.add(jsonObject.getString("title") + " ");
+                    viewList.add(jsonObject.getInt("view_count"));
 
-                    if (replyCount > 0)
-                        titleList.add(jsonObject.getString("title") + " <font color=#b30027>[" + Integer.toString(replyCount) + "]</font>");
-                    else titleList.add(jsonObject.getString("title")+ " ");
+                    countList.add(replyCount);
 
-                    infoList.add(jsonObject.getString("date") + "  |  조회:" + jsonObject.getString("view_count") + "  |  " + jsonObject.getString("ip") + ".*.*");
+                    infoList.add(jsonObject.getString("date") + "  |  " + jsonObject.getString("ip") + ".*.*");
                     idList.add(jsonObject.getInt("id"));
                 }
 
@@ -163,13 +171,14 @@ public class BoardHomeView extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            pb.setVisibility(View.GONE);
+
+            /*//footer.setVisibility(View.GONE);
             if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("new_article_created", false)) {
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean("new_article_created", false).apply();
             }
             if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("new_reply_created", false)) {
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean("new_reply_created", false).apply();
-            }
+            }*/
         }
     }
 
@@ -188,13 +197,11 @@ public class BoardHomeView extends Fragment {
             idList = new ArrayList<>();
             new GetJSON().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else if (pref.getBoolean("new_reply_created", false)) {
+            pref.edit().putBoolean("new_reply_created", false).apply();
             try {
-                titleList.set(pref.getInt("titlePos", 0), titleList.get(pref.getInt("titlePos", 0)).replaceAll("<font color=#b30027>\\[.+\\]<\\/font>", ""));
-                titleList.set(pref.getInt("titlePos", 0), titleList.get(pref.getInt("titlePos", 0)) + "<font color=#b30027>[" + pref.getInt("replyNum", 0) + "]</font>");
-                pref.edit().putBoolean("new_reply.created", false).apply();
+                countList.set(pref.getInt("titlePos", 0), pref.getInt("replyNum", 0));
                 adapter.notifyDataSetChanged();
-            } catch (Exception e){
-
+            } catch (Exception e) {
             }
         }
     }

@@ -25,9 +25,9 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class User {
     public static String cookie = "";
-    public static ArrayList<String> subCode = new ArrayList<>();
-    public static ArrayList<String> subName = new ArrayList<>();
-    public static ArrayList<Boolean> isNew = new ArrayList<>();
+    public static ArrayList<String> subCode;
+    public static ArrayList<String> subName;
+    public static ArrayList<Boolean> isNew;
     public static Context context;
 
     User(Context context){
@@ -129,11 +129,13 @@ public class User {
     }
 
     // POST
-    public static String getHtml(String method, String url, String query, String encoding) {
+    public static String getHtml(String method, String url, String query, String encoding) throws Exception {
         HttpURLConnection con;
         DataOutputStream output;
         String line = null;
         StringBuilder result = new StringBuilder();
+
+        if(User.cookie == null || User.cookie.equals("")) throw new Exception();
 
         try {
             con = (HttpURLConnection) new URL(url).openConnection();
@@ -171,10 +173,12 @@ public class User {
     }
 
     // GET
-    public static String getHtml(String method, String url, String encoding) {
+    public static String getHtml(String method, String url, String encoding)  throws Exception {
         HttpURLConnection con;
         String line;
         StringBuilder result = new StringBuilder();
+
+        if(User.cookie == null || User.cookie.equals("")) throw new Exception();
 
         try {
             con = (HttpURLConnection) new URL(url).openConnection();

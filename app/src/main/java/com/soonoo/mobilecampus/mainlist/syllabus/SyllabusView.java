@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
 import com.soonoo.mobilecampus.util.Parser;
@@ -24,20 +24,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class SyllabusView extends AppCompatActivity {
-    Document document;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_syllabus);
 
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("Syllabus");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Tracker t = ((Controller) getApplication()).getTracker(Controller.TrackerName.APP_TRACKER);
-        t.setScreenName("SyllabusActivity");
-        t.send(new HitBuilders.AppViewBuilder().build());
 
         try {
             Intent intent = getIntent();
@@ -65,12 +66,18 @@ public class SyllabusView extends AppCompatActivity {
             try {
                 if (str[1] == null) url = Sites.SYLLABUS_URL + Parser.getSubQuery(str[0]);
                 else url = Sites.SYLLABUS_URL + str[1];
-            }catch (Exception e){
+            } catch (Exception e) {
                 finish();
             }
+            String sylHtml = null;
+            try {
+                sylHtml = User.getHtml("GET", url, "euc-kr");
+            } catch (Exception e) {
+                sylHtml = "";
+            }
 
-            String sylHtml = User.getHtml("GET", url, "euc-kr");
             Document document = Jsoup.parse(sylHtml);
+
             try {
                 document.select("td").attr("style", "font-size:75%; ");
                 document.select("td.bgtable1").attr("style", "background-color:#edf1f3; font-size:60%; white-space:nowrap;");
@@ -121,17 +128,5 @@ public class SyllabusView extends AppCompatActivity {
     public void finish() {
         super.finish();
         //overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }

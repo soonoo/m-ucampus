@@ -8,7 +8,7 @@ package com.soonoo.mobilecampus;
 public class Sites {
     //public static final String BOARD_URL = "http://localhost:3000";
     //public static final String BOARD_URL = "http://10.0.3.2:4000";
-    public static final String BOARD_URL = "http://soonoo.iptime.org:3000";
+    public static final String BOARD_URL = "http://soonoo.iptime.org:3000/mobile";
 
 
     public static final String LOGIN_URL = "https://info.kw.ac.kr/webnote/login/login_proc.php";

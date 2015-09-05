@@ -8,10 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -39,10 +40,13 @@ public class CreateArticleView extends AppCompatActivity {
     }
 
     public boolean isEmpty() {
-        String titleText = title.getText().toString().replaceAll("[ |\\r|\\n|\\t]", "");
-        String contentText = content.getText().toString().replaceAll("[ |\\r|\\n|\\t]", "");
+        title = (EditText) findViewById(R.id.post_title);
+        content = (EditText) findViewById(R.id.post_content);
 
-        if (!titleText.equals("") && !contentText.equals("")) return false;
+        String titleText = title.getText().toString();
+        String contentText = content.getText().toString();
+
+        if (titleText.trim().length() > 0 && contentText.trim().length() > 0 ) return false;
         else return true;
     }
 
@@ -54,52 +58,6 @@ public class CreateArticleView extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        title = (EditText) findViewById(R.id.post_title);
-        content = (EditText) findViewById(R.id.post_content);
-        postButton = (Button) findViewById(R.id.post_submit_button);
-
-        title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (isEmpty()) postButton.setEnabled(false);
-                else postButton.setEnabled(true);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        content.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (isEmpty()) postButton.setEnabled(false);
-                else postButton.setEnabled(true);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                postButton.setVisibility(View.GONE);
-                pb = (ProgressBar) findViewById(R.id.pb_post);
-                pb.setVisibility(View.VISIBLE);
-                new PostArticle().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }
-        });
     }
 
     public class PostArticle extends AsyncTask<Void, Void, String> {
@@ -115,7 +73,7 @@ public class CreateArticleView extends AppCompatActivity {
             }
 
             try {
-                query = "title=" + URLEncoder.encode(title.getText().toString(), "UTF-8") + "&content=" + URLEncoder.encode(content.getText().toString(), "UTF-8")
+                query = "title=" + URLEncoder.encode(title.getText().toString().replaceAll("\\s+", " "), "UTF-8") + "&content=" + URLEncoder.encode(content.getText().toString(), "UTF-8")
                         + "&nickname=" + URLEncoder.encode(student_id, "UTF-8");
             } catch (Exception e) {
             }
@@ -123,7 +81,11 @@ public class CreateArticleView extends AppCompatActivity {
 
         @Override
         public String doInBackground(Void... p) {
-            return User.getHtml("GET", Sites.BOARD_URL + "/write/article?" + query, "UTF-8");
+            try {
+                return User.getHtml("GET", Sites.BOARD_URL + "/write/article?" + query, "UTF-8");
+            }catch (Exception e){
+                return "";
+            }
         }
 
         @Override
@@ -135,7 +97,7 @@ public class CreateArticleView extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(response);
                     JSONObject info = jsonArray.getJSONObject(0);
                     intent.putExtra("id", Integer.parseInt(info.getString("id")));
-                    doFinish();
+                    finish();
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     prefs.edit().putBoolean("new_article_created", true).apply();
 
@@ -152,11 +114,22 @@ public class CreateArticleView extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_create_article_view, menu);
 
+        return super.onCreateOptionsMenu(menu);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+            case R.id.actionbar_done:
+                item.setEnabled(false);
+                if(!isEmpty()) new PostArticle().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                else Snackbar.make(findViewById(R.id.create_view), "제목, 내용을 작성해 주세요.", Snackbar.LENGTH_SHORT).show();
+                    return true;
             case android.R.id.home:
                 this.finish();
                 return true;

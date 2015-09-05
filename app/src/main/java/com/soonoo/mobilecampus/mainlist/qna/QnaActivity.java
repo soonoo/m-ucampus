@@ -19,10 +19,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.soonoo.mobilecampus.Controller;
+import com.soonoo.mobilecampus.AnalyticsApplication;
 import com.soonoo.mobilecampus.R;
 import com.soonoo.mobilecampus.Sites;
-import com.soonoo.mobilecampus.mainlist.refer.ReferArticleView;
 import com.soonoo.mobilecampus.util.Parser;
 import com.soonoo.mobilecampus.util.User;
 
@@ -39,6 +38,7 @@ public class QnaActivity extends AppCompatActivity {
     ArrayList<String> codeList;
     String subCode;
     int page = 1;
+    private Tracker mTracker;
 
     int getDp(int px) {
         float scale = getResources().getDisplayMetrics().density;
@@ -50,6 +50,12 @@ public class QnaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qna);
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("QnaHome");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
